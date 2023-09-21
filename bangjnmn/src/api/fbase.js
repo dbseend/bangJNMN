@@ -6,13 +6,13 @@ import { getStorage } from "firebase/storage";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCJqlmYxHRiApmHC1aVWVxvsXq5slNZISw",
-  authDomain: "facebook-bb901.firebaseapp.com",
-  projectId: "facebook-bb901",
-  storageBucket: "facebook-bb901.appspot.com",
-  messagingSenderId: "856175115665",
-  appId: "1:856175115665:web:74ea57b49aa7b252072e30",
-  measurementId: "G-Y9K254QCWD",
+  apiKey: "AIzaSyAvs9_--j1AZEw08GpRvbkEiIDu0erfbaI",
+  authDomain: "bangjnmn.firebaseapp.com",
+  projectId: "bangjnmn",
+  storageBucket: "bangjnmn.appspot.com",
+  messagingSenderId: "176236963852",
+  appId: "1:176236963852:web:035f2abfcc53565cb2e629",
+  measurementId: "G-XB2R4YX88Q"
 };
 
 const app = initializeApp(firebaseConfig); // firebase 초기화

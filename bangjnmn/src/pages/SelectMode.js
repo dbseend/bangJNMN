@@ -1,9 +1,10 @@
 import React from "react";
+import Web_SelectMode from "../components/SelectMode_Components/Web_SelectMode";
 
 const SelectMode = () => {
   return (
     <div>
-      <h1>SelectMode</h1>
+      <Web_SelectMode />
     </div>
   );
 };
