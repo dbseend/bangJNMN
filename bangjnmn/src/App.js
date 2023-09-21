@@ -1,13 +1,17 @@
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import SelectMode from "./pages/SelectMode";
+import AdminHome from "./pages/admin/AdminHome";
+import ClientHome from "./pages/client/ClientHome";
 
 function App() {
   return (
-    <div className="App">
-      <h1>방주니마니 화이팅 !!</h1>
-      <h2>최지원 !!</h2>
-      <h2>김예은 !!</h2>
-      <h2>윤성현 !!</h2>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<SelectMode />} />
+        <Route path="/admin" element={<AdminHome />} />
+        <Route path="/client" element={<ClientHome />} />
+      </Routes>
+    </Router>
   );
 }
 
