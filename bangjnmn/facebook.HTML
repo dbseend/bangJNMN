@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    .top{
+      display: flex;
+      background: #F1F2F6;
+      padding-bottom: 250px;
+    }
+
+    #left{
+      padding-left: 228px;
+      padding-top: 213px;
+    }
+
+    #right{
+      overflow: auto;
+    }
+
+    #right #Message{
+      margin-top: 20px;
+      margin-left: 225px;
+    }
+
+    #right #login{
+      padding-top: 20px;
+      padding-right: 20px;
+      padding-left: 20px;
+      background: white;
+      margin-left: 200px;
+      margin-top: 213px;
+      overflow: auto;
+      border-radius: 10px;
+    }
+
+    .top h1{
+      font-family: Lato;
+      font-size: 59px;
+      font-weight: 800;
+      line-height: 71px;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #1777F2;
+    }
+
+    .top h2{
+      font-family: Lato;
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 36px;
+      letter-spacing: 0em;
+      text-align: left;
+    }
+
+    #login{
+      display: flex; /* Flexbox 레이아웃 사용 */
+      flex-direction: column;
+    }
+
+    #login input, #loginbutton, #forgotton{
+      margin-bottom: 20px;
+      width: 358px;
+      height: 44px;
+    }
+    
+    #loginbutton{
+      border-radius: 5px;
+      background: #1777F2;
+      border: 0;
+      font-size: 20px;
+      font-weight: bolder;
+      color: white;
+    }
+
+    #forgotton{
+      background: white;
+      border: 0;
+      border-bottom: 1px solid #5d5d5d;
+    }
+
+    #create{
+      margin-bottom: 20px;
+      margin-left: 50px;
+      width: 250px;
+      height: 44px;
+      border-radius: 5px;
+      background: rgb(25, 196, 28);
+      border: 0;
+      font-size: 20px;
+      font-weight: bolder;
+      color: white;
+    }
+
+    #email, #password{
+      border-radius: 5px;
+      border: 1px solid #747373;
+    }
+
+    input::placeholder{
+      font-size: 20px;
+      padding-left: 10px;
+      padding-top: 2px;
+    }
+
+  </style>
+
+</head>
+<body>
+  <div class = "top">
+    <div id = "left">
+      <h1>facebook</h1>
+      <h2>Facebook helps you connect and share<br>
+        with the people in your life</h2>
+    </div>
+    <div id = "right">
+      <div id = "login">
+        <input type = "text" id = "email" placeholder="Email address or phone number">
+        <input type = "text" id = "password" placeholder="Password">
+        <button id = loginbutton>Log in</button>
+        <button id = forgotton>Forgotton Password?</button>
+        <button id = create>Create New Account</button>
+      </div>
+      <div id = "Message"><b>Create a page</b> for a celebrity, brand or business.</div>
+    </div>
+  </div>
+  <div class = "bottom">
+    <img src = "/Rectangle 8.png">
+  </div>
+</body>
+</html>
