@@ -98,17 +98,25 @@ const Web_SelectMode = () => {
 
   //서브 컬렉션 만들기
   async function makeSubCollection() {
-    const userId = "fne0ukrCF3YZHPDO0pFjb0PICey1";
     const usersCollection = collection(dbService, "studentUser");
     const subCollectionName = "survey";
-    // const subCollectionRef = usersCollection
-    //   .doc(userId)
-    //   .collection(subCollectionName);
 
-    // subCollectionRef.add({
-    //   title: "설문",
-    //   content: "답변1: 매우 좋음",
-    // });
+    const userDocRef = doc(usersCollection, displayName);
+
+    const surveyData = {
+      title: "설문",
+      content: "답변1: 매우 좋음",
+    };
+
+    try {
+      await setDoc(doc(userDocRef, subCollectionName, displayName), surveyData);
+      console.log("서브 컬렉션에 데이터가 추가되었습니다.");
+    } catch (error) {
+      console.error(
+        "서브 컬렉션에 데이터를 추가하는 중 오류가 발생했습니다.",
+        error
+      );
+    }
   }
 
   const changeStudentId = (e) => {
