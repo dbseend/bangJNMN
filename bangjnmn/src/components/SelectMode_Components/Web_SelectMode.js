@@ -101,14 +101,14 @@ const Web_SelectMode = () => {
     const userId = "fne0ukrCF3YZHPDO0pFjb0PICey1";
     const usersCollection = collection(dbService, "studentUser");
     const subCollectionName = "survey";
-    const subCollectionRef = usersCollection
-      .doc(userId)
-      .collection(subCollectionName);
+    // const subCollectionRef = usersCollection
+    //   .doc(userId)
+    //   .collection(subCollectionName);
 
-    subCollectionRef.add({
-      title: "설문",
-      content: "답변1: 매우 좋음",
-    });
+    // subCollectionRef.add({
+    //   title: "설문",
+    //   content: "답변1: 매우 좋음",
+    // });
   }
 
   const changeStudentId = (e) => {
