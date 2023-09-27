@@ -19,4 +19,4 @@ const auth = getAuth(app); // firebase auth => user 정보를 관리한다.
 const dbService = getFirestore(app); //  firebase DB => DB를 관리
 const storage = getStorage(app); //storage => 파일이나 사진등의 text가 아닌 저장 내용들
 
-export default { app, auth, dbService, storage };
+export { app, auth, dbService, storage };

@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { auth, dbService } from "../../api/fbase";
-import { doc, getDoc, getDocs, setDoc, collection } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  collection,
+  getFirestore,
+} from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const Div = styled.div`
@@ -13,6 +20,7 @@ const Div = styled.div`
 const LogIn = () => {
   const [init, setInit] = useState(false);
   const [userData, setUserData] = useState("");
+  const [uid, setUid] = useState("");
   const [auth, setAuth] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,26 +50,62 @@ const LogIn = () => {
     "ICT창업학부",
     "창의융합교육원",
     "AI 융합교육원",
-    ];
+  ];
 
   const rcs = ["토레이", "손양원", "카이퍼", "열송학사", "장기려", "카마이클"];
+
   const handleGoogleLogin = () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider(); // provider를 구글로 설정
     signInWithPopup(auth, provider) // popup을 이용한 signup
-      .then((result) => {
+      .then(async (result) => {
         setInit(true);
         setUserData(result.user); // user data 설정
         setName(result.user.displayName);
         setEmail(result.user.email);
+        setUid(result.user.uid);
         console.log("유저 ", result.user);
-        // checkNewUser();
+        checkNewUser(result.user.displayName);
       });
+  };
+
+  const checkNewUser = async (displayName) => {
+    const docRef = doc(dbService, "studentUser", displayName);
+
+    try {
+      const docSnap = await getDoc(docRef); // await 키워드를 사용하여 문서 스냅샷을 기다립니다.
+      
+      if (docSnap.exists()) {
+        console.log("기존 유저");
+        // 메인페이지로 이동
+      } else {
+        console.log("새로운 유저");
+        //회원가입 페이지로 이동
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const changeMajor = (e) => {
     setMajor(e.target.value);
     console.log(e.target.value);
+  };
+
+  //회원가입
+  const signUp = (e) => {
+    const docRef = setDoc(doc(dbService, "studentUser", name), {
+      name: name,
+      email: email,
+      stuNum: stuNum,
+      phoneNumber: phoneNumber,
+      major: major,
+      rc: rc,
+      team: team,
+    });
+    if (docRef) {
+      console.log("회원가입에 저장 성공");
+    }
   };
 
   return (
@@ -101,7 +145,9 @@ const LogIn = () => {
         <input type="radio" name="numberOfRoom" value="room1" /> 1인실
         <input type="radio" name="numberOfRoom" value="room2" /> 2인실
         <input type="radio" name="numberOfRoom" value="room4" /> 4인실
+        <br />
       </form>
+      <button onClick={signUp}> 회원가입 </button>
     </Div>
   );
 };

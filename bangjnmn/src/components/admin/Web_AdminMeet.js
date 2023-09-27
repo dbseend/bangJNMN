@@ -1,10 +1,9 @@
 import React from "react";
-import Web_AdminMeet from "../../components/admin/Web_AdminMeet";
 
 const AdminMeet = () => {
   return (
     <div>
-      <Web_AdminMeet />
+      <h1>AdminMeet</h1>
     </div>
   );
 };

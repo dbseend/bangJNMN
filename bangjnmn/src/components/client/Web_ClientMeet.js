@@ -1,10 +1,9 @@
 import React from "react";
-import Web_ClientMeet from "../../components/client/Web_ClientMeet";
 
 const ClientMeet = () => {
   return (
     <div>
-      <Web_ClientMeet />
+      <h1>ClientMeet</h1>
     </div>
   );
 };
