@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import SelectMode from "./pages/SelectMode";
+import LogIn from "./pages/LogIn";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminMeet from "./pages/admin/AdminMeet";
 import AdminRoom from "./pages/admin/AdminRoom";
@@ -12,7 +12,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SelectMode />} />
+        <Route path="/" element={<LogIn />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/client/*" element={<ClientRoutes />} />
       </Routes>
