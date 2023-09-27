@@ -1,10 +1,9 @@
 import React from "react";
-import Web_ClientHome from "../../components/client/Web_ClientHome";
 
 const ClientHome = () => {
   return (
     <div>
-      <Web_ClientHome />
+      <h1>ClientHome</h1>
     </div>
   );
 };

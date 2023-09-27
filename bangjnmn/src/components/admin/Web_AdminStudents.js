@@ -1,10 +1,9 @@
 import React from "react";
-import Web_AdminStudents from "../../components/admin/Web_AdminStudents";
 
 const AdminStudents = () => {
   return (
     <div>
-      <Web_AdminStudents />
+      <h1>AdminStudents</h1>
     </div>
   );
 };
