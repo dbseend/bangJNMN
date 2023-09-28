@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { onReadUserData } from "../../utils/AccountStatus";
 
 const ClientMyPage = () => {
-  const currentPath = window.location.pathname;
-  const auth = localStorage.getItem("auth");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onReadUserData(navigate);
+  }, [navigate]);
 
   return (
     <div>

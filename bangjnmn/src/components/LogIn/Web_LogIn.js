@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { auth, dbService } from "../../api/fbase";
-import {
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  collection,
-  getFirestore,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Div = styled.div`
   display: grid;
@@ -34,6 +27,7 @@ const LogIn = () => {
   const [team, setTeam] = useState("");
   const [dorm, setDorm] = useState("");
   const [roommateNum, setRoommateNum] = useState(0);
+  const navigate = useNavigate();
 
   const majors = [
     "글로벌리더십학부",
@@ -87,10 +81,14 @@ const LogIn = () => {
 
       if (docSnap.exists()) {
         console.log("기존 유저");
-        // 메인페이지로 이동
+        if (localStorage.getItem("access") == "client") {
+          navigate("/client");
+        } else if (localStorage.getItem("access") == "admin") {
+          navigate("/admin");
+        }
       } else {
         console.log("새로운 유저");
-        //회원가입 페이지로 이동
+        // navigate("/signup"); //나중에 로그인, 회원가입 분리하면 페이지 이동하게 해주세요~
       }
     } catch (err) {
       console.log(err);
