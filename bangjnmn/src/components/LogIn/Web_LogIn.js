@@ -4,6 +4,7 @@ import { auth, dbService } from "../../api/fbase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import Select from 'react-select';
 
 const Div = styled.div`
   display: grid;
@@ -58,6 +59,21 @@ const LogIn = () => {
     "창조관",
   ];
 
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  // 선택이 변경될 때 호출되는 함수
+  const handleSelectChange = (selectedOption) => {
+    setSelectedOption(selectedOption);
+  };
+
+  const options = [
+    { value: "apple", label: "사과1" },
+    { value: "banana", label: "바나나" },
+    { value: "cherry", label: "체리" },
+    { value: "date", label: "데이트" },
+    { value: "grape", label: "포도" },
+    { value: "kiwi", label: "키위" },
+  ];
   const handleGoogleLogin = () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider(); // provider를 구글로 설정
@@ -180,6 +196,15 @@ const LogIn = () => {
   return (
     <div>
       <h1>LogIn Page</h1>
+      <Select
+        value={selectedOption}
+        onChange={handleSelectChange}
+        options={options}
+        isSearchable
+        placeholder="옵션 선택"
+      />
+
+      {selectedOption && <p>선택한 옵션: {selectedOption.label}</p>}
       <button onClick={handleGoogleLogin}>로그인하기</button>
       <form>
         <p>이름: {name}</p>
