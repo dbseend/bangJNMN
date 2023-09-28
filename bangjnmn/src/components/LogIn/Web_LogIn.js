@@ -26,19 +26,14 @@ const LogIn = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState(0);
-  const [grade, setGrade] = useState(0);
   const [stuNum, setStuNum] = useState("");
   const [major, setMajor] = useState("");
   const [phoneNumber, setPhonenumber] = useState("");
-  const [birth, setBrith] = useState("");
+  const [birth, setBirth] = useState("");
   const [rc, setRc] = useState("");
   const [team, setTeam] = useState("");
-  const [dormitory, setDormitory] = useState("");
-  const [roomNumber, setRoomNumber] = useState(0);
-  const { params } = useParams();
-  const currentURL = window.location.href;
-  const currentPath = window.location.pathname;
-  console.log(currentPath);
+  const [dorm, setDorm] = useState("");
+  const [roommateNum, setRoommateNum] = useState(0);
 
   const majors = [
     "글로벌리더십학부",
@@ -58,6 +53,16 @@ const LogIn = () => {
   ];
 
   const rcs = ["토레이", "손양원", "카이퍼", "열송학사", "장기려", "카마이클"];
+  const dorms = [
+    "비전관",
+    "벧엘관",
+    "하용조관",
+    "로뎀관",
+    "은혜관",
+    "국제관",
+    "갈대상자관",
+    "창조관",
+  ];
 
   const handleGoogleLogin = () => {
     const auth = getAuth();
@@ -92,8 +97,58 @@ const LogIn = () => {
     }
   };
 
+  const changeGender = (e) => {
+    setGender(e.target.value);
+    console.log(e.target.value);
+  };
+
   const changeMajor = (e) => {
     setMajor(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const changeStuNum = (e) => {
+    setStuNum(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const changeBirth = (e) => {
+    setBirth(e.target.value);
+    console.log.apply(e.target.value);
+  };
+
+  const changeRc = (e) => {
+    setRc(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const changePhoneNumber = (e) => {
+    const inputPhoneNumber = e.target.value.replace(/\D/g, "");
+    let formattedPhoneNumber = "";
+    if (inputPhoneNumber.length >= 3) {
+      formattedPhoneNumber += inputPhoneNumber.substring(0, 3) + "-";
+    }
+    if (inputPhoneNumber.length >= 7) {
+      formattedPhoneNumber += inputPhoneNumber.substring(3, 7) + "-";
+    }
+    if (inputPhoneNumber.length >= 11) {
+      formattedPhoneNumber += inputPhoneNumber.substring(7, 11);
+    }
+    setPhonenumber(formattedPhoneNumber);
+    console.log(formattedPhoneNumber);
+  };
+
+  const changeTeam = (e) => {
+    setTeam(e.target.value);
+    console.log(e.target.value);
+  };
+  const changeDorm = (e) => {
+    setDorm(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const changeRoommateNum = (e) => {
+    setRoommateNum(e.target.value);
     console.log(e.target.value);
   };
 
@@ -102,6 +157,17 @@ const LogIn = () => {
     const docRef = setDoc(doc(dbService, "studentUser", name), {
       name: name,
       email: email,
+      gender: gender,
+      stuNum: stuNum,
+      major: major,
+      phoneNumber: phoneNumber,
+      birth: birth,
+      rc: rc,
+      team: team,
+      dorm: dorm,
+      roommateNum: roommateNum,
+      roomNum: "",
+      access: "client",
       stuNum: stuNum,
       phoneNumber: phoneNumber,
       major: major,
@@ -114,28 +180,37 @@ const LogIn = () => {
   };
 
   return (
-    <Div>
+    <div>
       <h1>LogIn Page</h1>
       <button onClick={handleGoogleLogin}>로그인하기</button>
       <form>
         <p>이름: {name}</p>
         <p>이메일: {email}</p>
         <br />
-        <label for="gender">성별</label>
-        <input type="radio" name="gender" value="male" /> 남자
-        <input type="radio" name="gender" value="female" /> 여자
+        <label htmlFor="gender">성별</label>
+        <input
+          type="radio"
+          name="gender"
+          value="male"
+          onClick={changeGender}
+        />{" "}
+        남자
+        <input
+          type="radio"
+          name="gender"
+          value="female"
+          onClick={changeGender}
+        />{" "}
+        여자
         <br />
-        <label for="grade">학년</label>
-        <input type="radio" name="grade" value="grade1" /> 1학년
-        <input type="radio" name="grade" value="grade2" /> 2학년
-        <input type="radio" name="grade" value="grade3" /> 3학년
-        <input type="radio" name="grade" value="grade4" /> 4학년
+        <label htmlFor="studentNumber">학번</label>
+        <input type="text" name="studentNumber" onChange={changeStuNum} />
         <br />
-        <label for="studentNumber">학번</label>
-        <input type="text" name="studentNumber" />
-        <br />
-        <label for="major">학부</label>
+        <label htmlFor="major">학부</label>
         <select value={major} onChange={changeMajor}>
+          <option value="" disabled>
+            학부 선택
+          </option>
           {majors.map((majorOption) => (
             <option key={majorOption} value={majorOption}>
               {majorOption}
@@ -143,19 +218,73 @@ const LogIn = () => {
           ))}
         </select>
         <br />
-        <label for="phoneNumber">전화번호</label>
-        <input type="text" name="phoneNumber" />
+        <label htmlFor="phoneNumber">전화번호</label>
+        <input
+          type="text"
+          name="phoneNumber"
+          onChange={changePhoneNumber}
+          placeholder="전화번호를 입력하세요"
+          required
+          pattern="01[0-9]{9}"
+          maxLength={13}
+        />
         <br />
-        <label for="numberOfRoom">호인실</label>
-        <input type="radio" name="numberOfRoom" value="room1" /> 1인실
-        <input type="radio" name="numberOfRoom" value="room2" /> 2인실
-        <input type="radio" name="numberOfRoom" value="room4" /> 4인실
+        <label htmlFor="birth"> 생년월일 </label>
+        <input type="date" name="birth" onChange={changeBirth} />
+        <br />
+        <label htmlFor="rc"> RC </label>
+        <select value={rc} onChange={changeRc}>
+          <option value="" disabled>
+            rc 선택
+          </option>
+          {rcs.map((rcOption) => (
+            <option key={rcOption} value={rcOption}>
+              {rcOption}
+            </option>
+          ))}
+        </select>
+        <br />
+        <label htmlFor="team"> 팀 </label>
+        <input type="text" name="team" onChange={changeTeam} />
+        <br />
+        <label htmlFor="dorm"> 호관 </label>
+        <select value={dorm} onChange={changeDorm}>
+          <option value="" disabled>
+            호관 선택
+          </option>
+          {dorms.map((dormOption) => (
+            <option key={dormOption} value={dormOption}>
+              {dormOption}
+            </option>
+          ))}
+        </select>
+        <br />
+        <label htmlFor="roommateNum"> 인실 </label>
+        <input
+          type="radio"
+          name="roommateNum"
+          value="room1"
+          onClick={changeRoommateNum}
+        />{" "}
+        1인실
+        <input
+          type="radio"
+          name="roommateNum"
+          value="room2"
+          onClick={changeRoommateNum}
+        />{" "}
+        2인실
+        <input
+          type="radio"
+          name="roommateNum"
+          value="room4"
+          onClick={changeRoommateNum}
+        />{" "}
+        4인실
         <br />
       </form>
-      <button onClick={signUp}> 회원가입 </button>
-      <h1>현재 URL 정보</h1>
-      <p>경로: {currentPath}</p>
-    </Div>
+      <button onClick={signUp}>회원가입</button>
+    </div>
   );
 };
 
