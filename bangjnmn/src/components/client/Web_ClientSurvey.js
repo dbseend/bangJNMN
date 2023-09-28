@@ -2,8 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { doc, setDoc, collection } from "firebase/firestore";
 import { auth, dbService } from "../../api/fbase";
+import { useNavigate } from "react-router-dom";
+import { onReadUserData } from "../../utils/AccountStatus";
 
 const ClientSurvey = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onReadUserData(navigate);
+  }, [navigate]);
   // 각 질문에 대한 답변을 저장하는 state
   const [answers, setAnswers] = useState({
     role: "",

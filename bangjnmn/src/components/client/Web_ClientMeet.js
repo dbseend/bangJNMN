@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { onReadUserData } from "../../utils/AccountStatus";
 
 const Div = styled.div`
   display: flex;
@@ -12,14 +14,14 @@ const ClientMeet = () => {
   const [selectTime, setSelectTime] = useState("");
   const [reservedTime, setReservedTime] = useState([]);
   const [rows, setRows] = useState(Array(10).fill(false));
+  const startTime = 9 * 60; // 09:00를 분 단위로 표현
+  const interval = 30; // 30분 간격
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // 예시 시간 데이터 5개 생성
-    const exampleTimes = ["09:00", "10:30", "13:00", "15:30", "17:00"];
-
-    // 생성된 데이터를 selectTime 상태에 저장
-    setSelectTime(exampleTimes);
-  }, []);
+    onReadUserData(navigate);
+  }, [navigate]);
 
   const handleClick = (index) => {
     const newRows = [...rows];
@@ -34,30 +36,30 @@ const ClientMeet = () => {
     <Div>
       <h1>ClientMeet</h1>
       <label for="birth">원하는 면담 날짜</label>
-      <input type="date" onSelect={changeDay} />
-      <br />
-      <h1>{day}</h1>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>시간</th>
-            </tr>
-          </thead>
-          <tbody>
-            <p>시간</p>
-            {rows.map((isGreen, index) => (
-              <tr
-                key={index}
-                onClick={() => handleClick(index)}
-                style={{ backgroundColor: isGreen ? "green" : "white" }}
-              >
-                <td>행 {index + 1}</td>
+      <table border="1">
+        <tbody>
+          {[...Array(20)].map((_, rowIndex) => {
+            // 각 행에 대한 시간 계산
+            const minutes = startTime + rowIndex * interval;
+            const hours = Math.floor(minutes / 60);
+            const minutesOfDay = minutes % 60;
+
+            // 시간을 2자리 숫자로 표현 (예: 09, 10, 11)
+            const formattedHours = hours.toString().padStart(2, "0");
+            const formattedMinutes = minutesOfDay.toString().padStart(2, "0");
+
+            // 행에 시간을 표시
+            const timeLabel = `${formattedHours}:${formattedMinutes}`;
+
+            return (
+              <tr key={rowIndex}>
+                <td>{timeLabel}</td>
+                {/* 내용이 비어있는 열 */}
               </tr>
-            ))}
-          </tbody>
-        </table>{" "}
-      </div>
+            );
+          })}
+        </tbody>
+      </table>
     </Div>
   );
 };
