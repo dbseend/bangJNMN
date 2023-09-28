@@ -10,6 +10,7 @@ import {
   getFirestore,
 } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useParams } from "react-router-dom";
 
 const Div = styled.div`
   display: grid;
@@ -34,6 +35,10 @@ const LogIn = () => {
   const [team, setTeam] = useState("");
   const [dormitory, setDormitory] = useState("");
   const [roomNumber, setRoomNumber] = useState(0);
+  const { params } = useParams();
+  const currentURL = window.location.href;
+  const currentPath = window.location.pathname;
+  console.log(currentPath);
 
   const majors = [
     "글로벌리더십학부",
@@ -74,7 +79,7 @@ const LogIn = () => {
 
     try {
       const docSnap = await getDoc(docRef); // await 키워드를 사용하여 문서 스냅샷을 기다립니다.
-      
+
       if (docSnap.exists()) {
         console.log("기존 유저");
         // 메인페이지로 이동
@@ -148,6 +153,8 @@ const LogIn = () => {
         <br />
       </form>
       <button onClick={signUp}> 회원가입 </button>
+      <h1>현재 URL 정보</h1>
+      <p>경로: {currentPath}</p>
     </Div>
   );
 };
