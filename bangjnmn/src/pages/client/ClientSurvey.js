@@ -5,7 +5,6 @@ const ClientSurvey = () => {
   return (
     <div>
       {" "}
-      {/**제목 + 부가 설명 */}
       <h1>ClientSurvey</h1>
       <h3>방배정을 위한 설문입니다: </h3>
       <div>Q1. 당신은 누구입니까?
@@ -34,6 +33,7 @@ const ClientSurvey = () => {
       <div>Q8.ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
         <textarea name="comments" rows="4" cols="50"></textarea>
       </div>
+
     </div>
   );
 };
