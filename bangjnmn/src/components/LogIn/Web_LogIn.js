@@ -13,6 +13,7 @@ const Div = styled.div`
 const LogIn = () => {
   const [init, setInit] = useState(false);
   const [userData, setUserData] = useState("");
+  const [uid, setUid] = useState("");
   const [auth, setAuth] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,7 +46,7 @@ const LogIn = () => {
 
   const rcs = ["토레이", "손양원", "카이퍼", "열송학사", "장기려", "카마이클"];
   const dorms = ["비전관", "벧엘관", "하용조관", "로뎀관", "은혜관", "국제관", "갈대상자관", "창조관"];
-
+  
   const handleGoogleLogin = () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider(); // provider를 구글로 설정
@@ -55,6 +56,7 @@ const LogIn = () => {
         setUserData(result.user); // user data 설정
         setName(result.user.displayName);
         setEmail(result.user.email);
+        setUid(result.user.uid);
         console.log("유저 ", result.user);
         checkNewUser(result.user.displayName);
       });
@@ -82,6 +84,7 @@ const LogIn = () => {
     setGender(e.target.value);
     console.log(e.target.value);
   }
+
   const changeMajor = (e) => {
     setMajor(e.target.value);
     console.log(e.target.value);
@@ -131,6 +134,7 @@ const LogIn = () => {
     setRoommateNum(e.target.value);
     console.log(e.target.value);
   }
+
   //회원가입
   const signUp = (e) => {
     const docRef = setDoc(doc(dbService, "studentUser", name), {
@@ -146,7 +150,12 @@ const LogIn = () => {
       dorm: dorm,
       roommateNum: roommateNum,
       roomNum: "",
-      access: 1
+      access: "client"
+      stuNum: stuNum,
+      phoneNumber: phoneNumber,
+      major: major,
+      rc: rc,
+      team: team,
     });
     if (docRef) {
       console.log("회원가입에 저장 성공");
@@ -221,10 +230,16 @@ const LogIn = () => {
         <input type="radio" name="roommateNum" value="room1" onClick = {changeRoommateNum}/> 1인실
         <input type="radio" name="roommateNum" value="room2" onClick = {changeRoommateNum}/> 2인실
         <input type="radio" name="roommateNum" value="room4" onClick = {changeRoommateNum}/> 4인실
-        <br />
-        
+        <br />        
       </form>
       <button onClick = {signUp}> 회원가입 </button>
+        <label for="numberOfRoom">호인실</label>
+        <input type="radio" name="numberOfRoom" value="room1" /> 1인실
+        <input type="radio" name="numberOfRoom" value="room2" /> 2인실
+        <input type="radio" name="numberOfRoom" value="room4" /> 4인실
+        <br />
+      </form>
+      <button onClick={signUp}> 회원가입 </button>
     </Div>
   );
 };

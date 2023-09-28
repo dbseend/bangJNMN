@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LogIn from "./pages/LogIn";
+import SignUp from "./pages/SignUp";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminMeet from "./pages/admin/AdminMeet";
 import AdminRoom from "./pages/admin/AdminRoom";
@@ -13,6 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LogIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/client/*" element={<ClientRoutes />} />
       </Routes>
