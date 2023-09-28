@@ -8,6 +8,7 @@ import AdminSurvey from "./pages/admin/AdminSurvey";
 import ClientHome from "./pages/client/ClientHome";
 import ClientSurvey from "./pages/client/ClientSurvey";
 import ClientMeet from "./pages/client/ClientMeet";
+import ClientMyPage from "./components/client/Web_ClientMyPage";
 
 function App() {
   return (
@@ -40,7 +41,8 @@ function ClientRoutes() {
     <Routes>
       <Route path="/" element={<ClientHome />} />
       <Route path="survey" element={<ClientSurvey />} />
-      <Route path="meet" element={<ClientMeet />} />
+      <Route path="/meet" element={<ClientMeet />} />
+      <Route path="/mypage" element={<ClientMyPage />} />
     </Routes>
   );
 }
