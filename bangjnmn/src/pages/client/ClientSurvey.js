@@ -6,7 +6,7 @@ const ClientSurvey = () => {
     <div>
       {" "}
       <h1>ClientSurvey</h1>
-      <h3>방배정을 위한 설문입니다: </h3>
+      <h3>방배정을 위한 설문입니다: !!</h3>
       <div>Q1. 당신은 누구입니까?
         <input type="radio" name="role" value="senior"/> 새섬
         <input type="radio" name="role" value="freshman"/> 새내기
