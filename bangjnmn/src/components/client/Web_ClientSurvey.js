@@ -52,6 +52,7 @@ const ClientSurvey = () => {
 
   return (
     <div>
+      {" "}
       <h1>ClientSurvey</h1>
       <h3>방배정을 위한 설문입니다: !!</h3>
       <div>
