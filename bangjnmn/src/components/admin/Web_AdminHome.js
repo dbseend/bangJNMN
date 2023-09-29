@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { onReadUserData } from "../../utils/AccountStatus";
+import { checkStatus } from "../../utils/AccountStatus";
 
 const AdminHome = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    onReadUserData(navigate);
+    checkStatus(navigate);
   }, [navigate]);
 
   return (

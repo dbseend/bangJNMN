@@ -2,7 +2,7 @@ import React from "react";
 import { auth } from "../api/fbase";
 
 //로그인 상태(권한) 확인
-export const onReadUserData = (navigate) => {
+export const checkStatus = (navigate, displayName) => {
   const currentPath = window.location.pathname;
 
   auth.onAuthStateChanged(async (user) => {
@@ -12,8 +12,9 @@ export const onReadUserData = (navigate) => {
       console.log(user);
       // 로그인 상태
       if (
-        localStorage.getItem("access") == "client" &&
-        currentPath.includes("admin")
+        localStorage.getItem("access") === "client" &&
+        currentPath.includes("admin") &&
+        displayName === user.displayName // displayName과 비교
       ) {
         alert("접근할 수 없습니다.");
         navigate("/client");
