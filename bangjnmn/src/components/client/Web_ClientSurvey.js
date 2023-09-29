@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { doc, setDoc, collection } from "firebase/firestore";
-import { auth, dbService } from "../../api/fbase";
+import React, { useEffect, useState } from "react";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { onReadUserData } from "../../utils/AccountStatus";
+import { auth, dbService } from "../../api/fbase";
 
 const ClientSurvey = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    onReadUserData(navigate);
-  }, [navigate]);
-  // 각 질문에 대한 답변을 저장하는 state
+  const [name, setName] = useState("");
   const [answers, setAnswers] = useState({
     role: "",
     q1: "",
@@ -23,31 +16,50 @@ const ClientSurvey = () => {
     q7: "",
     q8: "",
   });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+
+    // 실시간으로 계속해서 user의 정보를 읽어오는 과정
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setName(user.displayName);
+        console.log("로그인 함");
+        console.log(user);
+        if (
+          localStorage.getItem("access") == "client" &&
+          currentPath.includes("admin")
+        ) {
+          alert("접근할 수 없습니다.");
+          navigate("/client");
+        }
+      } else {
+        alert("로그인이 필요합니다.");
+        navigate("/");
+      }
+    });
+  }, [navigate]);
+  // 각 질문에 대한 답변을 저장하는 state
 
   const handleSubmitAnswers = async () => {
     const usersCollection = collection(dbService, "studentUser");
     const subCollectionName = "survey";
-
-    const userDocRef = doc(usersCollection, "윤성현"); //실제 로그인한 사용자 이름으로 변경 해줘요
+    const userDocRef = doc(usersCollection, name);
 
     const surveyData = {
       ...answers,
     };
 
     try {
-      await setDoc(
-        userDocRef,
-        { [subCollectionName]: surveyData },
-        { merge: true }
-      );
-      console.log("서브 컬렉션에 데이터가 추가되었습니다.");
+      await setDoc(doc(userDocRef, subCollectionName, name), surveyData);
+
+      console.log("설문 결과를 저장했습니다.");
     } catch (error) {
-      console.error(
-        "서브 컬렉션에 데이터를 추가하는 중 오류가 발생했습니다.",
-        error
-      );
+      console.error("설문 결과를 저장하지 못 했습니다.", error);
     }
   };
+
   const handleAnswerChange = (e) => {
     const { name, value } = e.target;
 

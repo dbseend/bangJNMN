@@ -9,6 +9,7 @@ export const onReadUserData = (navigate) => {
     // 실시간으로 계속해서 user의 정보를 읽어오는 과정
     if (user) {
       console.log("로그인 함");
+      console.log(user);
       // 로그인 상태
       if (
         localStorage.getItem("access") == "client" &&
