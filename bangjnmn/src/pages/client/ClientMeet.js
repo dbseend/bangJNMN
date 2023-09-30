@@ -5,7 +5,7 @@ import Web_ClientMeet from "../../components/client/Web_ClientMeet";
 const ClientMeet = () => {
   return (
     <div>
-      <Web_clientNavBar />
+      {/* <Web_clientNavBar /> */}
       <Web_ClientMeet />
     </div>
   );

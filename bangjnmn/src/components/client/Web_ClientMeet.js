@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  collection,
-  doc,
-  updateDoc,
-  getDoc,
-  getDocs,
-} from "firebase/firestore";
+import { collection, doc, updateDoc, getDoc } from "firebase/firestore";
 import { auth, dbService } from "../../api/fbase";
 import { useNavigate } from "react-router-dom";
+
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+  overflow: hidden;
+`;
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -25,8 +29,11 @@ const TableCell = styled.td`
 
 const ClientMeet = () => {
   const [allUserData, setAllUserData] = useState("");
+  const [user, setUser] = useState("");
+  const [meetDate, setMeetDate] = useState("");
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
   const [clickedIndex, setClickedIndex] = useState(-1);
-  const [name, setName] = useState("");
   const [reserved, setReserved] = useState(false);
   const navigate = useNavigate();
 
@@ -37,11 +44,10 @@ const ClientMeet = () => {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
           console.log("로그인 되어있습니다.");
-          setName(user.displayName);
           const stuRef = doc(dbService, "studentUser", user.displayName);
           const stuSnap = await getDoc(stuRef);
           if (stuSnap.exists()) {
-            setReserved(stuSnap.data().meetTF);
+            setUser(stuSnap.data());
           }
           if (
             localStorage.getItem("access") === "client" &&
@@ -57,18 +63,10 @@ const ClientMeet = () => {
       });
     };
 
-    const fetchAllData = async () => {
-      const data = await getDocs(collection(dbService, "studentUser"));
-      const newData = data.docs.map((doc) => ({ ...doc.data() }));
-      setAllUserData(newData);
-      console.log(newData);
-    };
-
     checkStatus();
-    fetchAllData();
   }, []);
 
-  const times = Array.from({ length: 19 }, (_, index) => {
+  const times = Array.from({ length: 5 }, (_, index) => {
     const startTime = 9 * 60;
     const interval = 30;
 
@@ -82,18 +80,10 @@ const ClientMeet = () => {
     return `${formattedHours}:${formattedMinutes}`;
   });
 
-  const handleCellClick = (index) => {
-    if (clickedIndex === index) {
-      setClickedIndex(-1);
-    } else {
-      setClickedIndex(index);
-    }
-  };
-
   const reserveMeet = () => {
-    if (reserved == false) {
+    if (user.meet == false) {
       const stuCollection = collection(dbService, "studentUser");
-      const stuRef = doc(stuCollection, "윤성현");
+      const stuRef = doc(stuCollection, user.name);
       updateDoc(stuRef, {
         meetTime: clickedIndex,
         meetTF: true,
@@ -106,8 +96,42 @@ const ClientMeet = () => {
     }
   };
 
+  const handleSelectTime = (index) => {
+    if (clickedIndex === index) {
+      setClickedIndex(-1);
+    } else {
+      setClickedIndex(index);
+    }
+  };
+
+  const handleSelectDate = (e) => {
+    const dateObject = new Date(e.target.value);
+    const month = (dateObject.getMonth() + 1).toString(); // 월 (0부터 시작하므로 1을 더함)
+    const day = dateObject.getDate().toString(); // 일
+
+    setMeetDate(e.target.value);
+    setMonth(month);
+    setDay(day);
+  };
+
+  const checkTime = async () => {
+    /*
+    meetReservation 컬렉션 -> 특정 달에 해당하는 문서 -> day 컬렉션 -> 특정 일에 해당하는 문서
+    -> 면담시간, 면담 학생 맵 필드로 넣기
+    */
+    const meetCollection = collection(dbService, "meetReservation");
+    const monthRef = doc(meetCollection, month);
+    const dayCollection = collection(monthRef, "day");
+    const dayRef = doc(dayCollection, day);
+    
+    const data = await getDoc(dayRef);
+  };
+
   return (
-    <div>
+    <Div>
+      <h1>원하는 상담날짜</h1>
+      <input type="date" onChange={handleSelectDate} />
+      <button onClick={checkTime}>조회</button>
       <Table>
         <tbody>
           {times.map((item, index) => (
@@ -116,7 +140,7 @@ const ClientMeet = () => {
                 style={{
                   backgroundColor: clickedIndex === index ? "lightblue" : "",
                 }}
-                onClick={() => handleCellClick(index)}
+                onClick={() => handleSelectTime(index)}
               >
                 {item}
               </TableCell>
@@ -125,7 +149,7 @@ const ClientMeet = () => {
         </tbody>
       </Table>
       <button onClick={reserveMeet}>예약하기</button>
-    </div>
+    </Div>
   );
 };
 
