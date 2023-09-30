@@ -1,24 +1,56 @@
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { dbService } from "../../api/fbase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import styled from "styled-components";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  collection,
-  getFirestore,
-} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import styled from "styled-components";
 
 const Div = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-content: center;
+  margin: 0 auto;
+  /* width: 100%; */
+  overflow: hidden;
+  background: #38373C; 
+  width: 100vw; //화면 너비 만큼
+  height: 100vh; /* 화면 높이 만큼 */
+`;
+
+
+const Logo = styled.h1`
+  color: #F26938;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 41.667% */
+  letter-spacing: 0.1px;
+`
+const LoginButton = styled.button`
+  display: flex;
+  width: 314px;
+  height: 100px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 100px;
+  background: #cecccc;
+
+  color: #f26938;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 50% */
+  letter-spacing: 0.1px;
+  margin-top: 40px;
 `;
 
 const LogIn = () => {
@@ -27,45 +59,7 @@ const LogIn = () => {
   const [uid, setUid] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [gender, setGender] = useState(0);
-  const [stuNum, setStuNum] = useState("");
-  const [major, setMajor] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [birth, setBirth] = useState("");
-  const [rc, setRc] = useState("");
-  const [team, setTeam] = useState("");
-  const [dorm, setDorm] = useState("");
-  const [roommateNum, setRoommateNum] = useState(0);
   const navigate = useNavigate();
-
-  const majors = [
-    "글로벌리더십학부",
-    "국제어문학부",
-    "경영경제학부",
-    "법학부",
-    "커뮤니케이션학부",
-    "공간환경시스템공학부",
-    "기계제어공학부",
-    "콘텐츠융합디자인학부",
-    "생명과학부",
-    "전산전자공학부",
-    "상담심리사회복지학부",
-    "ICT창업학부",
-    "창의융합교육원",
-    "AI 융합교육원",
-  ];
-
-  const rcs = ["토레이", "손양원", "카이퍼", "열송학사", "장기려", "카마이클"];
-  const dorms = [
-    "비전관",
-    "벧엘관",
-    "하용조관",
-    "로뎀관",
-    "은혜관",
-    "국제관",
-    "갈대상자관",
-    "창조관",
-  ];
 
   const handleGoogleLogin = () => {
     const auth = getAuth();
@@ -86,7 +80,7 @@ const LogIn = () => {
     const docRef = doc(dbService, "studentUser", displayName);
 
     try {
-      const docSnap = await getDoc(docRef); // await 키워드를 사용하여 문서 스냅샷을 기다립니다.
+      const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log("기존 유저");
         if (localStorage.getItem("access") === "client") {
@@ -96,204 +90,18 @@ const LogIn = () => {
         }
       } else {
         console.log("새로운 유저");
-        // navigate("/signup"); //나중에 로그인, 회원가입 분리하면 페이지 이동하게 해주세요~
+        navigate("/signup");
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const changeGender = (e) => {
-    setGender(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const changeMajor = (e) => {
-    setMajor(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const changeStuNum = (e) => {
-    setStuNum(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const changeBirth = (e) => {
-    setBirth(e.target.value);
-    console.log.apply(e.target.value);
-  };
-
-  const changeRc = (e) => {
-    setRc(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const changePhoneNumber = (e) => {
-    const inputPhoneNumber = e.target.value.replace(/\D/g, "");
-    let formattedPhoneNumber = "";
-    if (inputPhoneNumber.length >= 3) {
-      formattedPhoneNumber += inputPhoneNumber.substring(0, 3) + "-";
-    }
-    if (inputPhoneNumber.length >= 7) {
-      formattedPhoneNumber += inputPhoneNumber.substring(3, 7) + "-";
-    }
-    if (inputPhoneNumber.length >= 11) {
-      formattedPhoneNumber += inputPhoneNumber.substring(7, 11);
-    }
-    setPhoneNumber(formattedPhoneNumber);
-    console.log(formattedPhoneNumber);
-  };
-
-  const changeTeam = (e) => {
-    setTeam(e.target.value);
-    console.log(e.target.value);
-  };
-  const changeDorm = (e) => {
-    setDorm(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const changeRoommateNum = (e) => {
-    setRoommateNum(e.target.value);
-    console.log(e.target.value);
-  };
-
-  //회원가입
-  const signUp = (e) => {
-    const docRef = setDoc(doc(dbService, "studentUser", name), {
-      name: name,
-      email: email,
-      gender: gender,
-      stuNum: stuNum,
-      major: major,
-      phoneNumber: phoneNumber,
-      birth: birth,
-      rc: rc,
-      team: team,
-      dorm: dorm,
-      roommateNum: roommateNum,
-      roomNum: "",
-      access: "client",
-    });
-    if (docRef) {
-      console.log("회원가입에 저장 성공");
-    }
-  };
-
   return (
-    <div>
-      <h1>LogIn Page</h1>
-      <Select
-        value={selectedOption}
-        onChange={handleSelectChange}
-        options={options}
-        isSearchable
-        placeholder="옵션 선택"
-      />
-
-      {selectedOption && <p>선택한 옵션: {selectedOption.label}</p>}
+    <Div>
+      <Logo>방주니마니</Logo>
       <LoginButton onClick={handleGoogleLogin}>login</LoginButton>
-
-      <form>
-      <p>이름: {name}</p>
-        <p>이메일: {email}</p>
-        <br />
-
-        <label htmlFor="gender">성별</label>
-        <input type="radio" name="gender" value="male" onClick={changeGender} /> 남자
-        <input type="radio" name="gender" value="female" onClick={changeGender} /> 여자
-        <br />
-
-        <label htmlFor="studentNumber">학번</label>
-        <input type="text" name="studentNumber" onChange={changeStuNum} />
-        <br />
-
-        <label htmlFor="major">학부</label>
-        <select value={major} onChange={changeMajor}>
-          <option value="" disabled>
-            학부 선택
-          </option>
-          {majors.map((majorOption) => (
-            <option key={majorOption} value={majorOption}>
-              {majorOption}
-            </option>
-          ))}
-        </select>
-        <br />
-
-        <label htmlFor="phoneNumber">전화번호</label>
-        <input
-          type="text"
-          name="phoneNumber"
-          onChange={changePhoneNumber}
-          placeholder="전화번호를 입력하세요"
-          required="required"
-          pattern="01[0-9]{9}"
-          maxLength={13}
-        />
-        <br />
-
-        <label htmlFor="birth"> 생년월일 </label>
-        <input type="date" name="birth" onChange={changeBirth} />
-        <br />
-
-        <label htmlFor="rc"> RC </label>
-        <select value={rc} onChange={changeRc}>
-          <option value="" disabled>
-            rc 선택
-          </option>
-          {rcs.map((rcOption) => (
-            <option key={rcOption} value={rcOption}>
-              {rcOption}
-            </option>
-          ))}
-        </select>
-        <br />
-
-        <label htmlFor="team"> 팀 </label>
-        <input type="text" name="team" onChange={changeTeam} />
-        <br />
-
-        <label htmlFor="dorm"> 호관 </label>
-        <select value={dorm} onChange={changeDorm}>
-          <option value="" disabled>
-            호관 선택
-          </option>
-          {dorms.map((dormOption) => (
-            <option key={dormOption} value={dormOption}>
-              {dormOption}
-            </option>
-          ))}
-        </select>
-        <br />
-
-        <label htmlFor="roommateNum"> 인실 </label>
-        <input
-          type="radio"
-          name="roommateNum"
-          value="room1"
-          onClick={changeRoommateNum}
-        />{" "}
-        1인실
-        <input
-          type="radio"
-          name="roommateNum"
-          value="room2"
-          onClick={changeRoommateNum}
-        />{" "}
-        2인실
-        <input
-          type="radio"
-          name="roommateNum"
-          value="room4"
-          onClick={changeRoommateNum}
-        />{" "}
-        4인실
-        <br />
-      </form>
-      <button onClick={signUp}> 회원가입 </button>
-      {/* ... (the rest of your code) */}
-    </div>
+    </Div>
   );
 };
 
