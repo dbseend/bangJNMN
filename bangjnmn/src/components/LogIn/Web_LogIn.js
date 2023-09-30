@@ -4,7 +4,7 @@ import { auth, dbService } from "../../api/fbase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import Select from 'react-select';
+import Select from "react-select";
 
 const Div = styled.div`
   display: grid;
@@ -61,7 +61,7 @@ const LogIn = () => {
 
   const [selectedOption, setSelectedOption] = useState(null);
 
-  // 선택이 변경될 때 호출되는 함수
+  // 선택이 변경될 때 호출되는 함수예용 !!
   const handleSelectChange = (selectedOption) => {
     setSelectedOption(selectedOption);
   };
@@ -94,7 +94,6 @@ const LogIn = () => {
 
     try {
       const docSnap = await getDoc(docRef); // await 키워드를 사용하여 문서 스냅샷을 기다립니다.
-
       if (docSnap.exists()) {
         console.log("기존 유저");
         if (localStorage.getItem("access") == "client") {
@@ -166,6 +165,28 @@ const LogIn = () => {
     console.log(e.target.value);
   };
 
+  const LoginButton = styled.button`
+    display: flex;
+    width: 314px;
+    height: 100px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    border-radius: 100px;
+    background: #cecccc;
+
+    color: #f26938;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 50% */
+    letter-spacing: 0.1px;
+  `;
+
   //회원가입
   const signUp = (e) => {
     const docRef = setDoc(doc(dbService, "studentUser", name), {
@@ -205,7 +226,8 @@ const LogIn = () => {
       />
 
       {selectedOption && <p>선택한 옵션: {selectedOption.label}</p>}
-      <button onClick={handleGoogleLogin}>로그인하기</button>
+      <LoginButton onClick={handleGoogleLogin}>login</LoginButton>
+
       <form>
         <p>이름: {name}</p>
         <p>이메일: {email}</p>
