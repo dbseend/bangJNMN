@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { auth, dbService } from "../../api/fbase";
+import styled from "styled-components";
 
 const ClientSurvey = () => {
   const [name, setName] = useState("");
@@ -68,6 +69,16 @@ const ClientSurvey = () => {
       [name]: value,
     }));
   };
+
+  const Div = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    overflow: hidden;
+  `;
 
   return (
     <div>
