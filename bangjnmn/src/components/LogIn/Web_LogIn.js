@@ -7,11 +7,28 @@ import Select from "react-select";
 import styled from "styled-components";
 
 const Div = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-content: center;
+  margin: -8px;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #38373c;
 `;
 
+
+const Logo = styled.h1`
+  color: #F26938;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 41.667% */
+  letter-spacing: 0.1px;
+`
 const LoginButton = styled.button`
   display: flex;
   width: 314px;
@@ -32,6 +49,7 @@ const LoginButton = styled.button`
   font-weight: 500;
   line-height: 20px; /* 50% */
   letter-spacing: 0.1px;
+  margin-top: 40px;
 `;
 
 const LogIn = () => {
@@ -79,10 +97,10 @@ const LogIn = () => {
   };
 
   return (
-    <div>
-      <h1>LogIn Page</h1>
+    <Div>
+      <Logo>방주니마니</Logo>
       <LoginButton onClick={handleGoogleLogin}>login</LoginButton>
-    </div>
+    </Div>
   );
 };
 
