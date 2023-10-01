@@ -7,6 +7,7 @@ import AdminSurvey from "./pages/admin/AdminSurvey";
 import ClientHome from "./pages/client/ClientHome";
 import ClientSurvey from "./pages/client/ClientSurvey";
 import ClientMeet from "./pages/client/ClientMeet";
+import AdminSearch from "./pages/admin/AdminSearch";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function AdminRoutes() {
       <Route path="survey" element={<AdminSurvey />} />
       <Route path="meet" element={<AdminMeet />} />
       <Route path="room" element={<AdminRoom />} />
+      <Route path="search" element={<AdminSearch />} />
     </Routes>
   );
 }
