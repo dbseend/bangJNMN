@@ -1,14 +1,14 @@
 import React from "react";
 import Web_clientNavBar from "../../components/client/Web_ClientNavBar";
-import Web_ClientSurvey from "../../components/client/Web_ClientSurvey";
+import Web_ClientMyPage from "../../components/client/Web_ClientMyPage";
 
-const ClientSurvey = () => {
+const ClientMyPage = () => {
   return (
     <div>
       <Web_clientNavBar />
-      <Web_ClientSurvey />
+      <Web_ClientMyPage />
     </div>
   );
 };
 
-export default ClientSurvey;
+export default ClientMyPage;

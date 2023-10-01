@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import SelectMode from "./pages/SelectMode";
+import LogIn from "./pages/LogIn";
+import SignUp from "./pages/SignUp";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminMeet from "./pages/admin/AdminMeet";
 import AdminRoom from "./pages/admin/AdminRoom";
@@ -7,13 +8,15 @@ import AdminSurvey from "./pages/admin/AdminSurvey";
 import ClientHome from "./pages/client/ClientHome";
 import ClientSurvey from "./pages/client/ClientSurvey";
 import ClientMeet from "./pages/client/ClientMeet";
+import ClientMyPage from "./components/client/Web_ClientMyPage";
 import AdminSearch from "./pages/admin/AdminSearch";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SelectMode />} />
+        <Route path="/" element={<LogIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/client/*" element={<ClientRoutes />} />
       </Routes>
@@ -40,7 +43,8 @@ function ClientRoutes() {
     <Routes>
       <Route path="/" element={<ClientHome />} />
       <Route path="survey" element={<ClientSurvey />} />
-      <Route path="meet" element={<ClientMeet />} />
+      <Route path="/meet" element={<ClientMeet />} />
+      <Route path="/mypage" element={<ClientMyPage />} />
     </Routes>
   );
 }

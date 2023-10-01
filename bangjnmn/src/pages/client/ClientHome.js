@@ -1,11 +1,14 @@
 import React from "react";
+import Web_clientNavBar from "../../components/client/Web_ClientNavBar";
+import Web_ClientHome from "../../components/client/Web_ClientHome";
 
 const ClientHome = () => {
-    return (
-        <div>
-            <h1>ClientHome</h1>
-        </div>
-    )
-}
+  return (
+    <div>
+      <Web_clientNavBar />
+      <Web_ClientHome />
+    </div>
+  );
+};
 
 export default ClientHome;

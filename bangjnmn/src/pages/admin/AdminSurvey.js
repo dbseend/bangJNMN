@@ -1,11 +1,14 @@
 import React from "react";
+import Web_AdminNavBar from "../../components/admin/Web_AdminNavBar";
+import Web_AdminStudents from "../../components/admin/Web_AdminStudents";
 
-const AdminSurvey = () => {
-    return (
-        <div>
-            <h1>AdminSurvey</h1>
-        </div>
-    )
-}
+const AdminStudents = () => {
+  return (
+    <div>
+      <Web_AdminNavBar />
+      <Web_AdminStudents />
+    </div>
+  );
+};
 
-export default AdminSurvey;
+export default AdminStudents;
