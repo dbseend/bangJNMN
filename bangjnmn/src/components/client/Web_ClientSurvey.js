@@ -81,7 +81,7 @@ const ClientSurvey = () => {
   `;
 
   return (
-    <div>
+    <Div>
       {" "}
       <h1>ClientSurvey</h1>
       <h3>방배정을 위한 설문입니다: !!</h3>
@@ -303,7 +303,7 @@ const ClientSurvey = () => {
         3번
       </div>
       <button onClick={handleSubmitAnswers}>답변제출</button>
-    </div>
+    </Div>
   );
 };
 
