@@ -81,7 +81,7 @@ const ClientSurvey = () => {
   `;
 
   return (
-    <div>
+    <Div>
       {" "}
       <h1>ClientSurvey</h1>
       <h3>방배정을 위한 설문입니다: !!</h3>
@@ -109,40 +109,201 @@ const ClientSurvey = () => {
         />{" "}
         팀원
       </div>
+
       <div>
         Q1. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
-        <textarea name="q1" onChange={handleAnswerChange}></textarea>
+        <input
+          type="radio"
+          name="Q2"
+          value="Q2"
+          onChange={handleAnswerChange}
+        />{" "}
+        1번
+        <input
+          type="radio"
+          name="Q2"
+          value="Q2"
+          onChange={handleAnswerChange}
+        />{" "}
+        2번
+        <input
+          type="radio"
+          name="Q2"
+          value="Q2"
+          onChange={handleAnswerChange}
+        />{" "}
+        3번
       </div>
       <div>
         Q2. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
-        <textarea name="q2" onChange={handleAnswerChange}></textarea>
+        <input
+          type="radio"
+          name="Q1"
+          value="Q1"
+          onChange={handleAnswerChange}
+        />{" "}
+        1번
+        <input
+          type="radio"
+          name="Q1"
+          value="Q1"
+          onChange={handleAnswerChange}
+        />{" "}
+        2번
+        <input
+          type="radio"
+          name="Q1"
+          value="Q1"
+          onChange={handleAnswerChange}
+        />{" "}
+        3번
       </div>
       <div>
         Q3. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
-        <textarea name="q3" onChange={handleAnswerChange}></textarea>
+        <input
+          type="radio"
+          name="Q3"
+          value="Q3"
+          onChange={handleAnswerChange}
+        />{" "}
+        1번
+        <input
+          type="radio"
+          name="Q3"
+          value="Q3"
+          onChange={handleAnswerChange}
+        />{" "}
+        2번
+        <input
+          type="radio"
+          name="Q3"
+          value="Q3"
+          onChange={handleAnswerChange}
+        />{" "}
+        3번
       </div>
       <div>
         Q4. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
-        <textarea name="q4" onChange={handleAnswerChange}></textarea>
+        <input
+          type="radio"
+          name="Q4"
+          value="Q4"
+          onChange={handleAnswerChange}
+        />{" "}
+        1번
+        <input
+          type="radio"
+          name="Q4"
+          value="Q4"
+          onChange={handleAnswerChange}
+        />{" "}
+        2번
+        <input
+          type="radio"
+          name="Q4"
+          value="Q4"
+          onChange={handleAnswerChange}
+        />{" "}
+        3번
       </div>
       <div>
         Q5. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
-        <textarea name="q5" onChange={handleAnswerChange}></textarea>
+        <input
+          type="radio"
+          name="Q5"
+          value="Q5"
+          onChange={handleAnswerChange}
+        />{" "}
+        1번
+        <input
+          type="radio"
+          name="Q5"
+          value="Q5"
+          onChange={handleAnswerChange}
+        />{" "}
+        2번
+        <input
+          type="radio"
+          name="Q5"
+          value="Q5"
+          onChange={handleAnswerChange}
+        />{" "}
+        3번
       </div>
       <div>
         Q6. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
-        <textarea name="q6" onChange={handleAnswerChange}></textarea>
+        <input
+          type="radio"
+          name="Q6"
+          value="Q6"
+          onChange={handleAnswerChange}
+        />{" "}
+        1번
+        <input
+          type="radio"
+          name="Q6"
+          value="Q6"
+          onChange={handleAnswerChange}
+        />{" "}
+        2번
+        <input
+          type="radio"
+          name="Q6"
+          value="Q6"
+          onChange={handleAnswerChange}
+        />{" "}
+        3번
       </div>
       <div>
         Q7. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
-        <textarea name="q7" onChange={handleAnswerChange}></textarea>
+        <input
+          type="radio"
+          name="Q7"
+          value="Q7"
+          onChange={handleAnswerChange}
+        />{" "}
+        1번
+        <input
+          type="radio"
+          name="Q7"
+          value="Q7"
+          onChange={handleAnswerChange}
+        />{" "}
+        2번
+        <input
+          type="radio"
+          name="Q7"
+          value="Q7"
+          onChange={handleAnswerChange}
+        />{" "}
+        3번
       </div>
       <div>
         Q8. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
-        <textarea name="q8" onChange={handleAnswerChange}></textarea>
+        <input
+          type="radio"
+          name="Q8"
+          value="Q8"
+          onChange={handleAnswerChange}
+        />{" "}
+        1번
+        <input
+          type="radio"
+          name="Q8"
+          value="Q8"
+          onChange={handleAnswerChange}
+        />{" "}
+        2번
+        <input
+          type="radio"
+          name="Q8"
+          value="Q8"
+          onChange={handleAnswerChange}
+        />{" "}
+        3번
       </div>
       <button onClick={handleSubmitAnswers}>답변제출</button>
-    </div>
+    </Div>
   );
 };
 
