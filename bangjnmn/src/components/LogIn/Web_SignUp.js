@@ -10,15 +10,11 @@ const Div = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  width: 100%;
+  margin: -8px;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
   background: #38373c;
-  /* width: 100vw; //화면 너비 만큼
-  height: 100vh; */
-/* top: 854px;
-left: 799px; */
-
 `;
 
 const Title = styled.div`
@@ -50,16 +46,27 @@ const Table = styled.div`
 
 const Typo = styled.div`
   color: #000;
-  text-align: center;
   font-family: Roboto bold;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: 20px; /* 125% */
   letter-spacing: 0.1px;
-  top: 201px;
-  left: 416px;
+  padding-top: 21px;
+  padding-left: 16px;
 `;
+
+const Content = styled.div`
+  color: #000;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 125% */
+  letter-spacing: 0.1px;
+  padding-top: 21px;
+  padding-left: 100px;
+`
 const Radio = styled.input`
   appearance: none;
   width: 18px;
@@ -250,14 +257,15 @@ const SignUp = () => {
       <form>
         <Mass1>
           <Table>
-            <Typo>이름 </Typo> {userData.displayName}{" "}
+            <Typo> 이름 </Typo> <Content> {userData.displayName}{" "} </Content>
           </Table>
           <Table>
-            <Typo>이메일 </Typo> {userData.email}
+            <Typo> 이메일 </Typo>
+            <Content> {userData.email} </Content>
           </Table>
 
           <Table>
-            <label htmlFor="gender">성별</label>
+            <label htmlFor="gender"> <Typo> 성별 </Typo></label>
             <Radio
               type="radio"
               name="gender"
@@ -274,12 +282,12 @@ const SignUp = () => {
             여자
           </Table>
           <Table>
-            <label htmlFor="birth"> 생년월일 </label>
+            <label htmlFor="birth"> <Typo> 생년월일 </Typo> </label>
             <input type="date" name="birth" onChange={changeBirth} />
           </Table>
 
           <Table>
-            <label htmlFor="phoneNumber">전화번호</label>
+            <label htmlFor="phoneNumber"> <Typo> 전화번호 </Typo></label>
             <input
               type="text"
               name="phoneNumber"
@@ -294,11 +302,11 @@ const SignUp = () => {
         
         {/* <Mass> */}
           <Table>
-            <label htmlFor="studentNumber">학번</label>
+            <label htmlFor="studentNumber"> <Typo> 학번 </Typo></label>
             <input type="text" name="studentNumber" onChange={changeStuNum} />
           </Table>
           <Table>
-            <label htmlFor="major">학부</label>
+            <label htmlFor="major"> <Typo> 학부 </Typo></label>
             <select value={major} onChange={changeMajor}>
               <option value="" disabled>
                 학부 선택
@@ -312,7 +320,7 @@ const SignUp = () => {
           </Table>
 
           <Table>
-            <label htmlFor="rc"> RC </label>
+            <label htmlFor="rc"> <Typo> RC </Typo> </label>
             <select value={rc} onChange={changeRc}>
               <option value="" disabled>
                 rc 선택
@@ -326,7 +334,7 @@ const SignUp = () => {
           </Table>
 
           <Table>
-            <label htmlFor="dorm"> 호관 </label>
+            <label htmlFor="dorm"> <Typo> 거주호관 </Typo> </label>
             <select value={dorm} onChange={changeDorm}>
               <option value="" disabled>
                 호관 선택
@@ -339,11 +347,11 @@ const SignUp = () => {
             </select>
           </Table>
           <Table>
-            <label htmlFor="team"> 팀 </label>
+            <label htmlFor="team"> <Typo> 팀 </Typo> </label>
             <input type="text" name="team" onChange={changeTeam} />
           </Table>
           <Table>
-            <label htmlFor="roommateNum"> 인실 </label>
+            <label htmlFor="roommateNum"><Typo> 인실 </Typo>  </label>
             <Radio
               type="radio"
               name="roommateNum"

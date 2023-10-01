@@ -11,12 +11,11 @@ const Div = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  /* width: 100%; */
+  margin: -8px;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
-  background: #38373C; 
-  width: 100vw; //화면 너비 만큼
-  height: 100vh; /* 화면 높이 만큼 */
+  background: #38373c;
 `;
 
 
