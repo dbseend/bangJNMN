@@ -8,14 +8,14 @@ const ClientSurvey = () => {
   const [name, setName] = useState("");
   const [answers, setAnswers] = useState({
     role: "",
-    q1: "",
-    q2: "",
-    q3: "",
-    q4: "",
-    q5: "",
-    q6: "",
-    q7: "",
-    q8: "",
+    Q1: "",
+    Q2: "",
+    Q3: "",
+    Q4: "",
+    Q5: "",
+    Q6: "",
+    Q7: "",
+    Q8: "",
   });
   const navigate = useNavigate();
 
@@ -80,8 +80,12 @@ const ClientSurvey = () => {
     overflow: hidden;
   `;
 
+  const Button = styled.button`
+    cursor: pointer;
+  `;
+
   return (
-    <Div>
+    <div>
       {" "}
       <h1>ClientSurvey</h1>
       <h3>방배정을 위한 설문입니다: !!</h3>
@@ -109,27 +113,26 @@ const ClientSurvey = () => {
         />{" "}
         팀원
       </div>
-
       <div>
         Q1. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
         <input
           type="radio"
-          name="Q2"
-          value="Q2"
+          name="Q1"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
-          name="Q2"
-          value="Q2"
+          name="Q1"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
-          name="Q2"
-          value="Q2"
+          name="Q1"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -138,22 +141,22 @@ const ClientSurvey = () => {
         Q2. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
         <input
           type="radio"
-          name="Q1"
-          value="Q1"
+          name="Q2"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
-          name="Q1"
-          value="Q1"
+          name="Q2"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
-          name="Q1"
-          value="Q1"
+          name="Q2"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -163,21 +166,21 @@ const ClientSurvey = () => {
         <input
           type="radio"
           name="Q3"
-          value="Q3"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
           name="Q3"
-          value="Q3"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
           name="Q3"
-          value="Q3"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -187,21 +190,21 @@ const ClientSurvey = () => {
         <input
           type="radio"
           name="Q4"
-          value="Q4"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
           name="Q4"
-          value="Q4"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
           name="Q4"
-          value="Q4"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -211,21 +214,21 @@ const ClientSurvey = () => {
         <input
           type="radio"
           name="Q5"
-          value="Q5"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
           name="Q5"
-          value="Q5"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
           name="Q5"
-          value="Q5"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -235,21 +238,21 @@ const ClientSurvey = () => {
         <input
           type="radio"
           name="Q6"
-          value="Q6"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
           name="Q6"
-          value="Q6"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
           name="Q6"
-          value="Q6"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -259,21 +262,21 @@ const ClientSurvey = () => {
         <input
           type="radio"
           name="Q7"
-          value="Q7"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
           name="Q7"
-          value="Q7"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
           name="Q7"
-          value="Q7"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -283,27 +286,27 @@ const ClientSurvey = () => {
         <input
           type="radio"
           name="Q8"
-          value="Q8"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
           name="Q8"
-          value="Q8"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
           name="Q8"
-          value="Q8"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
       </div>
-      <button onClick={handleSubmitAnswers}>답변제출</button>
-    </Div>
+      <Button onClick={handleSubmitAnswers}>답변제출</Button>
+    </div>
   );
 };
 
