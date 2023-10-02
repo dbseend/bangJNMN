@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { collection, doc, updateDoc, getDoc } from "firebase/firestore";
+import { collection, doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
 import { auth, dbService } from "../../api/fbase";
 import { useNavigate } from "react-router-dom";
 
@@ -81,19 +81,35 @@ const ClientMeet = () => {
   });
 
   const reserveMeet = () => {
-    if (user.meet == false) {
-      const stuCollection = collection(dbService, "studentUser");
-      const stuRef = doc(stuCollection, user.name);
-      updateDoc(stuRef, {
-        meetTime: clickedIndex,
-        meetTF: true,
+    const meetCollection = collection(dbService, "meetReservation");
+    const monthRef = doc(meetCollection, month);
+    const dayCollection = collection(monthRef, "day");
+    const dayRef = doc(dayCollection, day);
+    const time = clickedIndex.toString();
+
+    const data = {
+      time: 4,
+      name: "김예은",
+    };
+
+    console.log(data);
+
+    setDoc(
+      dayRef,
+      {
+        clickedIndex: {
+          time: data.time,
+          name: data.name,
+        },
+      },
+      { merge: true }
+    )
+      .then(() => {
+        console.log("day 문서 업데이트 성공!");
+      })
+      .catch((error) => {
+        console.error("day 문서 업데이트 실패: ", error);
       });
-      setReserved(true);
-      console.log(clickedIndex);
-    }
-    if (reserved == true) {
-      alert("이미 예약하셨습니다");
-    }
   };
 
   const handleSelectTime = (index) => {
@@ -123,7 +139,7 @@ const ClientMeet = () => {
     const monthRef = doc(meetCollection, month);
     const dayCollection = collection(monthRef, "day");
     const dayRef = doc(dayCollection, day);
-    
+
     const data = await getDoc(dayRef);
   };
 
