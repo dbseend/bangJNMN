@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { collection, doc, updateDoc, getDoc } from "firebase/firestore";
+import { collection, doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
 import { auth, dbService } from "../../api/fbase";
 import { useNavigate } from "react-router-dom";
 
@@ -28,8 +28,10 @@ const TableCell = styled.td`
 `;
 
 const ClientMeet = () => {
-  const [allUserData, setAllUserData] = useState("");
   const [user, setUser] = useState("");
+  const [index, setIndex] = useState([]);
+  const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
+  const [meetInfo, setMeetInfo] = useState("");
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
@@ -80,20 +82,57 @@ const ClientMeet = () => {
     return `${formattedHours}:${formattedMinutes}`;
   });
 
+  const checkTime = async () => {
+    const meetCollection = collection(dbService, "meetReservation");
+    const monthRef = doc(meetCollection, month);
+    const dayCollection = collection(monthRef, "day");
+    const dayRef = doc(dayCollection, day);
+
+    const docSnap = await getDoc(dayRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      const data = docSnap.data();
+      const arr = Object.values(data);
+      setIndex(arr);
+      for (let i = 0; i < arr.length; i++) {
+        reserveTF[arr[i].time] = true;
+      }
+    } else {
+      console.log("No such document!");
+      setMeetInfo("정보 없음");
+    }
+
+    console.log(reserveTF);
+  };
+
   const reserveMeet = () => {
-    if (user.meet == false) {
-      const stuCollection = collection(dbService, "studentUser");
-      const stuRef = doc(stuCollection, user.name);
-      updateDoc(stuRef, {
-        meetTime: clickedIndex,
-        meetTF: true,
+    const meetCollection = collection(dbService, "meetReservation");
+    const monthRef = doc(meetCollection, month);
+    const dayCollection = collection(monthRef, "day");
+    const dayRef = doc(dayCollection, day);
+
+    if (reserveTF[clickedIndex] == true) {
+      alert("이미 예약된 시간입니다!");
+    }
+
+    setDoc(
+      dayRef,
+      {
+        [clickedIndex]: {
+          time: clickedIndex,
+          name: user.name,
+        },
+      },
+      { merge: true }
+    )
+      .then(() => {
+        console.log("day 문서 업데이트 성공!");
+        alert("예약이 완료되었습니다.");
+      })
+      .catch((error) => {
+        console.error("day 문서 업데이트 실패: ", error);
+        alert("예약에 실패했습니다.");
       });
-      setReserved(true);
-      console.log(clickedIndex);
-    }
-    if (reserved == true) {
-      alert("이미 예약하셨습니다");
-    }
   };
 
   const handleSelectTime = (index) => {
@@ -106,25 +145,12 @@ const ClientMeet = () => {
 
   const handleSelectDate = (e) => {
     const dateObject = new Date(e.target.value);
-    const month = (dateObject.getMonth() + 1).toString(); // 월 (0부터 시작하므로 1을 더함)
-    const day = dateObject.getDate().toString(); // 일
+    const month = (dateObject.getMonth() + 1).toString();
+    const day = dateObject.getDate().toString();
 
     setMeetDate(e.target.value);
     setMonth(month);
     setDay(day);
-  };
-
-  const checkTime = async () => {
-    /*
-    meetReservation 컬렉션 -> 특정 달에 해당하는 문서 -> day 컬렉션 -> 특정 일에 해당하는 문서
-    -> 면담시간, 면담 학생 맵 필드로 넣기
-    */
-    const meetCollection = collection(dbService, "meetReservation");
-    const monthRef = doc(meetCollection, month);
-    const dayCollection = collection(monthRef, "day");
-    const dayRef = doc(dayCollection, day);
-    
-    const data = await getDoc(dayRef);
   };
 
   return (
@@ -138,7 +164,11 @@ const ClientMeet = () => {
             <tr key={index}>
               <TableCell
                 style={{
-                  backgroundColor: clickedIndex === index ? "lightblue" : "",
+                  backgroundColor: reserveTF[index]
+                    ? "red"
+                    : clickedIndex === index
+                    ? "lightblue"
+                    : "",
                 }}
                 onClick={() => handleSelectTime(index)}
               >
