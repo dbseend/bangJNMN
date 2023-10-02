@@ -8,7 +8,7 @@ const ClientMyPage = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({
+  useState({
     phoneNumber: "",
   });
 
@@ -114,7 +114,7 @@ const ClientMyPage = () => {
         전화번호: {editMode ? (
           <input
             type="text"
-            value={formData.phoneNumber}
+            value={phoneNumber}
             onChange={(e) => handleFieldChange("phoneNumber", e.target.value)}
           />
         ) : (

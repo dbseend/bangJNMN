@@ -81,7 +81,7 @@ const ClientSurvey = () => {
   `;
 
   return (
-    <Div>
+    <div>
       {" "}
       <h1>ClientSurvey</h1>
       <h3>방배정을 위한 설문입니다: !!</h3>
@@ -114,22 +114,22 @@ const ClientSurvey = () => {
         Q1. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
         <input
           type="radio"
-          name="Q2"
-          value="Q2"
+          name="Q1"
+          value="1"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
-          name="Q2"
-          value="Q2"
+          name="Q1"
+          value="2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
-          name="Q2"
-          value="Q2"
+          name="Q1"
+          value="3"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -138,22 +138,22 @@ const ClientSurvey = () => {
         Q2. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?<br></br>
         <input
           type="radio"
-          name="Q1"
-          value="Q1"
+          name="Q2"
+          value="Q2"
           onChange={handleAnswerChange}
         />{" "}
         1번
         <input
           type="radio"
-          name="Q1"
-          value="Q1"
+          name="Q2"
+          value="Q2"
           onChange={handleAnswerChange}
         />{" "}
         2번
         <input
           type="radio"
-          name="Q1"
-          value="Q1"
+          name="Q2"
+          value="Q2"
           onChange={handleAnswerChange}
         />{" "}
         3번
@@ -303,7 +303,7 @@ const ClientSurvey = () => {
         3번
       </div>
       <button onClick={handleSubmitAnswers}>답변제출</button>
-    </Div>
+    </div>
   );
 };
 
