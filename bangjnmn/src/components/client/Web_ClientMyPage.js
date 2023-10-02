@@ -1,6 +1,6 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Prompt } from "react-router-dom";
 import styled from "styled-components";
 import { auth, dbService } from "../../api/fbase";
 
@@ -8,40 +8,45 @@ const ClientMyPage = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  useState({
-    phoneNumber: "",
-  });
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isModified, setIsModified] = useState(false);
 
   useEffect(() => {
-    const currentPath = window.location.pathname;
+      const checkStatus = async () => {
+      const currentPath = window.location.pathname;
 
-    // 실시간으로 계속해서 user의 정보를 읽어오는 과정
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        // Firebase Authentication에서 사용자 정보를 가져옴
-        const displayName = user.displayName;
-
-        // fetchData 함수 호출 시 displayName 전달
-        const data = await fetchData(displayName);
-
-        setUserData(data);
-
-        console.log("로그인 함");
-        console.log(user);
-
-        if (
-          localStorage.getItem("access") === "client" &&
-          currentPath.includes("admin")
-        ) {
-          alert("접근할 수 없습니다.");
-          navigate("/client");
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          console.log("로그인 되어있습니다.");
+          const stuRef = doc(dbService, "studentUser", user.displayName);
+          const stuSnap = await getDoc(stuRef);
+          if (stuSnap.exists()) {
+            setUserData(stuSnap.data());
+            setPhoneNumber(stuSnap.data().phoneNumber);
+          }
+          if (
+            localStorage.getItem("access") === "client" &&
+            currentPath.includes("admin")
+          ) {
+            console.log("접근할 수 없습니다.");
+            navigate("/client");
+          }
+        } else {
+          console.log("로그인이 필요합니다.");
+          navigate("/");
         }
-      } else {
-        alert("로그인이 필요합니다.");
-        navigate("/");
-      }
-    });
-  }, [navigate]);
+      });
+      window.onbeforeunload = (e) => {
+        if (isModified) {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      };
+    };
+
+    checkStatus();
+  }, [isModified]);
 
   const fetchData = async (displayName) => {
     try {
@@ -63,28 +68,35 @@ const ClientMyPage = () => {
 
   const handleEdit = () => {
     setEditMode(true);
-    setFormData({ phoneNumber: userData.phoneNumber }); // 전화번호 수정 모드 진입 시 기존 번호를 표시
+    setPhoneNumber(userData ? userData.phoneNumber : ""); // 전화번호 수정 모드 진입 시 기존 번호를 표시
   };
 
-  const handleFieldChange = (fieldName, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [fieldName]: value,
-    }));
+  const handleFieldChange = (e) => {
+    const newPhoneNumber = e.target.value;
+    const phoneNumberPattern = /^010-\d{4}-\d{4}$/;
+
+    setPhoneNumber(newPhoneNumber); // 입력 값을 항상 상태에 업데이트
+
+    if (newPhoneNumber === "" || phoneNumberPattern.test(newPhoneNumber)) {
+      // 조건을 만족하거나 빈 문자열일 경우 오류 메시지 초기화
+      setErrorMessage("");
+    } else {
+      // 조건을 만족하지 않을 경우 오류 메시지 표시
+      setErrorMessage("올바른 전화번호 형식이 아닙니다. (예: 010-1234-5678)");
+    }
   };
 
   const handleSave = async () => {
-    // Firebase에 수정한 전화번호 정보 업데이트
+    if (errorMessage) {
+      alert(errorMessage);
+      return;
+    }
+
     try {
-      const docRef = doc(dbService, "studentUser", userData.displayName);
-      const { phoneNumber } = formData; // 전화번호 값 가져오기
-      await updateDoc(docRef, { phoneNumber });
+      const docRef = doc(dbService, "studentUser", userData.name);
+      await updateDoc(docRef, { phoneNumber: phoneNumber });
       alert("전화번호 정보가 업데이트되었습니다.");
-      setEditMode(false); // 수정 모드 종료
-      setUserData((prevData) => ({
-        ...prevData,
-        phoneNumber: formData.phoneNumber, // 수정한 전화번호로 업데이트된 정보를 반영
-      }));
+      setEditMode(false);
     } catch (error) {
       console.error("전화번호 정보 업데이트 오류:", error);
       alert("전화번호 정보 업데이트에 실패했습니다.");
@@ -101,6 +113,10 @@ const ClientMyPage = () => {
     overflow: hidden;
   `;
 
+  const Button = styled.button `
+    cursor: pointer;
+  `;
+
   return (
     <div>
       <h1>ClientMyPage</h1>
@@ -111,19 +127,27 @@ const ClientMyPage = () => {
       <div>성별: {userData ? userData.gender : "로딩 중..."}</div>
       <div>학부: {userData ? userData.major : "로딩 중..."}</div>
       <div>
-        전화번호: {editMode ? (
-          <input
-            type="text"
-            value={phoneNumber}
-            onChange={(e) => handleFieldChange("phoneNumber", e.target.value)}
-          />
+        전화번호:{" "}
+        {editMode ? (
+          <div>
+            <input
+              type="text"
+              value={phoneNumber}
+              onChange={handleFieldChange}
+            />
+            <span style={{ color: "red" }}>{errorMessage}</span>
+          </div>
         ) : (
-          userData ? userData.phoneNumber : "로딩 중..."
+          userData ? (
+            userData.phoneNumber
+          ) : (
+            "로딩 중..."
+          )
         )}
         {editMode ? (
-          <button onClick={handleSave}>저장</button>
+          <Button onClick={handleSave}>저장</Button>
         ) : (
-          <button onClick={handleEdit}>수정</button>
+          <Button onClick={handleEdit} >수정</Button>
         )}
       </div>
       <div>생년월일: {userData ? userData.birth : "로딩 중..."}</div>
