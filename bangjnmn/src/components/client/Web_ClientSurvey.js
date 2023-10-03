@@ -104,7 +104,11 @@ const ClientSurvey = () => {
       <h3>방배정을 위한 설문입니다: !!</h3>
       <div>
         Q1. 당신은 누구입니까 ?
-        {answers.role ? "" : <span style={{ color: "red" }}>답변 필요</span>}{" "}
+        {answers.role ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}{" "}
         <br></br>
         <input
           type="radio"
@@ -130,8 +134,11 @@ const ClientSurvey = () => {
       </div>
       <div>
         Q1. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-        {answers.Q1 ? "" : <span style={{ color: "red" }}>답변 필요</span>}
-        <br></br>
+        {answers.Q1 ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}<br></br>
         <input
           type="radio"
           name="Q1"
@@ -155,8 +162,11 @@ const ClientSurvey = () => {
         3번
       </div>
       <div>
-        Q2. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-        {answers.Q2 ? "" : <span style={{ color: "red" }}>답변 필요</span>}{" "}
+        Q2. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?{answers.Q2 ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}{" "}
         <br></br>
         <input
           type="radio"
@@ -181,8 +191,11 @@ const ClientSurvey = () => {
         3번
       </div>
       <div>
-        Q3. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-        {answers.Q3 ? "" : <span style={{ color: "red" }}>답변 필요</span>}{" "}
+        Q3. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?{answers.Q3 ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}{" "}
         <br></br>
         <input
           type="radio"
@@ -207,8 +220,11 @@ const ClientSurvey = () => {
         3번
       </div>
       <div>
-        Q4. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-        {answers.Q4 ? "" : <span style={{ color: "red" }}>답변 필요</span>}{" "}
+        Q4. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?{answers.Q4 ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}{" "}
         <br></br>
         <input
           type="radio"
@@ -233,8 +249,11 @@ const ClientSurvey = () => {
         3번
       </div>
       <div>
-        Q5. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-        {answers.Q5 ? "" : <span style={{ color: "red" }}>답변 필요</span>}{" "}
+        Q5. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?{answers.Q5 ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}{" "}
         <br></br>
         <input
           type="radio"
@@ -259,8 +278,11 @@ const ClientSurvey = () => {
         3번
       </div>
       <div>
-        Q6. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-        {answers.Q6 ? "" : <span style={{ color: "red" }}>답변 필요</span>}{" "}
+        Q6. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?{answers.Q6 ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}{" "}
         <br></br>
         <input
           type="radio"
@@ -285,8 +307,11 @@ const ClientSurvey = () => {
         3번
       </div>
       <div>
-        Q7. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-        {answers.Q7 ? "" : <span style={{ color: "red" }}>답변 필요</span>}{" "}
+        Q7. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?{answers.Q7 ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}{" "}
         <br></br>
         <input
           type="radio"
@@ -311,8 +336,11 @@ const ClientSurvey = () => {
         3번
       </div>
       <div>
-        Q8. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-        {answers.Q8 ? "" : <span style={{ color: "red" }}>답변 필요</span>}{" "}
+        Q8. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?{answers.Q8 ? (
+          ""
+        ) : (
+          <span style={{ color: "red" }}>답변 필요</span>
+        )}{" "}
         <br></br>
         <input
           type="radio"
