@@ -40,46 +40,42 @@ const ClientSurvey = () => {
         navigate("/");
       }
     });
-  }, [navigate]);
+  }, []);
   // 각 질문에 대한 답변을 저장하는 state
 
   const handleSubmitAnswers = async () => {
     const usersCollection = collection(dbService, "studentUser");
     const subCollectionName = "survey";
     const userDocRef = doc(usersCollection, name);
-    const allQuestionsAnswered = Object.keys(answers).every(
-      (question) => answers[question]
-    );
-
-    if (!allQuestionsAnswered) {
+  
+    // Filter out keys with falsy (empty string) values from answers
+    const filteredAnswers = {};
+    for (const key in answers) {
+      if (answers[key]) {
+        filteredAnswers[key] = answers[key];
+      }
+    }
+  
+    if (Object.keys(filteredAnswers).length === 0) {
       alert("모든 질문에 답변해주세요.");
       return;
     }
-
-    const surveyData = {
-      ...answers,
-    };
-
+  
     try {
-      await setDoc(doc(userDocRef, subCollectionName, name), surveyData);
-
+      await setDoc(doc(userDocRef, subCollectionName, name), filteredAnswers);
+  
       console.log("설문 결과를 저장했습니다.");
     } catch (error) {
       console.error("설문 결과를 저장하지 못 했습니다.", error);
     }
   };
-
+  
   const handleAnswerChange = (e) => {
     const { name, value } = e.target;
 
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
       [name]: value,
-    }));
-
-    setAnswers((prevIsAnswered) => ({
-      ...prevIsAnswered,
-      [name]: true,
     }));
   };
 
@@ -113,21 +109,21 @@ const ClientSurvey = () => {
         <input
           type="radio"
           name="role"
-          value="senior"
+          value="새섬"
           onChange={handleAnswerChange}
         />{" "}
         새섬
         <input
           type="radio"
           name="role"
-          value="freshman"
+          value="새내기"
           onChange={handleAnswerChange}
         />{" "}
         새내기
         <input
           type="radio"
           name="role"
-          value="team"
+          value="팀원"
           onChange={handleAnswerChange}
         />{" "}
         팀원
