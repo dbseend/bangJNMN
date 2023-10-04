@@ -1,24 +1,56 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../../api/fbase";
+
+const Div = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
+  justify-content: center; 
+  margin: 0 auto;
+  width: 100%;
+  overflow: hidden;
+`;
+const Margin = styled.div`
+  margin-right: 60px;
+`
 
 const Web_AdminNavBar = () => {
   const navigate = useNavigate();
 
-  //navigate 예시
-  const moveToRoom = () => {
-    navigate("admin/room");
+  const onLogOutClick = () => {
+    // 로그아웃
+    auth.signOut();
+    console.log("logout");
   };
 
+  const moveToHome = () => {
+    navigate("/admin/home");
+  };
+  const moveToStudent = () => {
+    navigate("/admin/students");
+  };
+  const moveToRoom = () => {
+    navigate("/admin/room");
+  };
+  const moveToMeet = () => {
+    navigate("/admin/meet");
+  };
+
+
   return (
-    <div>
-      <h1>admin navbar</h1>
-      {/* Link to 사용 예시 */}
-      <Link to="/admin/rome">
-        <h2>Link to 로 방배정하러 가자 ~</h2>
-      </Link>
-      <h2 onClick={moveToRoom}>navigate 로 방배정하러 가자 ~</h2>
-    </div>
+    <Div>
+        <div onClick={moveToHome}>홈</div>
+      <Margin></Margin>
+        <div onClick={moveToStudent}>학생정보 조회 하자 ~</div>
+      <Margin></Margin>
+        <div onClick={moveToRoom}>기숙사 방배정 보자 ~</div>
+      <Margin></Margin>
+        <div onClick={moveToMeet}>면담 예약 하러 가자~</div>
+      <Margin></Margin>
+      <div onClick={onLogOutClick}> 로그아웃</div>
+    </Div>
   );
 };
 
