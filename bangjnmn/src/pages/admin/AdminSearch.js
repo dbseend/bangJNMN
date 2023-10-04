@@ -1,5 +1,5 @@
-import React from "react";
-//import Select from 'react-select';
+import React, { useState } from "react";
+
 import { styled } from "styled-components";
 
 const Div = styled.div`
@@ -13,30 +13,33 @@ const Div = styled.div`
 `;
 
 const AdminSearch = () => {
-
-    // const options = [
-    //   { value: 'option1', label: 'Option 1' },
-    //   { value: 'option2', label: 'Option 2' },
-    //   { value: 'option3', label: 'Option 3' }
-    // ];
-
-    // const [selectedOption, setSelectedOption] = useState(null);
-
-    // const handleChange = (selected) => {
-    //   setSelectedOption(selected);
-    // };
+    const [isOpen, setIsOpen] = useState(false);
+    const options = ['Option 1', 'Option 2', 'Option 3'];
 
     return (
         <Div>
             <h1>AdminSearch</h1>
-            {/* <Select
-              options={options}
-              value={selectedOption}
-              onChange={handleChange}
-            />
-            {selectedOption && (
-              <p>You have selected: {selectedOption.label}</p>
-            )} */}
+            <div>
+              <span>
+              <button onClick={() => setIsOpen(!isOpen)}>
+                {isOpen ? 'Close menu' : 'Open menu'}
+              </button>
+
+              {isOpen && (
+              <ul>
+                {options.map((option, index) => (
+                  <li key={index}>{option}</li>
+                ))}
+              </ul>
+              )}
+              </span>
+              <div>
+                테이블 띄우기
+              </div>
+              클릭시 모달창 띄우기
+            </div>
+            
+
         </Div>
     )
 }
