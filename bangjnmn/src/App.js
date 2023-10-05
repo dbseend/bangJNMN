@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LogIn from "./pages/LogIn";
 import SignUp from "./pages/SignUp";
@@ -8,6 +9,8 @@ import AdminSurvey from "./pages/admin/AdminSurvey";
 import ClientHome from "./pages/client/ClientHome";
 import ClientSurvey from "./pages/client/ClientSurvey";
 import ClientMeet from "./pages/client/ClientMeet";
+//import ClientMyPage from "./components/client/Web_ClientMyPage";
+import AdminSearch from "./pages/admin/AdminSearch";
 import ClientMyPage from "./pages/client/ClientMyPage";
 
 function App() {
@@ -28,6 +31,10 @@ function AdminRoutes() {
   return (
     <Routes>
       <Route path="/" element={<AdminHome />} />
+      <Route path="survey" element={<AdminSurvey />} />
+      <Route path="meet" element={<AdminMeet />} />
+      <Route path="room" element={<AdminRoom />} />
+      <Route path="search" element={<AdminSearch />} />
       <Route path="/survey" element={<AdminSurvey />} />
       <Route path="/meet" element={<AdminMeet />} />
       <Route path="/room" element={<AdminRoom />} />

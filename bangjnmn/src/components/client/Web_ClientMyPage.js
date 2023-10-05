@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Prompt } from "react-router-dom";
 import styled from "styled-components";
 import { auth, dbService } from "../../api/fbase";
-
+import React from "react";
 const ClientMyPage = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
