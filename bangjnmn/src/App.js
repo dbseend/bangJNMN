@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LogIn from "./pages/LogIn";
 import SignUp from "./pages/SignUp";
@@ -8,7 +9,7 @@ import AdminSurvey from "./pages/admin/AdminSurvey";
 import ClientHome from "./pages/client/ClientHome";
 import ClientSurvey from "./pages/client/ClientSurvey";
 import ClientMeet from "./pages/client/ClientMeet";
-import ClientMyPage from "./components/client/Web_ClientMyPage";
+//import ClientMyPage from "./components/client/Web_ClientMyPage";
 import AdminSearch from "./pages/admin/AdminSearch";
 import ClientMyPage from "./pages/client/ClientMyPage";
 
