@@ -113,26 +113,26 @@ const ClientMeet = () => {
 
     if (reserveTF[clickedIndex] == true) {
       alert("이미 예약된 시간입니다!");
-    }
-
-    setDoc(
-      dayRef,
-      {
-        [clickedIndex]: {
-          time: clickedIndex,
-          name: user.name,
+    } else {
+      setDoc(
+        dayRef,
+        {
+          [clickedIndex]: {
+            time: clickedIndex,
+            name: user.name,
+          },
         },
-      },
-      { merge: true }
-    )
-      .then(() => {
-        console.log("day 문서 업데이트 성공!");
-        alert("예약이 완료되었습니다.");
-      })
-      .catch((error) => {
-        console.error("day 문서 업데이트 실패: ", error);
-        alert("예약에 실패했습니다.");
-      });
+        { merge: true }
+      )
+        .then(() => {
+          console.log("day 문서 업데이트 성공!");
+          alert("예약이 완료되었습니다.");
+        })
+        .catch((error) => {
+          console.error("day 문서 업데이트 실패: ", error);
+          alert("예약에 실패했습니다.");
+        });
+    }
   };
 
   const handleSelectTime = (index) => {
