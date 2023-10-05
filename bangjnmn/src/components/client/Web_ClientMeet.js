@@ -29,7 +29,7 @@ const TableCell = styled.td`
 
 const ClientMeet = () => {
   const [user, setUser] = useState("");
-  const [index, setIndex] = useState([]);
+  const [resArr, setResArr] = useState([]);
   const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
   const [meetInfo, setMeetInfo] = useState("");
   const [meetDate, setMeetDate] = useState("");
@@ -93,7 +93,7 @@ const ClientMeet = () => {
       console.log("Document data:", docSnap.data());
       const data = docSnap.data();
       const arr = Object.values(data);
-      setIndex(arr);
+      setResArr(arr);
       for (let i = 0; i < arr.length; i++) {
         reserveTF[arr[i].time] = true;
       }
@@ -113,26 +113,26 @@ const ClientMeet = () => {
 
     if (reserveTF[clickedIndex] == true) {
       alert("이미 예약된 시간입니다!");
-    }
-
-    setDoc(
-      dayRef,
-      {
-        [clickedIndex]: {
-          time: clickedIndex,
-          name: user.name,
+    } else {
+      setDoc(
+        dayRef,
+        {
+          [clickedIndex]: {
+            time: clickedIndex,
+            name: user.name,
+          },
         },
-      },
-      { merge: true }
-    )
-      .then(() => {
-        console.log("day 문서 업데이트 성공!");
-        alert("예약이 완료되었습니다.");
-      })
-      .catch((error) => {
-        console.error("day 문서 업데이트 실패: ", error);
-        alert("예약에 실패했습니다.");
-      });
+        { merge: true }
+      )
+        .then(() => {
+          console.log("day 문서 업데이트 성공!");
+          alert("예약이 완료되었습니다.");
+        })
+        .catch((error) => {
+          console.error("day 문서 업데이트 실패: ", error);
+          alert("예약에 실패했습니다.");
+        });
+    }
   };
 
   const handleSelectTime = (index) => {
@@ -169,10 +169,17 @@ const ClientMeet = () => {
                     : clickedIndex === index
                     ? "lightblue"
                     : "",
+                  cursor: resArr[index] ? "not-allowed" : "pointer",
                 }}
-                onClick={() => handleSelectTime(index)}
+                onClick={() => {
+                  if (resArr[index] && resArr[index].auth !== "admin") {
+                    handleSelectTime(index);
+                  }
+                }}
               >
-                {item}
+                {resArr[index] && resArr[index].auth == "client"
+                  ? item + resArr[index].name
+                  : item}
               </TableCell>
             </tr>
           ))}
