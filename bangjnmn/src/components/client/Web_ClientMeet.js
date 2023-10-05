@@ -29,7 +29,7 @@ const TableCell = styled.td`
 
 const ClientMeet = () => {
   const [user, setUser] = useState("");
-  const [index, setIndex] = useState([]);
+  const [resArr, setResArr] = useState([]);
   const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
   const [meetInfo, setMeetInfo] = useState("");
   const [meetDate, setMeetDate] = useState("");
@@ -93,7 +93,7 @@ const ClientMeet = () => {
       console.log("Document data:", docSnap.data());
       const data = docSnap.data();
       const arr = Object.values(data);
-      setIndex(arr);
+      setResArr(arr);
       for (let i = 0; i < arr.length; i++) {
         reserveTF[arr[i].time] = true;
       }
@@ -169,10 +169,17 @@ const ClientMeet = () => {
                     : clickedIndex === index
                     ? "lightblue"
                     : "",
+                  cursor: resArr[index] ? "not-allowed" : "pointer",
                 }}
-                onClick={() => handleSelectTime(index)}
+                onClick={() => {
+                  if (resArr[index] && resArr[index].auth !== "admin") {
+                    handleSelectTime(index);
+                  }
+                }}
               >
-                {item}
+                {resArr[index] && resArr[index].auth == "client"
+                  ? item + resArr[index].name
+                  : item}
               </TableCell>
             </tr>
           ))}

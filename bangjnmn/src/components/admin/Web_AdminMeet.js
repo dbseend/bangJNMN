@@ -29,14 +29,13 @@ const TableCell = styled.td`
 
 const AdminMeet = () => {
   const [user, setUser] = useState("");
-  const [index, setIndex] = useState([]);
+  const [resArr, setResArr] = useState([]);
   const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
   const [meetInfo, setMeetInfo] = useState("");
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const [clickedIndex, setClickedIndex] = useState(-1);
-  const [reserved, setReserved] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,6 +81,7 @@ const AdminMeet = () => {
     return `${formattedHours}:${formattedMinutes}`;
   });
 
+  // 언제, 누가(이름) 예약했는지 확인
   const checkTime = async () => {
     const meetCollection = collection(dbService, "meetReservation");
     const monthRef = doc(meetCollection, month);
@@ -93,10 +93,11 @@ const AdminMeet = () => {
       console.log("Document data:", docSnap.data());
       const data = docSnap.data();
       const arr = Object.values(data);
-      setIndex(arr);
-      // for (let i = 0; i < arr.length; i++) {
-      //   reserveTF[arr[i].time] = true;
-      // }
+      setResArr(arr);
+
+      for (let i = 0; i < arr.length; i++) {
+        reserveTF[arr[i].time] = true;
+      }
     } else {
       console.log("No such document!");
       setMeetInfo("정보 없음");
@@ -106,6 +107,33 @@ const AdminMeet = () => {
   };
 
   const reserveMeet = () => {
+    const meetCollection = collection(dbService, "meetReservation");
+    const monthRef = doc(meetCollection, month);
+    const dayCollection = collection(monthRef, "day");
+    const dayRef = doc(dayCollection, day);
+
+    setDoc(
+      dayRef,
+      {
+        [clickedIndex]: {
+          time: clickedIndex,
+          name: user.name,
+          auth: user.access,
+        },
+      },
+      { merge: true }
+    )
+      .then(() => {
+        console.log("day 문서 업데이트 성공!");
+        alert("예약이 완료되었습니다.");
+      })
+      .catch((error) => {
+        console.error("day 문서 업데이트 실패: ", error);
+        alert("예약에 실패했습니다.");
+      });
+  };
+
+  const updateMeet = () => {
     const meetCollection = collection(dbService, "meetReservation");
     const monthRef = doc(meetCollection, month);
     const dayCollection = collection(monthRef, "day");
@@ -129,33 +157,6 @@ const AdminMeet = () => {
         console.error("day 문서 업데이트 실패: ", error);
         alert("예약에 실패했습니다.");
       });
-  };
-
-  // 내가 선택한 시간 보여주기
-  const updateMeet = () => {
-    const meetCollection = collection(dbService, "meetReservation");
-    const monthRef = doc(meetCollection, month);
-    const dayCollection = collection(monthRef, "day");
-    const dayRef = doc(dayCollection, day);
-
-    // setDoc(
-    //   dayRef,
-    //   {
-    //     [clickedIndex]: {
-    //       time: clickedIndex,
-    //       name: user.name,
-    //     },
-    //   },
-    //   { merge: true }
-    // )
-    //   .then(() => {
-    //     console.log("day 문서 업데이트 성공!");
-    //     alert("예약이 완료되었습니다.");
-    //   })
-    //   .catch((error) => {
-    //     console.error("day 문서 업데이트 실패: ", error);
-    //     alert("예약에 실패했습니다.");
-    //   });
   };
 
   const handleSelectTime = (index) => {
@@ -195,7 +196,7 @@ const AdminMeet = () => {
                 }}
                 onClick={() => handleSelectTime(index)}
               >
-                {item}
+                {resArr[index] ? item + resArr[index].name : item}
               </TableCell>
             </tr>
           ))}
