@@ -117,11 +117,6 @@ const AdminMeet = () => {
   const reserveMeet = async () => {
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
-    const userRef = doc(collection(dbService, "user"), user.name);
-
-    const date = meetDate;
-    const time = formatTime(selectedTime);
-    const meetTime = date + " " + time;
 
     if (reserveTF[selectedTime]) {
       alert("이미 예약된 시간입니다!");
@@ -137,12 +132,6 @@ const AdminMeet = () => {
       };
 
       await setDoc(dayRef, { ...dayUpdateData }, { merge: true });
-
-      await updateDoc(userRef, {
-        meetTF: true,
-        meetTime: meetTime,
-        meetIdx: selectedTime,
-      });
 
       console.log("day 문서 업데이트 성공!");
       alert("예약이 완료되었습니다.");
