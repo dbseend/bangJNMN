@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import styled from "styled-components";
 
+
 const Div = styled.div`
   display: flex;
   flex-direction: column;
@@ -97,6 +98,21 @@ const checkEmailDomain = (email) => {
   if (emailDomain !== "handong.ac.kr") {
     console.log('handong.ac.kr 메일이 아님');
     alert("학교 메일 계정 (@handong.ac.kr)으로 로그인하세요.");
+kye
+    const auth = getAuth();
+      const uiConfig = {
+        callbacks: {
+          signInSuccessWithAuthResult: (authResult) => {
+            if (authResult.user.email.split('@')[1] !== "handong.ac.kr") {
+              return false; // 로그인 실패로 처리하여 팝업을 닫는다.
+            }
+            return true; // 로그인 성공으로 처리
+          },
+        },
+      };
+    const ui = new firebaseui.auth.AuthUI(auth);
+    ui.start('#firebaseui-auth-container', uiConfig);
+ main
   }
 };
 
