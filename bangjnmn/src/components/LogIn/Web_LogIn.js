@@ -98,6 +98,7 @@ const checkEmailDomain = (email) => {
   if (emailDomain !== "handong.ac.kr") {
     console.log('handong.ac.kr 메일이 아님');
     alert("학교 메일 계정 (@handong.ac.kr)으로 로그인하세요.");
+kye
     const auth = getAuth();
       const uiConfig = {
         callbacks: {
@@ -111,6 +112,7 @@ const checkEmailDomain = (email) => {
       };
     const ui = new firebaseui.auth.AuthUI(auth);
     ui.start('#firebaseui-auth-container', uiConfig);
+ main
   }
 };
 

@@ -44,7 +44,7 @@ const ClientSurvey = () => {
   // 각 질문에 대한 답변을 저장하는 state
 
   const handleSubmitAnswers = async () => {
-    const usersCollection = collection(dbService, "studentUser");
+    const usersCollection = collection(dbService, "user");
     const subCollectionName = "survey";
     const userDocRef = doc(usersCollection, name);
   
