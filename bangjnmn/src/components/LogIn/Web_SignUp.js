@@ -4,15 +4,15 @@ import { auth, dbService } from "../../api/fbase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { useForm, Controller } from "react-hook-form";
 
 const Div = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: -8px;
-  width: 100vw;
-  height: 100vh;
+  margin: 0 auto;
+  width: 100%;
   overflow: hidden;
   background: #38373c;
 `;
@@ -30,11 +30,15 @@ const Title = styled.div`
   width: 111px;
   height: 20px;
   left: 665px;
-
 `;
 
 const Mass1 = styled.div`
   margin-top: 90px;
+  margin-bottom: 52px;
+`;
+
+const Mass = styled.div`
+  margin-bottom: 52px;
 `;
 const Table = styled.div`
   width: 645px;
@@ -42,6 +46,7 @@ const Table = styled.div`
   flex-shrink: 0;
   border: 1px solid #000;
   background: #fff;
+  display: flex;
 `;
 
 const Typo = styled.div`
@@ -54,6 +59,8 @@ const Typo = styled.div`
   letter-spacing: 0.1px;
   padding-top: 21px;
   padding-left: 16px;
+  margin-right: 81px;
+  width: 60px;
 `;
 
 const Content = styled.div`
@@ -64,17 +71,132 @@ const Content = styled.div`
   font-weight: 700;
   line-height: 20px; /* 125% */
   letter-spacing: 0.1px;
-  padding-top: 21px;
-  padding-left: 100px;
-`
+  margin-top: 21px;
+  margin-right: 70px;
+`;
 const Radio = styled.input`
   appearance: none;
   width: 18px;
   height: 18px;
   border-radius: 2px;
   border: 2px solid var(--m-3-sys-light-on-surface-variant, #49454f);
+  /* 선택되지 않은 상태의 배경색과 기타 스타일 */
+  &:not(:checked) {
+    background-color: transparent; /* 선택되지 않은 상태에서는 배경색이 투명합니다. */
+  }
+  /* 선택된 상태에서의 배경색과 기타 스타일 */
+  &:checked {
+    background-color: #49454f; /* 선택된 상태에서의 배경색 */
+  }
+  margin-top: 21px;
+  margin-right: 11px;
 `;
+const Date = styled.input`
+  width: 150px;
+  height: 32px;
+  gap: 8px;
+  border: 1px solid #79747e;
+  margin-top: 12px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 125% */
+  letter-spacing: 0.1px;
+  padding-left: 10px;
+  border-radius: 10px;
+`;
+
+const Text = styled.input`
+  width: 150px;
+  height: 32px;
+  padding: 6px, 8px, 6px, 16px;
+  gap: 8px;
+  border: 1px solid #79747e;
+  margin-top: 10px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 125% */
+  letter-spacing: 0.1px;
+  padding-left: 10px;
+  border-radius: 10px;
+`;
+
+const Submit = styled.button`
+  width: 157px;
+  height: 50px;
+  padding: 10px, 24px, 10px, 24px;
+
+  border-radius: 100px;
+  gap: 8px;
+  background: #cecccc;
+  margin-bottom: 74px;
+
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.10000000149011612px;
+  text-align: center;
+  color: #f26938;
+`;
+
+const SubmitContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const Dropdown = styled.select`
+  width: 150px;
+  height: 32px;
+  top: 580px;
+  left: 527px;
+  border: 1px solid #79747e;
+  margin-top: 11px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 125% */
+  letter-spacing: 0.1px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+`;
+const SearchAndDropdown = {
+  control: (provided, state) => ({
+    ...provided,
+    border: "1px solid #79747E",
+    width: "150px",
+    height: "32px",
+    gap: "8px",
+    marginTop: "9px",
+    fontFamily: "Roboto",
+    fontSize: "12px",
+    fontStyle: "normal",
+    fontWeight: "700",
+    lineHeight: "20px",
+    letterSpacing: "0.1px",
+    borderRadius: "10px",
+    cursor: state.isFocused ? "pointer" : "default",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? "#f26938" : "white",
+    color: state.isFocused ? "white" : "black",
+    fontSize: "12px",
+  }),
+};
+
 const SignUp = () => {
+  const {
+    handleSubmit,
+    control,
+
+    formState: { isValid },
+  } = useForm();
   const [userData, setUserData] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -91,14 +213,25 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const options = [
-    { value: "apple", label: "사과1" },
-    { value: "banana", label: "바나나" },
-    { value: "cherry", label: "체리" },
-    { value: "date", label: "데이트" },
-    { value: "grape", label: "포도" },
-    { value: "kiwi", label: "키위" },
+    { value: "김군오", label: "김군오 교수님 팀" },
+    { value: "김민재", label: "김민재 교수님 팀" },
+    { value: "김제니", label: "김제니 교수님 팀" },
+    { value: "김주일", label: "김주일 교수님 팀" },
+    { value: "도형기", label: "도형기 교수님 팀" },
+    { value: "라영안", label: "라영안 교수님 팀" },
+    { value: "박찬송", label: "박찬송 교수님 팀" },
+    { value: "신성만", label: "신성만 교수님 팀" },
+    { value: "용환기", label: "용환기 교수님 팀" },
+    { value: "이정민", label: "이정민 교수님 팀" },
+    { value: "정모니카", label: "정모니카 교수님 팀" },
+    { value: "제양규", label: "제양규 교수님 팀" },
+    { value: "조규봉", label: "조규봉 교수님 팀" },
+    { value: "조현지", label: "조현지 교수님 팀" },
+    { value: "차승만", label: "차승만 교수님 팀" },
+    { value: "최혜봉", label: "최혜봉 교수님 팀" },
+    { value: "황성수", label: "황성수 교수님 팀" },
   ];
-
+  
   const majors = [
     "글로벌리더십학부",
     "국제어문학부",
@@ -134,7 +267,7 @@ const SignUp = () => {
 
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          console.log("로그인 되어있습니다.");
+          console.log("로그인 되어 있습니다.");
           console.log(user);
           setUserData(user);
           const stuRef = doc(dbService, "studentUser", user.displayName);
@@ -158,37 +291,51 @@ const SignUp = () => {
     checkStatus();
   }, []);
 
-  //회원가입
-  const signUp = (e) => {
-    const docRef = setDoc(doc(dbService, "studentUser", name), {
-      name: name,
-      email: email,
-      gender: gender,
-      birth: birth,
-      phoneNumber: phoneNumber,
-      stuNum: stuNum,
-      major: major,
-      rc: rc,
-      team: team,
-      dorm: dorm,
-      roommateNum: roommateNum,
-      roomNum: "",
-      access: "client",
-      meetTime: null,
-      meetTF: false,
-    });
-    if (docRef) {
-      console.log("회원가입에 저장 성공");
+  // 회원가입
+  const signUp = async (formData) => {
+    try {
+      const docRef = await setDoc(
+        doc(dbService, "studentUser", userData.displayName),
+        {
+          name: userData.displayName,
+          email: formData.email,
+          gender: formData.gender,
+          birth: formData.birth,
+          phoneNumber: formData.phoneNumber,
+          stuNum: formData.stuNum,
+          major: formData.major,
+          rc: formData.rc,
+          team: formData.team.value, // 선택한 팀의 값을 사용
+          dorm: formData.dorm,
+          roommateNum: formData.roommateNum,
+          roomNum: "",
+          access: "client",
+          meetTime: null,
+          meetTF: false,
+        }
+      );
+
+      // 폼 데이터가 모두 유효한 경우에만 회원가입 처리
+      if (isValid) {
+        if (docRef) {
+          console.log("회원가입에 저장 성공");
+        }
+      } else {
+        console.error("폼 데이터 유효성 검사 실패");
+      }
+    } catch (error) {
+      console.error("회원가입 실패: ", error);
     }
   };
 
   const handleSelectChange = (selectedOption) => {
     setSelectedOption(selectedOption);
+    console.log(selectedOption.value);
   };
 
   const changeGender = (e) => {
-    setGender(e.target.value);
-    console.log(e.target.value);
+    setGender(e.target.id);
+    console.log(e.target.id);
   };
 
   const changeMajor = (e) => {
@@ -203,7 +350,7 @@ const SignUp = () => {
 
   const changeBirth = (e) => {
     setBirth(e.target.value);
-    console.log.apply(e.target.value);
+    console.log(e.target.value);
   };
 
   const changeRc = (e) => {
@@ -212,172 +359,278 @@ const SignUp = () => {
   };
 
   const changePhoneNumber = (e) => {
-    const inputPhoneNumber = e.target.value.replace(/\D/g, "");
-    let formattedPhoneNumber = "";
-    if (inputPhoneNumber.length >= 3) {
-      formattedPhoneNumber += inputPhoneNumber.substring(0, 3) + "-";
-    }
-    if (inputPhoneNumber.length >= 7) {
-      formattedPhoneNumber += inputPhoneNumber.substring(3, 7) + "-";
-    }
-    if (inputPhoneNumber.length >= 11) {
-      formattedPhoneNumber += inputPhoneNumber.substring(7, 11);
-    }
-    setPhoneNumber(formattedPhoneNumber);
-    console.log(formattedPhoneNumber);
-  };
-
-  const changeTeam = (e) => {
-    setTeam(e.target.value);
+    setPhoneNumber(e.target.value);
     console.log(e.target.value);
   };
+
   const changeDorm = (e) => {
     setDorm(e.target.value);
     console.log(e.target.value);
   };
 
   const changeRoommateNum = (e) => {
-    setRoommateNum(e.target.value);
-    console.log(e.target.value);
+    setRoommateNum(e.target.id);
+    console.log(e.target.id);
   };
 
   return (
     <Div>
       <Title>방주니마니</Title>
-      {/* <Select
-        value={selectedOption}
-        onChange={handleSelectChange}
-        options={options}
-        isSearchable
-        placeholder="옵션 선택"
-      /> */}
 
-      {/* {selectedOption && <p>선택한 옵션: {selectedOption.label}</p>} */}
-
-      <form>
+      <form onSubmit={handleSubmit((data) => signUp(data))}>
         <Mass1>
           <Table>
-            <Typo> 이름 </Typo> <Content> {userData.displayName}{" "} </Content>
+            <Typo> 이름 </Typo> <Content> {userData.displayName} </Content>
           </Table>
-          <Table>
-            <Typo> 이메일 </Typo>
-            <Content> {userData.email} </Content>
-          </Table>
+          <Controller
+            name="email"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <Typo> 이메일 </Typo>
+                <Content> {userData.email} </Content>
+              </Table>
+            )}
+          />
+          <Controller
+            name="gender"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="gender">
+                  <Typo> 성별 </Typo>
+                </label>
+                <Radio
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  id="남자"
+                  onClick={changeGender}
+                  {...field}
+                />
+                <Content> 남자 </Content>
+                <Radio
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  id="여자"
+                  onClick={changeGender}
+                  {...field}
+                />
+                <Content> 여자 </Content>
+              </Table>
+            )}
+          />
+          <Controller
+            name="birth"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="birth">
+                  <Typo> 생년월일 </Typo>
+                </label>
+                <Date
+                  type="date"
+                  name="birth"
+                  onSelect={changeBirth}
+                  {...field}
+                />
+              </Table>
+            )}
+          />
 
-          <Table>
-            <label htmlFor="gender"> <Typo> 성별 </Typo></label>
-            <Radio
-              type="radio"
-              name="gender"
-              value="male"
-              onClick={changeGender}
-            />{" "}
-            남자
-            <Radio
-              type="radio"
-              name="gender"
-              value="female"
-              onClick={changeGender}
-            />{" "}
-            여자
-          </Table>
-          <Table>
-            <label htmlFor="birth"> <Typo> 생년월일 </Typo> </label>
-            <input type="date" name="birth" onChange={changeBirth} />
-          </Table>
-
-          <Table>
-            <label htmlFor="phoneNumber"> <Typo> 전화번호 </Typo></label>
-            <input
-              type="text"
-              name="phoneNumber"
-              onChange={changePhoneNumber}
-              placeholder="전화번호를 입력하세요"
-              required="required"
-              pattern="01[0-9]{9}"
-              maxLength={13}
-            />
-          </Table>
+          <Controller
+            name="phoneNumber"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="phoneNumber">
+                  <Typo> 전화번호 </Typo>
+                </label>
+                <Text
+                  type="text"
+                  name="phoneNumber"
+                  {...field}
+                  value={phoneNumber}
+                  onChange={changePhoneNumber}
+                  placeholder="전화번호를 입력하세요"
+                  pattern="01[0-9]{9}"
+                  required="required"
+                  maxLength={13}
+                />
+              </Table>
+            )}
+          />
         </Mass1>
-        
-        {/* <Mass> */}
-          <Table>
-            <label htmlFor="studentNumber"> <Typo> 학번 </Typo></label>
-            <input type="text" name="studentNumber" onChange={changeStuNum} />
-          </Table>
-          <Table>
-            <label htmlFor="major"> <Typo> 학부 </Typo></label>
-            <select value={major} onChange={changeMajor}>
-              <option value="" disabled>
-                학부 선택
-              </option>
-              {majors.map((majorOption) => (
-                <option key={majorOption} value={majorOption}>
-                  {majorOption}
-                </option>
-              ))}
-            </select>
-          </Table>
 
-          <Table>
-            <label htmlFor="rc"> <Typo> RC </Typo> </label>
-            <select value={rc} onChange={changeRc}>
-              <option value="" disabled>
-                rc 선택
-              </option>
-              {rcs.map((rcOption) => (
-                <option key={rcOption} value={rcOption}>
-                  {rcOption}
-                </option>
-              ))}
-            </select>
-          </Table>
+        <Mass>
+          <Controller
+            name="stuNum"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="stuNum">
+                  <Typo> 학번 </Typo>
+                </label>
+                <Text
+                  type="text"
+                  name="stuNum"
+                  {...field}
+                  value={stuNum}
+                  placeholder="학번을 입력하세요"
+                  pattern="2[0-9]{7}"
+                  required="required"
+                  maxLength={8}
+                  onChange={changeStuNum}
+                />
+              </Table>
+            )}
+          />
+          <Controller
+            name="major"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="major">
+                  <Typo> 학부 </Typo>
+                </label>
+                <Dropdown {...field} onChange={changeMajor}>
+                  <options value="" disabled>
+                    학부 선택
+                  </options>
+                  {majors.map((majorOption) => (
+                    <option key={majorOption} value={majorOption}>
+                      {majorOption}
+                    </option>
+                  ))}
+                </Dropdown>
+              </Table>
+            )}
+          />
 
-          <Table>
-            <label htmlFor="dorm"> <Typo> 거주호관 </Typo> </label>
-            <select value={dorm} onChange={changeDorm}>
-              <option value="" disabled>
-                호관 선택
-              </option>
-              {dorms.map((dormOption) => (
-                <option key={dormOption} value={dormOption}>
-                  {dormOption}
-                </option>
-              ))}
-            </select>
-          </Table>
-          <Table>
-            <label htmlFor="team"> <Typo> 팀 </Typo> </label>
-            <input type="text" name="team" onChange={changeTeam} />
-          </Table>
-          <Table>
-            <label htmlFor="roommateNum"><Typo> 인실 </Typo>  </label>
-            <Radio
-              type="radio"
-              name="roommateNum"
-              value="room4"
-              onClick={changeRoommateNum}
-            />{" "}
-            4인실
-            <Radio
-              type="radio"
-              name="roommateNum"
-              value="room2"
-              onClick={changeRoommateNum}
-            />{" "}
-            2인실
-            <Radio
-              type="radio"
-              name="roommateNum"
-              value="room1"
-              onClick={changeRoommateNum}
-            />{" "}
-            1인실
-          </Table>
-        {/* </Mass> */}
-        <br />
+          <Controller
+            name="rc"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="rc">
+                  <Typo> RC </Typo>
+                </label>
+                <Dropdown {...field} onChange={changeRc}>
+                  <options value="" disabled>
+                    RC 선택
+                  </options>
+                  {rcs.map((rcOption) => (
+                    <option key={rcOption} value={rcOption}>
+                      {rcOption}
+                    </option>
+                  ))}
+                </Dropdown>
+              </Table>
+            )}
+          />
+
+          <Controller
+            name="dorm"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="dorm">
+                  <Typo> 거주호관 </Typo>
+                </label>
+                <Dropdown {...field} onChange={changeDorm}>
+                  <options value="" disabled>
+                    호관 선택
+                  </options>
+                  {dorms.map((dormOption) => (
+                    <option key={dormOption} value={dormOption}>
+                      {dormOption}
+                    </option>
+                  ))}
+                </Dropdown>
+              </Table>
+            )}
+          />
+
+          <Controller
+            name="team"
+            control={control}
+            defaultValue={options[0]} // 기본값 설정 (예: 첫 번째 팀)
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="team">
+                  <Typo> 팀 </Typo>
+                </label>
+                <Select
+                  {...field}
+                  value={selectedOption}
+                  onChange={(selectedOption) => {
+                    field.onChange(selectedOption);
+                    handleSelectChange(selectedOption);
+                  }}
+                  options={options}
+                  isSearchable
+                  placeholder="팀 선택"
+                  styles={SearchAndDropdown}
+                />
+              </Table>
+            )}
+          />
+          <Controller
+            name="roommateNum"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Table>
+                <label htmlFor="roommateNum">
+                  <Typo> 인실 </Typo>
+                </label>
+                <Radio
+                  type="radio"
+                  name="roommateNum"
+                  value="room4"
+                  id="room4"
+                  onClick={changeRoommateNum}
+                  {...field}
+                />
+                <Content> 4인실 </Content>
+                <Radio
+                  type="radio"
+                  name="roommateNum"
+                  value="room2"
+                  id="room2"
+                  onClick={changeRoommateNum}
+                  {...field}
+                />
+                <Content> 2인실 </Content>
+                <Radio
+                  type="radio"
+                  name="roommateNum"
+                  value="room1"
+                  id="room1"
+                  onClick={changeRoommateNum}
+                  {...field}
+                />
+                <Content> 1인실 </Content>
+              </Table>
+            )}
+          />
+        </Mass>
+        <SubmitContainer>
+          <Submit type="submit" disabled={!isValid}>
+            {" "}
+            확인{" "}
+          </Submit>
+        </SubmitContainer>
       </form>
-      <button onClick={signUp}> 회원가입 </button>
     </Div>
   );
 };
