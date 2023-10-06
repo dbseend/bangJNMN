@@ -9,10 +9,10 @@ import styled from "styled-components";
 const Div = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: -8px;
-  width: 100vw;
+  align-items: center; 
+  justify-content: center; 
+  margin: 0 auto;
+  width: 100%;
   height: 100vh;
   overflow: hidden;
   background: #38373c;
@@ -28,6 +28,11 @@ const Logo = styled.h1`
   font-weight: 700;
   line-height: 20px; /* 41.667% */
   letter-spacing: 0.1px;
+  width: 222px;
+  height: 20px;
+  top: 420px;
+  left: 608px;
+
 `
 const LoginButton = styled.button`
   display: flex;
@@ -40,6 +45,8 @@ const LoginButton = styled.button`
   flex-shrink: 0;
   border-radius: 100px;
   background: #cecccc;
+  top: 504px;
+  left: 563px;
 
   color: #f26938;
   text-align: center;
@@ -49,8 +56,11 @@ const LoginButton = styled.button`
   font-weight: 500;
   line-height: 20px; /* 50% */
   letter-spacing: 0.1px;
-  margin-top: 40px;
+  padding-left: 24px;
+  padding-right: 24px;
 `;
+
+
 
 const LogIn = () => {
   const [init, setInit] = useState(false);
@@ -59,6 +69,7 @@ const LogIn = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+    
 
   const handleGoogleLogin = () => {
     const auth = getAuth();
@@ -76,26 +87,30 @@ const LogIn = () => {
   };
 
   const checkNewUser = async (displayName) => {
-    const docRef = doc(dbService, "studentUser", displayName);
-
+    const docRef = doc(dbService, "user", displayName);
+    
     try {
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log("기존 유저");
-        if (localStorage.getItem("access") === "client") {
-          navigate("/client");
-        } else if (localStorage.getItem("access") === "admin") {
-          navigate("/admin");
-        }
-      } else {
-        console.log("새로운 유저");
-        navigate("/signup");
-      }
+      // const data = { key: docSnap.data().access };
+      // const expirationTime = new Date().getTime() + 3600 * 1000;
+      // const itemToStore = { data, expirationTime };
+      localStorage.setItem("access", "client");
+      // if (docSnap.exists()) {
+      //   console.log("기존 유저");
+      //   if (localStorage.getItem("access") === "client") {
+      //     navigate("/client");
+      //   } else if (localStorage.getItem("access") === "admin") {
+      //     navigate("/admin");
+      //   }
+      // } else {
+      //   console.log("새로운 유저");
+      //   navigate("/signup");
+      // }
     } catch (err) {
       console.log(err);
     }
   };
-
+  
   return (
     <Div>
       <Logo>방주니마니</Logo>
