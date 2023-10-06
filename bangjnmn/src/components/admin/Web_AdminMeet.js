@@ -36,6 +36,7 @@ const TableCell = styled.td`
 
 const AdminMeet = () => {
   const [user, setUser] = useState("");
+  const [selectedTimes, setSelectedTimes] = useState([]);
   const [selectedTime, setSelectedTime] = useState(-1);
   const [reservationList, setReservationList] = useState([]);
   const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
@@ -114,24 +115,21 @@ const AdminMeet = () => {
     }
   };
 
-  const reserveMeet = async () => {
+  const reserveMeet = () => {
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
 
-    if (reserveTF[selectedTime]) {
-      alert("이미 예약된 시간입니다!");
-      return;
-    }
-
     try {
-      const dayUpdateData = {
-        [selectedTime]: {
-          time: selectedTime,
-          name: user.name,
-        },
-      };
+      selectedTimes.forEach(async (selectedTime) => {
+        const dayUpdateData = {
+          [selectedTime]: {
+            time: selectedTime,
+            name: user.name,
+          },
+        };
 
-      await setDoc(dayRef, { ...dayUpdateData }, { merge: true });
+        await setDoc(dayRef, { ...dayUpdateData }, { merge: true });
+      });
 
       console.log("day 문서 업데이트 성공!");
       alert("예약이 완료되었습니다.");
@@ -160,10 +158,19 @@ const AdminMeet = () => {
   };
 
   const handleSelectTime = (index) => {
-    if (selectedTime === index) {
-      setSelectedTime(-1);
-    } else {
-      setSelectedTime(index);
+    if (meetDate == "") {
+      alert("날짜를 먼저 선택해주세요!");
+    }
+    if (meetDate != "") {
+      const selectedIndex = selectedTimes.indexOf(index);
+
+      if (selectedIndex === -1) {
+        setSelectedTimes([...selectedTimes, index]);
+      } else {
+        const newSelectedTimes = [...selectedTimes];
+        newSelectedTimes.splice(selectedIndex, 1);
+        setSelectedTimes(newSelectedTimes);
+      }
     }
   };
 
@@ -190,7 +197,7 @@ const AdminMeet = () => {
                 style={{
                   backgroundColor: reserveTF[index]
                     ? "red"
-                    : selectedTime === index
+                    : selectedTimes.includes(index)
                     ? "lightblue"
                     : "",
                   cursor: reservationList[index] ? "not-allowed" : "pointer",
@@ -200,7 +207,7 @@ const AdminMeet = () => {
                 }}
               >
                 {reservationList[index] &&
-                reservationList[index].auth == "client"
+                reservationList[index].auth === "client"
                   ? item + reservationList[index].name
                   : item}
               </TableCell>
