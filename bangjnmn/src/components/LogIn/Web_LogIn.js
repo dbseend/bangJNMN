@@ -87,25 +87,25 @@ const LogIn = () => {
   };
 
   const checkNewUser = async (displayName) => {
-    const docRef = doc(dbService, "studentUser", displayName);
+    const docRef = doc(dbService, "user", displayName);
     
     try {
       const docSnap = await getDoc(docRef);
-      const data = { key: docSnap.data().access };
-      const expirationTime = new Date().getTime() + 3600 * 1000;
-      const itemToStore = { data, expirationTime };
-      localStorage.setItem("myData", JSON.stringify(itemToStore));
-      if (docSnap.exists()) {
-        console.log("기존 유저");
-        if (localStorage.getItem("access") === "client") {
-          navigate("/client");
-        } else if (localStorage.getItem("access") === "admin") {
-          navigate("/admin");
-        }
-      } else {
-        console.log("새로운 유저");
-        navigate("/signup");
-      }
+      // const data = { key: docSnap.data().access };
+      // const expirationTime = new Date().getTime() + 3600 * 1000;
+      // const itemToStore = { data, expirationTime };
+      localStorage.setItem("access", "client");
+      // if (docSnap.exists()) {
+      //   console.log("기존 유저");
+      //   if (localStorage.getItem("access") === "client") {
+      //     navigate("/client");
+      //   } else if (localStorage.getItem("access") === "admin") {
+      //     navigate("/admin");
+      //   }
+      // } else {
+      //   console.log("새로운 유저");
+      //   navigate("/signup");
+      // }
     } catch (err) {
       console.log(err);
     }
