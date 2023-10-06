@@ -123,6 +123,11 @@ const ClientMeet = () => {
     const time = formatTime(selectedTime);
     const meetTime = date + " " + time;
 
+    if(user.meetTF == true){
+      alert("이미 면담 예약하셨습니다!");
+      return;
+    }
+
     if (reserveTF[selectedTime]) {
       alert("이미 예약된 시간입니다!");
       return;
@@ -171,10 +176,15 @@ const ClientMeet = () => {
   };
 
   const handleSelectTime = (index) => {
-    if (selectedTime === index) {
-      setSelectedTime(-1);
-    } else {
-      setSelectedTime(index);
+    if(meetDate == ""){
+      alert("날짜를 먼저 선택해주세요!");
+    }
+    if(meetDate != ""){
+      if (selectedTime === index) {
+        setSelectedTime(-1);
+      } else {
+        setSelectedTime(index);
+      }
     }
   };
 
