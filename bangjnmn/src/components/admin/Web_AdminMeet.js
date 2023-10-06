@@ -46,6 +46,7 @@ const AdminMeet = () => {
   const times = Array.from({ length: 5 }, (_, index) => formatTime(index));
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const checkStatus = async () => {
       const currentPath = window.location.pathname;
@@ -58,14 +59,20 @@ const AdminMeet = () => {
           if (stuSnap.exists()) {
             setUser(stuSnap.data());
           }
-          // if (
-          //   localStorage.getItem("access") === "client" &&
-          //   currentPath.includes("admin")
-          // ) {
-          //   console.log("접근할 수 없습니다.");
-          //   navigate("/client");
-          // }
-        } else {
+          if ( // client -> admin 접근 차단
+            localStorage.getItem("access") === "client" &&
+            currentPath.includes("admin")
+          ) {
+            alert("접근할 수 없습니다.");
+            navigate("/client");
+          } else if ( // admin -> client 접근 차단
+            localStorage.getItem("access") === "admin" &&
+            currentPath.includes("client")
+          ) {
+            alert("접근할 수 없습니다.");
+            navigate("/admin");
+          }
+        } else { // 로그인 안 함
           console.log("로그인이 필요합니다.");
           navigate("/");
         }
@@ -74,7 +81,7 @@ const AdminMeet = () => {
 
     checkStatus();
   }, []);
-
+  
   function formatTime(index) {
     const startTime = 9 * 60;
     const interval = 30;
