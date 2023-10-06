@@ -69,22 +69,36 @@ const LogIn = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-    
 
-  const handleGoogleLogin = () => {
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider(); // provider를 구글로 설정
-    signInWithPopup(auth, provider) // popup을 이용한 signup
-      .then(async (result) => {
-        setInit(true);
-        setUserData(result.user); // user data 설정
-        setName(result.user.displayName);
-        setEmail(result.user.email);
-        setUid(result.user.uid);
-        console.log("유저 ", result.user);
-        checkNewUser(result.user.displayName);
-      });
-  };
+const handleGoogleLogin = () => {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider(); // provider를 구글로 설정
+  signInWithPopup(auth, provider) // popup을 이용한 signup
+    .then(async (result) => {
+      setInit(true);
+      setUserData(result.user); // user data 설정
+      setName(result.user.displayName);
+      setEmail(result.user.email);
+      setUid(result.user.uid);
+      console.log("유저 ", result.user);
+
+      // 이메일 도메인 확인
+      checkEmailDomain(result.user.email);
+      checkNewUser(result.user.displayName);
+    })
+    .catch((error) => {
+      console.error("Google 로그인 에러:", error);
+    });
+};
+
+const checkEmailDomain = (email) => {
+  const emailDomain = email.split('@')[1]; // 이메일 주소에서 도메인 추출
+
+  if (emailDomain !== "handong.ac.kr") {
+    console.log('handong.ac.kr 메일이 아님');
+    alert("학교 메일 계정 (@handong.ac.kr)으로 로그인하세요.");
+  }
+};
 
   const checkNewUser = async (displayName) => {
     const docRef = doc(dbService, "user", displayName);
