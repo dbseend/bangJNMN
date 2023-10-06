@@ -270,7 +270,7 @@ const SignUp = () => {
           console.log("로그인 되어 있습니다.");
           console.log(user);
           setUserData(user);
-          const stuRef = doc(dbService, "studentUser", user.displayName);
+          const stuRef = doc(dbService, "user", user.displayName);
           const stuSnap = await getDoc(stuRef);
           if (stuSnap.exists()) {
           }
@@ -295,7 +295,7 @@ const SignUp = () => {
   const signUp = async (formData) => {
     try {
       const docRef = await setDoc(
-        doc(dbService, "studentUser", userData.displayName),
+        doc(dbService, "user", userData.displayName),
         {
           name: userData.displayName,
           email: formData.email,
@@ -310,8 +310,9 @@ const SignUp = () => {
           roommateNum: formData.roommateNum,
           roomNum: "",
           access: "client",
-          meetTime: null,
+          meetTime: 0,
           meetTF: false,
+          meetIdx: 0
         }
       );
 

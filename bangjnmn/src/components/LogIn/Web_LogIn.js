@@ -69,43 +69,57 @@ const LogIn = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-    
 
-  const handleGoogleLogin = () => {
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider(); // provider를 구글로 설정
-    signInWithPopup(auth, provider) // popup을 이용한 signup
-      .then(async (result) => {
-        setInit(true);
-        setUserData(result.user); // user data 설정
-        setName(result.user.displayName);
-        setEmail(result.user.email);
-        setUid(result.user.uid);
-        console.log("유저 ", result.user);
-        checkNewUser(result.user.displayName);
-      });
-  };
+const handleGoogleLogin = () => {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider(); // provider를 구글로 설정
+  signInWithPopup(auth, provider) // popup을 이용한 signup
+    .then(async (result) => {
+      setInit(true);
+      setUserData(result.user); // user data 설정
+      setName(result.user.displayName);
+      setEmail(result.user.email);
+      setUid(result.user.uid);
+      console.log("유저 ", result.user);
+
+      // 이메일 도메인 확인
+      checkEmailDomain(result.user.email);
+      checkNewUser(result.user.displayName);
+    })
+    .catch((error) => {
+      console.error("Google 로그인 에러:", error);
+    });
+};
+
+const checkEmailDomain = (email) => {
+  const emailDomain = email.split('@')[1]; // 이메일 주소에서 도메인 추출
+
+  if (emailDomain !== "handong.ac.kr") {
+    console.log('handong.ac.kr 메일이 아님');
+    alert("학교 메일 계정 (@handong.ac.kr)으로 로그인하세요.");
+  }
+};
 
   const checkNewUser = async (displayName) => {
-    const docRef = doc(dbService, "studentUser", displayName);
+    const docRef = doc(dbService, "user", displayName);
     
     try {
       const docSnap = await getDoc(docRef);
-      const data = { key: docSnap.data().access };
-      const expirationTime = new Date().getTime() + 3600 * 1000;
-      const itemToStore = { data, expirationTime };
-      localStorage.setItem("myData", JSON.stringify(itemToStore));
-      if (docSnap.exists()) {
-        console.log("기존 유저");
-        if (localStorage.getItem("access") === "client") {
-          navigate("/client");
-        } else if (localStorage.getItem("access") === "admin") {
-          navigate("/admin");
-        }
-      } else {
-        console.log("새로운 유저");
-        navigate("/signup");
-      }
+      // const data = { key: docSnap.data().access };
+      // const expirationTime = new Date().getTime() + 3600 * 1000;
+      // const itemToStore = { data, expirationTime };
+      localStorage.setItem("access", "client");
+      // if (docSnap.exists()) {
+      //   console.log("기존 유저");
+      //   if (localStorage.getItem("access") === "client") {
+      //     navigate("/client");
+      //   } else if (localStorage.getItem("access") === "admin") {
+      //     navigate("/admin");
+      //   }
+      // } else {
+      //   console.log("새로운 유저");
+      //   navigate("/signup");
+      // }
     } catch (err) {
       console.log(err);
     }
