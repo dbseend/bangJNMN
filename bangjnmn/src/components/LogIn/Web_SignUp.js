@@ -284,7 +284,6 @@ const SignUp = () => {
     checkStatus();
   }, []);
 
-kye
   //회원가입
   const signUp = async (e) => {
     e.preventDefault();
