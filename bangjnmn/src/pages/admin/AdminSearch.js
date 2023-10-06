@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
 import Web_AdminSearch from '../../components/admin/Web_AdminSearch';
 
 import { styled } from "styled-components";
@@ -59,5 +60,16 @@ const AdminSearch = () => {
         </Div>
     )
 }
+=======
+import Web_AdminSearch from "../../components/admin/Web_AdminSearch";
+
+const AdminSearch = () => {
+  return (
+    <div>
+      <Web_AdminSearch />
+    </div>
+  );
+};
+>>>>>>> main
 
 export default AdminSearch;
