@@ -58,13 +58,22 @@ const ClientMeet = () => {
             setUser(stuSnap.data());
           }
           if (
+            // client -> admin 접근 차단
             localStorage.getItem("access") === "client" &&
             currentPath.includes("admin")
           ) {
-            console.log("접근할 수 없습니다.");
+            alert("접근할 수 없습니다.");
             navigate("/client");
+          } else if (
+            // admin -> client 접근 차단
+            localStorage.getItem("access") === "admin" &&
+            currentPath.includes("client")
+          ) {
+            alert("접근할 수 없습니다.");
+            navigate("/admin");
           }
         } else {
+          // 로그인 안 함
           console.log("로그인이 필요합니다.");
           navigate("/");
         }

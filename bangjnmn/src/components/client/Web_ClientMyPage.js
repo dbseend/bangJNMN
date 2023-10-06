@@ -12,8 +12,9 @@ const ClientMyPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isModified, setIsModified] = useState(false);
 
+
   useEffect(() => {
-      const checkStatus = async () => {
+    const checkStatus = async () => {
       const currentPath = window.location.pathname;
 
       auth.onAuthStateChanged(async (user) => {
@@ -23,29 +24,35 @@ const ClientMyPage = () => {
           const stuSnap = await getDoc(stuRef);
           if (stuSnap.exists()) {
             setUserData(stuSnap.data());
-            setPhoneNumber(stuSnap.data().phoneNumber);
           }
-          if (
+          if ( // client -> admin 접근 차단
             localStorage.getItem("access") === "client" &&
             currentPath.includes("admin")
           ) {
-            console.log("접근할 수 없습니다.");
+            alert("접근할 수 없습니다.");
             navigate("/client");
+          } else if ( // admin -> client 접근 차단
+            localStorage.getItem("access") === "admin" &&
+            currentPath.includes("client")
+          ) {
+            alert("접근할 수 없습니다.");
+            navigate("/admin");
           }
-        } else {
+        } else { // 로그인 안 함
           console.log("로그인이 필요합니다.");
           navigate("/");
         }
       });
-      window.onbeforeunload = (e) => {
-        if (isModified) {
-          e.preventDefault();
-          e.returnValue = "";
-        }
-      };
+    };
+    window.onbeforeunload = (e) => {
+      if (isModified) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
     };
 
     checkStatus();
+
   }, [isModified]);
 
   const fetchData = async (displayName) => {
