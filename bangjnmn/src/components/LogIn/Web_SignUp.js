@@ -310,8 +310,9 @@ const SignUp = () => {
           roommateNum: formData.roommateNum,
           roomNum: "",
           access: "client",
-          meetTime: null,
+          meetTime: 0,
           meetTF: false,
+          meetIdx: 0
         }
       );
 
