@@ -19,7 +19,7 @@ const ClientMyPage = () => {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
           console.log("로그인 되어있습니다.");
-          const stuRef = doc(dbService, "studentUser", user.displayName);
+          const stuRef = doc(dbService, "user", user.displayName);
           const stuSnap = await getDoc(stuRef);
           if (stuSnap.exists()) {
             setUserData(stuSnap.data());
@@ -50,7 +50,7 @@ const ClientMyPage = () => {
 
   const fetchData = async (displayName) => {
     try {
-      const docRef = doc(dbService, "studentUser", displayName);
+      const docRef = doc(dbService, "user", displayName);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -93,7 +93,7 @@ const ClientMyPage = () => {
     }
 
     try {
-      const docRef = doc(dbService, "studentUser", userData.name);
+      const docRef = doc(dbService, "user", userData.name);
       await updateDoc(docRef, { phoneNumber: phoneNumber });
       alert("전화번호 정보가 업데이트되었습니다.");
       setEditMode(false);
