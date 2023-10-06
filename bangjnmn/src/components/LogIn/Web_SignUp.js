@@ -4,7 +4,6 @@ import { auth, dbService } from "../../api/fbase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { useForm, Controller } from "react-hook-form";
 
 const Div = styled.div`
   display: flex;
@@ -142,11 +141,10 @@ const Submit = styled.button`
   text-align: center;
   color: #f26938;
 `;
-
-const SubmitContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+// const SubmitContainer = styled.div`
+//   display: flex;
+//   justify-content: center;
+// `;
 
 const Dropdown = styled.select`
   width: 150px;
@@ -191,12 +189,6 @@ const SearchAndDropdown = {
 };
 
 const SignUp = () => {
-  const {
-    handleSubmit,
-    control,
-
-    formState: { isValid },
-  } = useForm();
   const [userData, setUserData] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -209,7 +201,6 @@ const SignUp = () => {
   const [team, setTeam] = useState("");
   const [dorm, setDorm] = useState("");
   const [roommateNum, setRoommateNum] = useState(0);
-  const [selectedOption, setSelectedOption] = useState("");
   const navigate = useNavigate();
 
   const options = [
@@ -231,7 +222,7 @@ const SignUp = () => {
     { value: "최혜봉", label: "최혜봉 교수님 팀" },
     { value: "황성수", label: "황성수 교수님 팀" },
   ];
-  
+
   const majors = [
     "글로벌리더십학부",
     "국제어문학부",
@@ -267,9 +258,11 @@ const SignUp = () => {
 
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          console.log("로그인 되어 있습니다.");
+          console.log("로그인 되어있습니다.");
           console.log(user);
           setUserData(user);
+          setName(user.displayName);
+          setEmail(user.email);
           const stuRef = doc(dbService, "user", user.displayName);
           const stuSnap = await getDoc(stuRef);
           if (stuSnap.exists()) {
@@ -291,47 +284,36 @@ const SignUp = () => {
     checkStatus();
   }, []);
 
-  // 회원가입
-  const signUp = async (formData) => {
-    try {
-      const docRef = await setDoc(
-        doc(dbService, "user", userData.displayName),
-        {
-          name: userData.displayName,
-          email: formData.email,
-          gender: formData.gender,
-          birth: formData.birth,
-          phoneNumber: formData.phoneNumber,
-          stuNum: formData.stuNum,
-          major: formData.major,
-          rc: formData.rc,
-          team: formData.team.value, // 선택한 팀의 값을 사용
-          dorm: formData.dorm,
-          roommateNum: formData.roommateNum,
-          roomNum: "",
-          access: "client",
-          meetTime: 0,
-          meetTF: false,
-          meetIdx: 0
-        }
-      );
-
-      // 폼 데이터가 모두 유효한 경우에만 회원가입 처리
-      if (isValid) {
-        if (docRef) {
-          console.log("회원가입에 저장 성공");
-        }
-      } else {
-        console.error("폼 데이터 유효성 검사 실패");
-      }
-    } catch (error) {
-      console.error("회원가입 실패: ", error);
+  //회원가입
+  const signUp = async (e) => {
+    e.preventDefault();
+    const docRef = setDoc(doc(dbService, "user", name), {
+      name: name,
+      email: email,
+      gender: gender,
+      birth: birth,
+      phoneNumber: phoneNumber,
+      stuNum: stuNum,
+      major: major,
+      rc: rc,
+      team: team,
+      dorm: dorm,
+      roommateNum: roommateNum,
+      roomNum: "",
+      access: "client",
+      meetTime: 0,
+      meetTF: false,
+      meetIdx: 0,
+    });
+    if (docRef) {
+      console.log("회원가입에 저장 성공");
+      navigate("/client");
     }
   };
 
-  const handleSelectChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
-    console.log(selectedOption.value);
+  const changeTeam = (team) => {
+    setTeam(team);
+    console.log(team.label);
   };
 
   const changeGender = (e) => {
@@ -378,260 +360,178 @@ const SignUp = () => {
     <Div>
       <Title>방주니마니</Title>
 
-      <form onSubmit={handleSubmit((data) => signUp(data))}>
+      <form>
         <Mass1>
           <Table>
             <Typo> 이름 </Typo> <Content> {userData.displayName} </Content>
           </Table>
-          <Controller
-            name="email"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <Typo> 이메일 </Typo>
-                <Content> {userData.email} </Content>
-              </Table>
-            )}
-          />
-          <Controller
-            name="gender"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="gender">
-                  <Typo> 성별 </Typo>
-                </label>
-                <Radio
-                  type="radio"
-                  name="gender"
-                  value="male"
-                  id="남자"
-                  onClick={changeGender}
-                  {...field}
-                />
-                <Content> 남자 </Content>
-                <Radio
-                  type="radio"
-                  name="gender"
-                  value="female"
-                  id="여자"
-                  onClick={changeGender}
-                  {...field}
-                />
-                <Content> 여자 </Content>
-              </Table>
-            )}
-          />
-          <Controller
-            name="birth"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="birth">
-                  <Typo> 생년월일 </Typo>
-                </label>
-                <Date
-                  type="date"
-                  name="birth"
-                  onSelect={changeBirth}
-                  {...field}
-                />
-              </Table>
-            )}
-          />
+          <Table>
+            <Typo> 이메일 </Typo>
+            <Content> {userData.email} </Content>
+          </Table>
 
-          <Controller
-            name="phoneNumber"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="phoneNumber">
-                  <Typo> 전화번호 </Typo>
-                </label>
-                <Text
-                  type="text"
-                  name="phoneNumber"
-                  {...field}
-                  value={phoneNumber}
-                  onChange={changePhoneNumber}
-                  placeholder="전화번호를 입력하세요"
-                  pattern="01[0-9]{9}"
-                  required="required"
-                  maxLength={13}
-                />
-              </Table>
-            )}
-          />
+          <Table>
+            <label htmlFor="gender">
+              {" "}
+              <Typo> 성별 </Typo>
+            </label>
+            <Radio
+              type="radio"
+              name="gender"
+              value="male"
+              id="남자"
+              onClick={changeGender}
+            />{" "}
+            <Content> 남자 </Content>
+            <Radio
+              type="radio"
+              name="gender"
+              value="female"
+              id="여자"
+              onClick={changeGender}
+            />{" "}
+            <Content> 여자 </Content>
+          </Table>
+          <Table>
+            <label htmlFor="birth">
+              {" "}
+              <Typo> 생년월일 </Typo>{" "}
+            </label>
+            <Date type="date" name="birth" onChange={changeBirth} />
+          </Table>
+
+          <Table>
+            <label htmlFor="phoneNumber">
+              {" "}
+              <Typo> 전화번호 </Typo>
+            </label>
+            <Text
+              type="text"
+              name="phoneNumber"
+              onChange={changePhoneNumber}
+              placeholder="전화번호를 입력하세요"
+              required="required"
+              pattern="01[0-9]{9}"
+              maxLength={13}
+            />
+          </Table>
         </Mass1>
 
         <Mass>
-          <Controller
-            name="stuNum"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="stuNum">
-                  <Typo> 학번 </Typo>
-                </label>
-                <Text
-                  type="text"
-                  name="stuNum"
-                  {...field}
-                  value={stuNum}
-                  placeholder="학번을 입력하세요"
-                  pattern="2[0-9]{7}"
-                  required="required"
-                  maxLength={8}
-                  onChange={changeStuNum}
-                />
-              </Table>
-            )}
-          />
-          <Controller
-            name="major"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="major">
-                  <Typo> 학부 </Typo>
-                </label>
-                <Dropdown {...field} onChange={changeMajor}>
-                  <options value="" disabled>
-                    학부 선택
-                  </options>
-                  {majors.map((majorOption) => (
-                    <option key={majorOption} value={majorOption}>
-                      {majorOption}
-                    </option>
-                  ))}
-                </Dropdown>
-              </Table>
-            )}
-          />
+          <Table>
+            <label htmlFor="studentNumber">
+              {" "}
+              <Typo> 학번 </Typo>
+            </label>
+            <Text
+              type="text"
+              name="stuNum"
+              onChange={changeStuNum}
+              placeholder="학번을 입력하세요"
+              pattern="2[0-9]{2}00[0-9]{3}"
+              maxLength={8}
+            />
+          </Table>
+          <Table>
+            <label htmlFor="major">
+              {" "}
+              <Typo> 학부 </Typo>
+            </label>
+            <Dropdown value={major} onChange={changeMajor}>
+              <option value="" disabled>
+                학부 선택
+              </option>
+              {majors.map((majorOption) => (
+                <option key={majorOption} value={majorOption}>
+                  {majorOption}
+                </option>
+              ))}
+            </Dropdown>
+          </Table>
 
-          <Controller
-            name="rc"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="rc">
-                  <Typo> RC </Typo>
-                </label>
-                <Dropdown {...field} onChange={changeRc}>
-                  <options value="" disabled>
-                    RC 선택
-                  </options>
-                  {rcs.map((rcOption) => (
-                    <option key={rcOption} value={rcOption}>
-                      {rcOption}
-                    </option>
-                  ))}
-                </Dropdown>
-              </Table>
-            )}
-          />
+          <Table>
+            <label htmlFor="rc">
+              {" "}
+              <Typo> RC </Typo>{" "}
+            </label>
+            <Dropdown value={rc} onChange={changeRc}>
+              <option value="" disabled>
+                rc 선택
+              </option>
+              {rcs.map((rcOption) => (
+                <option key={rcOption} value={rcOption}>
+                  {rcOption}
+                </option>
+              ))}
+            </Dropdown>
+          </Table>
 
-          <Controller
-            name="dorm"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="dorm">
-                  <Typo> 거주호관 </Typo>
-                </label>
-                <Dropdown {...field} onChange={changeDorm}>
-                  <options value="" disabled>
-                    호관 선택
-                  </options>
-                  {dorms.map((dormOption) => (
-                    <option key={dormOption} value={dormOption}>
-                      {dormOption}
-                    </option>
-                  ))}
-                </Dropdown>
-              </Table>
-            )}
-          />
+          <Table>
+            <label htmlFor="dorm">
+              {" "}
+              <Typo> 거주호관 </Typo>{" "}
+            </label>
+            <Dropdown value={dorm} onChange={changeDorm}>
+              <option value="" disabled>
+                호관 선택
+              </option>
+              {dorms.map((dormOption) => (
+                <option key={dormOption} value={dormOption}>
+                  {dormOption}
+                </option>
+              ))}
+            </Dropdown>
+          </Table>
+          <Table>
+            <label htmlFor="team">
+              {" "}
+              <Typo> 팀 </Typo>{" "}
+            </label>
 
-          <Controller
-            name="team"
-            control={control}
-            defaultValue={options[0]} // 기본값 설정 (예: 첫 번째 팀)
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="team">
-                  <Typo> 팀 </Typo>
-                </label>
-                <Select
-                  {...field}
-                  value={selectedOption}
-                  onChange={(selectedOption) => {
-                    field.onChange(selectedOption);
-                    handleSelectChange(selectedOption);
-                  }}
-                  options={options}
-                  isSearchable
-                  placeholder="팀 선택"
-                  styles={SearchAndDropdown}
-                />
-              </Table>
-            )}
-          />
-          <Controller
-            name="roommateNum"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Table>
-                <label htmlFor="roommateNum">
-                  <Typo> 인실 </Typo>
-                </label>
-                <Radio
-                  type="radio"
-                  name="roommateNum"
-                  value="room4"
-                  id="room4"
-                  onClick={changeRoommateNum}
-                  {...field}
-                />
-                <Content> 4인실 </Content>
-                <Radio
-                  type="radio"
-                  name="roommateNum"
-                  value="room2"
-                  id="room2"
-                  onClick={changeRoommateNum}
-                  {...field}
-                />
-                <Content> 2인실 </Content>
-                <Radio
-                  type="radio"
-                  name="roommateNum"
-                  value="room1"
-                  id="room1"
-                  onClick={changeRoommateNum}
-                  {...field}
-                />
-                <Content> 1인실 </Content>
-              </Table>
-            )}
-          />
+            <Select
+              onChange={changeTeam}
+              type="text"
+              name="team"
+              value={team}
+              options={options}
+              isSearchable
+              placeholder="팀 선택"
+              styles={SearchAndDropdown}
+            />
+          </Table>
+          <Table>
+            <label htmlFor="roommateNum">
+              <Typo> 인실 </Typo>{" "}
+            </label>
+            <Radio
+              type="radio"
+              name="roommateNum"
+              value="room4"
+              id="room4"
+              onClick={changeRoommateNum}
+            />{" "}
+            <Content> 4인실 </Content>
+            <Radio
+              type="radio"
+              name="roommateNum"
+              value="room2"
+              id="room2"
+              onClick={changeRoommateNum}
+            />{" "}
+            <Content> 2인실 </Content>
+            <Radio
+              type="radio"
+              name="roommateNum"
+              value="room1"
+              id="room1"
+              onClick={changeRoommateNum}
+            />{" "}
+            <Content> 1인실 </Content>
+          </Table>
         </Mass>
-        <SubmitContainer>
-          <Submit type="submit" disabled={!isValid}>
-            {" "}
-            확인{" "}
-          </Submit>
-        </SubmitContainer>
+        <br />
       </form>
+      <Submit onClick={signUp}> 확인 </Submit>
     </Div>
   );
 };
