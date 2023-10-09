@@ -10,8 +10,8 @@ import styled from "styled-components";
 const Div = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
+  align-items: center;
+  justify-content: center;
   margin: 0 auto;
   width: 100%;
   height: 100vh;
@@ -19,9 +19,8 @@ const Div = styled.div`
   background: #38373c;
 `;
 
-
 const Logo = styled.h1`
-  color: #F26938;
+  color: #f26938;
   text-align: center;
   font-family: Roboto;
   font-size: 48px;
@@ -33,8 +32,7 @@ const Logo = styled.h1`
   height: 20px;
   top: 420px;
   left: 608px;
-
-`
+`;
 const LoginButton = styled.button`
   display: flex;
   width: 314px;
@@ -60,8 +58,6 @@ const LoginButton = styled.button`
   padding-left: 24px;
   padding-right: 24px;
 `;
-
-
 
 const LogIn = () => {
   const [init, setInit] = useState(false);
@@ -99,46 +95,71 @@ const checkEmailDomain = (email) => {
     console.log('handong.ac.kr 메일이 아님');
     alert("학교 메일 계정 (@handong.ac.kr)으로 로그인하세요.");
     const auth = getAuth();
-      const uiConfig = {
-        callbacks: {
-          signInSuccessWithAuthResult: (authResult) => {
-            if (authResult.user.email.split('@')[1] !== "handong.ac.kr") {
-              return false; // 로그인 실패로 처리하여 팝업을 닫는다.
-            }
-            return true; // 로그인 성공으로 처리
-          },
-        },
-      };
-    const ui = new firebaseui.auth.AuthUI(auth);
-    ui.start('#firebaseui-auth-container', uiConfig);
-  }
-};
+    const provider = new GoogleAuthProvider(); // provider를 구글로 설정
+    signInWithPopup(auth, provider) // popup을 이용한 signup
+      .then(async (result) => {
+        setInit(true);
+        setUserData(result.user); // user data 설정
+        setName(result.user.displayName);
+        setEmail(result.user.email);
+        setUid(result.user.uid);
+        console.log("유저 ", result.user);
+
+        // 이메일 도메인 확인
+        checkEmailDomain(result.user.email);
+        checkNewUser(result.user.displayName);
+      })
+      .catch((error) => {
+        console.error("Google 로그인 에러:", error);
+      });
+    }
+  };
 
   const checkNewUser = async (displayName) => {
     const docRef = doc(dbService, "user", displayName);
-    
+
     try {
       const docSnap = await getDoc(docRef);
-      // const data = { key: docSnap.data().access };
-      // const expirationTime = new Date().getTime() + 3600 * 1000;
-      // const itemToStore = { data, expirationTime };
-      localStorage.setItem("access", "client");
-      // if (docSnap.exists()) {
-      //   console.log("기존 유저");
-      //   if (localStorage.getItem("access") === "client") {
-      //     navigate("/client");
-      //   } else if (localStorage.getItem("access") === "admin") {
-      //     navigate("/admin");
-      //   }
-      // } else {
-      //   console.log("새로운 유저");
-      //   navigate("/signup");
-      // }
+
+      if (docSnap.exists()) {
+        const data = { key: docSnap.data().access };
+        const expirationTime = new Date().getTime() + 60 * 1000; // 현재 시간에서 1시간(3600초) 후의 시간을 계산
+
+        // 데이터와 만료 시간을 객체로 저장
+        const itemToStore = { data, expirationTime };
+
+        // 로컬 스토리지에서 이전 데이터 가져오기
+        const storedItem = JSON.parse(localStorage.getItem("accessData"));
+
+        if (storedItem) {
+          // 만료되지 않았으면 로컬 스토리지에 저장된 데이터를 사용하여 작업 수행
+          if (new Date().getTime() < storedItem.expirationTime) {
+            if (storedItem.data.key === "client") {
+              navigate("/client");
+              return; // 리다이렉트 후 함수 종료
+            } else if (storedItem.data.key === "admin") {
+              navigate("/admin");
+              return; // 리다이렉트 후 함수 종료
+            }
+          } else {
+            // 데이터가 만료된 경우 삭제
+            localStorage.removeItem("accessData");
+          }
+        }
+
+        // 새로운 데이터를 로컬 스토리지에 저장
+        localStorage.setItem("accessData", JSON.stringify(itemToStore));
+
+        console.log("기존 유저");
+      } else {
+        console.log("새로운 유저");
+        navigate("/signup");
+      }
     } catch (err) {
       console.log(err);
     }
   };
-  
+
   return (
     <Div>
       <Logo>방주니마니</Logo>

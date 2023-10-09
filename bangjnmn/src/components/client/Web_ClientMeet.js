@@ -58,13 +58,22 @@ const ClientMeet = () => {
             setUser(stuSnap.data());
           }
           if (
+            // client -> admin 접근 차단
             localStorage.getItem("access") === "client" &&
             currentPath.includes("admin")
           ) {
-            console.log("접근할 수 없습니다.");
+            alert("접근할 수 없습니다.");
             navigate("/client");
+          } else if (
+            // admin -> client 접근 차단
+            localStorage.getItem("access") === "admin" &&
+            currentPath.includes("client")
+          ) {
+            alert("접근할 수 없습니다.");
+            navigate("/admin");
           }
         } else {
+          // 로그인 안 함
           console.log("로그인이 필요합니다.");
           navigate("/");
         }
@@ -87,6 +96,7 @@ const ClientMeet = () => {
   }
 
   const checkTime = async () => {
+    alert(user.meetCreated);
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
 
@@ -122,6 +132,12 @@ const ClientMeet = () => {
     const date = meetDate;
     const time = formatTime(selectedTime);
     const meetTime = date + " " + time;
+    const meetCreated = new Date();
+
+    if (user.meetTF == true) {
+      alert("이미 면담 예약하셨습니다!");
+      return;
+    }
 
     if (reserveTF[selectedTime]) {
       alert("이미 예약된 시간입니다!");
@@ -142,6 +158,7 @@ const ClientMeet = () => {
         meetTF: true,
         meetTime: meetTime,
         meetIdx: selectedTime,
+        meetCreated: meetCreated,
       });
 
       console.log("day 문서 업데이트 성공!");
@@ -159,22 +176,38 @@ const ClientMeet = () => {
     const userRef = doc(collection(dbService, "user"), user.name);
     const meetIdx = user.meetIdx;
 
-    await updateDoc(dayRef, {
-      [meetIdx]: deleteField(),
-    });
+    const currentTime = Math.floor(Date.now() / 1000); // 현재 시간을 초로 변환
+    const reserveTime = user.meetCreated.seconds; // 예약 시간을 초로 가정합니다.
+    const timeDiff = currentTime - reserveTime; // 시간 차이 계산
+    const timeDiffHours = timeDiff / 3600;
 
-    await updateDoc(userRef, {
-      meetTF: false,
-      meetTime: "",
-      meetIdx: 0,
-    });
+    if (timeDiffHours < 24) {
+      await updateDoc(dayRef, {
+        [meetIdx]: deleteField(),
+      });
+
+      await updateDoc(userRef, {
+        meetTF: false,
+        meetTime: "",
+        meetIdx: 0,
+        meetCreated: "",
+      });
+    }
+    if (timeDiffHours >= 24) {
+      alert("취소 할 수 없습니다(24시간 이내 가능)");
+    }
   };
 
   const handleSelectTime = (index) => {
-    if (selectedTime === index) {
-      setSelectedTime(-1);
-    } else {
-      setSelectedTime(index);
+    if (meetDate == "") {
+      alert("날짜를 먼저 선택해주세요!");
+    }
+    if (meetDate != "") {
+      if (selectedTime === index) {
+        setSelectedTime(-1);
+      } else {
+        setSelectedTime(index);
+      }
     }
   };
 
