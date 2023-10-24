@@ -284,6 +284,10 @@ const SignUp = () => {
     checkStatus();
   }, []);
 
+<<<<<<< HEAD
+=======
+kye
+>>>>>>> e2588c13e31399a40dbdbdee4427584da695e0b7
   //회원가입
   const signUp = async (e) => {
     e.preventDefault();
