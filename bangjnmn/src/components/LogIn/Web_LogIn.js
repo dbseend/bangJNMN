@@ -1,9 +1,8 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { dbService } from "../../api/fbase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Select from "react-select";
 import styled from "styled-components";
 
 
@@ -81,7 +80,7 @@ const handleGoogleLogin = () => {
 
       // 이메일 도메인 확인
       checkEmailDomain(result.user.email);
-      checkNewUser(result.user.displayName);
+      // checkNewUser(result.user.displayName);
     })
     .catch((error) => {
       console.error("Google 로그인 에러:", error);
@@ -94,28 +93,16 @@ const checkEmailDomain = (email) => {
   if (emailDomain !== "handong.ac.kr") {
     console.log('handong.ac.kr 메일이 아님');
     alert("학교 메일 계정 (@handong.ac.kr)으로 로그인하세요.");
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider(); // provider를 구글로 설정
-    signInWithPopup(auth, provider) // popup을 이용한 signup
-      .then(async (result) => {
-        setInit(true);
-        setUserData(result.user); // user data 설정
-        setName(result.user.displayName);
-        setEmail(result.user.email);
-        setUid(result.user.uid);
-        console.log("유저 ", result.user);
-
-        // 이메일 도메인 확인
-        checkEmailDomain(result.user.email);
-        checkNewUser(result.user.displayName);
-      })
-      .catch((error) => {
-        console.error("Google 로그인 에러:", error);
-      });
+    navigate("/");
     }
+  else {checkNewUser(name)};
   };
-
+  
   const checkNewUser = async (displayName) => {
+    if (!displayName) {
+      console.log("displayName이 없습니다.");
+      return;
+    }
     const docRef = doc(dbService, "user", displayName);
 
     try {
