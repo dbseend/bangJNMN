@@ -12,6 +12,7 @@ import ClientMeet from "./pages/client/ClientMeet";
 //import ClientMyPage from "./components/client/Web_ClientMyPage";
 import AdminSearch from "./pages/admin/AdminSearch";
 import ClientMyPage from "./pages/client/ClientMyPage";
+import AdminDetail from './pages/admin/AdminDetail';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function AdminRoutes() {
       <Route path="/survey" element={<AdminSurvey />} />
       <Route path="/meet" element={<AdminMeet />} />
       <Route path="/room" element={<AdminRoom />} />
+      <Route path="/search/:id" element={<AdminDetail />} />
     </Routes>
   );
 }
