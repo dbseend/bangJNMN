@@ -1,7 +1,7 @@
 import React from "react";
 import User from "../../components/admin/search/Web_Index";
 
-const AdminHome = () => {
+const AdminDetail = () => {
   return (
     <div>
       <User />
@@ -9,4 +9,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default AdminDetail;
