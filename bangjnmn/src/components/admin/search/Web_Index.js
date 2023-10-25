@@ -16,30 +16,9 @@ const User = () => {
 
   console.log(user)
 
-  // async function updateUser() {
-  //   await updateDoc(doc(fruitCollection, productId), {
-  //     name: fruit.name,
-  //     season: fruit.season,
-  //     color: fruit.color,
-  //     taste: fruit.taste,
-  //     count: fruit.count,
-  //     price: fruit.price,
-  //   })
-  //   navigate('/products')
-  // }
-
-  // async function deleteFruit() {
-  //   await deleteDoc(doc(fruitCollection, productId))
-  //   navigate('/products')
-  // }
-
-  // const changeHandler = e => {
-  //   setFruit(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  // }
-
   return (
     <div>
-      <h1>{userId} 제품 상세 페이지</h1>
+      <h1>{userId} 학생 상세 페이지</h1>
       <div>
         <label>이름</label>
         <input value={user.name} name="name"/>
@@ -50,7 +29,7 @@ const User = () => {
       </div>
       <div>
         <label>팀</label>
-        <input value={user.team} name="team"/>
+        <input value={user.team ? user.team.value : ''} name="team"/>
       </div>
       <div>
         <label>전공</label>

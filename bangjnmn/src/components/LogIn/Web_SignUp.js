@@ -284,7 +284,7 @@ const SignUp = () => {
 
     checkStatus();
   }, []);
-
+  
   const isValidPhoneNumber = (value) => {
     // 정규 표현식을 사용하여 유효한 전화번호 확인
     const phonePattern = /^(010-\d{4}-\d{4}|010\d{8})$/;
@@ -296,9 +296,7 @@ const SignUp = () => {
     const stuNumPattern = /^2\d{7}$/;
     return stuNumPattern.test(value);
   };
-  
-  
-  
+
   //회원가입
   const signUp = async (e) => {
     e.preventDefault();
