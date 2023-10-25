@@ -8,7 +8,7 @@ const Item = ({ data }) => {
     <tr>
       <td>{data.name}</td>
       <td>{data.stuNum}</td>
-      <td>{data.team}</td>
+      <td>{data.team.value}</td>
       <td>{data.major}</td>
       <td>{data.birth}</td>
       <td>{data.roommateNum}</td>
