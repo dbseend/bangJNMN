@@ -14,6 +14,10 @@ const User = () => {
     setUser({ ...state })
   }, [])
 
+  const handleGoBack = () => {
+    navigate("../search"); // 이동할 경로를 지정합니다
+  };
+
   console.log(user)
 
   return (
@@ -43,10 +47,23 @@ const User = () => {
         <label>호실</label>
         <input value={user.roommateNum} name="roommateNum"/>
       </div>
-      {/* <div>
-        <button onClick={updateFruit}>수정</button>
-        <button onClick={deleteFruit}>제거</button>
-      </div> */}
+      <div>
+        <label>이메일</label>
+        <input value={user.email} name="email"/>
+      </div>
+      <div>
+        <label>성별</label>
+        <input value={user.gender} name="gender"/>
+      </div>
+      <div>
+        <label>전화번호</label>
+        <input value={user.phoneNumber} name="phoneNumber"/>
+      </div>
+      <div>
+        <label>기숙사</label>
+        <input value={user.dorm} name="dorm"/>
+      </div>
+      <button onClick={handleGoBack}>돌아가기</button>
     </div>
   )
 }
