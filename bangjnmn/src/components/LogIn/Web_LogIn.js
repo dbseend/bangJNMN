@@ -15,11 +15,11 @@ const Div = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: #38373c;
+  background: #204E4A;
 `;
 
 const Logo = styled.h1`
-  color: #f26938;
+  color: #fff9f3;
   text-align: center;
   font-family: Roboto;
   font-size: 48px;
@@ -46,7 +46,7 @@ const LoginButton = styled.button`
   top: 504px;
   left: 563px;
 
-  color: #f26938;
+  color: #38373C;
   text-align: center;
   font-family: Roboto;
   font-size: 40px;
