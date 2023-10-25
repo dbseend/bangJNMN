@@ -26,7 +26,7 @@ const Web_AdminNavBar = () => {
   };
 
   const moveToHome = () => {
-    navigate("/admin/home");
+    navigate("/admin/");
   };
   const moveToStudent = () => {
     navigate("/admin/students");

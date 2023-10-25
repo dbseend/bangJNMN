@@ -77,7 +77,7 @@ const Web_clientNavBar = () => {
   };
 
   const moveToHome = () => {
-    navigate("/client/home");
+    navigate("/client/");
   };
   const moveToSurvey = () => {
     navigate("/client/survey");
