@@ -150,6 +150,7 @@ const ClientMeet = () => {
         [selectedTime]: {
           time: selectedTime,
           name: user.name,
+          access: user.access,
         },
       };
 
