@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-
 const Div = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,7 +14,7 @@ const Div = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: #204E4A;
+  background: #204e4a;
 `;
 
 const Logo = styled.h1`
@@ -46,7 +45,7 @@ const LoginButton = styled.button`
   top: 504px;
   left: 563px;
 
-  color: #38373C;
+  color: #38373c;
   text-align: center;
   font-family: Roboto;
   font-size: 40px;
