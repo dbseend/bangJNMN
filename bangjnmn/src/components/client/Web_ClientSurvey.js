@@ -31,6 +31,7 @@ const ClientSurvey = () => {
           const stuSnap = await getDoc(stuRef);
           if (stuSnap.exists()) {
             setUser(stuSnap.data());
+            setName(user.displayName);
           }
           if (
             // client -> admin 접근 차단
@@ -60,12 +61,12 @@ const ClientSurvey = () => {
 
   // 각 질문에 대한 답변을 저장하는 state
   const handleSubmitAnswers = async () => {
-    const usersCollection = collection(dbService, "name");
-    const subCollectionName = "survey";
-    const userDocRef = doc(usersCollection, name);
+    const usersCollection = collection(dbService, "user"); // "user" 컬렉션으로 수정
+    const userDocRef = doc(usersCollection, name); // 사용자 이름을 문서로 사용
+    const subCollectionName = collection(userDocRef, "survey");
 
     const userDocExists = (await getDoc(userDocRef)).exists();
-    if (!userDocExists) {
+   /* if (!userDocExists) {
       try {
         await setDoc(userDocRef, {});
         console.log("사용자 문서 생성됨.");
@@ -73,7 +74,7 @@ const ClientSurvey = () => {
         console.error("사용자 문서를 생성하지 못했습니다.", error);
         return;
       }
-    }
+    }*/
 
     // Filter out keys with falsy (empty string) values from answers
     const filteredAnswers = {};
@@ -89,7 +90,7 @@ const ClientSurvey = () => {
     }
 
     try {
-      await setDoc(doc(userDocRef, subCollectionName, name), filteredAnswers);
+      await setDoc(doc(userDocRef, "survey", name), filteredAnswers);
 
       console.log("설문 결과를 저장했습니다.");
     } catch (error) {
@@ -111,7 +112,6 @@ const ClientSurvey = () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 8px;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -156,7 +156,7 @@ const ClientSurvey = () => {
     font-family: Roboto;
     font-style: normal;
     font-weight: 700;
-    font-size: 18px ;
+    font-size: 18px;
     line-height: 22px;
     margin-left: 166px;
     text-align: left;
@@ -247,7 +247,8 @@ const ClientSurvey = () => {
     align-items: center;
   `;
   const Radio = styled.div`
-  color : black;`
+    color: black;
+  `;
 
   return (
     <Div>
@@ -460,7 +461,7 @@ const ClientSurvey = () => {
         </Answer>
       </Rect1>
       <SubmitContainer>
-        <Submit onClick={handleSubmitAnswers}>확인</Submit>
+        <Submit type="submit" onClick={handleSubmitAnswers}>확인</Submit>
       </SubmitContainer>
     </Div>
   );
