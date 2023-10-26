@@ -8,7 +8,6 @@ const ClientSurvey = () => {
   const [user, setUser] = useState("");
   const [name, setName] = useState("");
   const [answers, setAnswers] = useState({
-    role: "",
     Q1: "",
     Q2: "",
     Q3: "",
@@ -16,7 +15,6 @@ const ClientSurvey = () => {
     Q5: "",
     Q6: "",
     Q7: "",
-    Q8: "",
   });
   const navigate = useNavigate();
 
@@ -270,21 +268,21 @@ const ClientSurvey = () => {
         <Answer>
           <input
             type="radio"
-            name="role"
+            name="Q1"
             value="새섬"
             onChange={handleAnswerChange}
           />{" "}
           새섬
           <input
             type="radio"
-            name="role"
+            name="Q1"
             value="새내기"
             onChange={handleAnswerChange}
           />{" "}
           새내기
           <input
             type="radio"
-            name="role"
+            name="Q1"
             value="팀원"
             onChange={handleAnswerChange}
           />{" "}
@@ -297,59 +295,32 @@ const ClientSurvey = () => {
         <Answer>
           <input
             type="radio"
-            name="Q1"
+            name="Q2"
             value="1"
             onChange={handleAnswerChange}
           />{" "}
           7시 이전
           <input
             type="radio"
-            name="Q1"
+            name="Q2"
             value="2"
             onChange={handleAnswerChange}
           />{" "}
           7시 이전
           <input
             type="radio"
-            name="Q1"
+            name="Q2"
             value="3"
             onChange={handleAnswerChange}
           />{" "}
           7시 이후
           <input
             type="radio"
-            name="Q1"
+            name="Q2"
             value="4"
             onChange={handleAnswerChange}
           />{" "}
           7시 이후
-        </Answer>
-        <Question>
-          Q2. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
-          <br></br>
-        </Question>
-        <Answer>
-          <input
-            type="radio"
-            name="Q2"
-            value="1"
-            onChange={handleAnswerChange}
-          />{" "}
-          1번
-          <input
-            type="radio"
-            name="Q2"
-            value="2"
-            onChange={handleAnswerChange}
-          />{" "}
-          2번
-          <input
-            type="radio"
-            name="Q2"
-            value="3"
-            onChange={handleAnswerChange}
-          />{" "}
-          3번
         </Answer>
         <Question>
           Q3. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
@@ -454,6 +425,33 @@ const ClientSurvey = () => {
           <input
             type="radio"
             name="Q6"
+            value="3"
+            onChange={handleAnswerChange}
+          />{" "}
+          3번
+        </Answer>
+        <Question>
+          Q7. ㅇㅇㅇㅇ에 자신의 ㅁㅁ?
+          <br></br>
+        </Question>
+        <Answer>
+          <input
+            type="radio"
+            name="Q7"
+            value="1"
+            onChange={handleAnswerChange}
+          />{" "}
+          1번
+          <input
+            type="radio"
+            name="Q7"
+            value="2"
+            onChange={handleAnswerChange}
+          />{" "}
+          2번
+          <input
+            type="radio"
+            name="Q7"
             value="3"
             onChange={handleAnswerChange}
           />{" "}
