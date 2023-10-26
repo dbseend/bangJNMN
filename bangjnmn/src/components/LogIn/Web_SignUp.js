@@ -493,7 +493,7 @@ const SignUp = () => {
             </label>
             <Dropdown value={rc} onChange={changeRc}>
               <option value="" disabled>
-                rc 선택
+                RC 선택
               </option>
               {rcs.map((rcOption) => (
                 <option key={rcOption} value={rcOption}>
