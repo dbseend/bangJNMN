@@ -8,12 +8,63 @@ const Div = styled.div`
   flex-direction: row;
   align-items: center; 
   justify-content: center; 
-  margin: 0 auto;
-  width: 100%;
+  margin: -8px;
+  width: Fixed (1,440px);
   overflow: hidden;
+  display: flex;
+  height: 30px;
+  padding: 16px 80px;
+  gap: 48px;
+
+  border-bottom: 1px solid var(--cool-gray-20, #DDE1E6);
+  background: #204E4A;
 `;
-const Margin = styled.div`
-  margin-right: 60px;
+const Home = styled.div`
+width: 111px;
+height: 20px;
+font-family: Roboto;
+font-size: 24px;
+font-weight: 700;
+line-height: 20px;
+letter-spacing: 0.10000000149011612px;
+text-align: center;
+color: #fff9f3;
+margin-right:532px;
+margin-top:16px;
+margin-bottom: 16px;
+`
+const Menu = styled.div`
+width: Fixed (331px);
+height: Hug (48px);
+gap: 16px;
+
+//styleName: Other/Menu M;
+font-family: Roboto;
+font-size: 16px;
+font-weight: 500;
+line-height: 16px;
+letter-spacing: 0em;
+text-align: left;
+color: #fff9f3;
+
+`
+
+const Logout = styled.button`
+width: 105px;
+height: 40px;
+border-radius: 28px;
+border: 1px solid #DDE1E6;
+background-color: #CECCCC;
+font-family: Roboto;
+font-size: 16px;
+font-weight: 500;
+line-height: 16px;
+letter-spacing: 0.5px;
+color: #FFFFFF;
+text-align: center;
+
+padding: 0px, 16px, 0px, 16px;
+gap: 10px;
 `
 
 const Web_clientNavBar = () => {
@@ -26,7 +77,7 @@ const Web_clientNavBar = () => {
   };
 
   const moveToHome = () => {
-    navigate("/client/home");
+    navigate("/client/");
   };
   const moveToSurvey = () => {
     navigate("/client/survey");
@@ -37,18 +88,15 @@ const Web_clientNavBar = () => {
   const moveToMyPage = () => {
     navigate("/client/mypage");
   };
-
   return (
     <Div>
-        <div onClick={moveToHome}>홈</div>
-      <Margin></Margin>
-        <div onClick={moveToSurvey}>Link to 로 설문하러 가자 ~</div>
-      <Margin></Margin>
-        <div onClick={moveToMeet}>Link to 로 면담예약하러 가자 ~</div>
-      <Margin></Margin>
-        <div onClick={moveToMyPage}>Link to 로 마이페이지 가자 ~</div>
-      <Margin></Margin>
-      <div onClick={onLogOutClick}> 로그아웃</div>
+        <Home onClick={moveToHome}>방주니마니</Home>
+      {/* <Margin></Margin> */}
+        <Menu onClick={moveToSurvey}>설문하기</Menu>
+        <Menu onClick={moveToMeet}>면담 예약하기</Menu>
+        <Menu onClick={moveToMyPage}>마이페이지</Menu>
+        <Menu></Menu> <Menu></Menu>
+          <Logout onClick={onLogOutClick}> 로그아웃</Logout>
     </Div>
   );
 };
