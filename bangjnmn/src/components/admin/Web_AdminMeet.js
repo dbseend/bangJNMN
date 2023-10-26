@@ -95,6 +95,8 @@ const AdminMeet = () => {
   }
 
   const checkTime = async () => {
+    setReserveTF(Array(5).fill(false));
+
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
 
