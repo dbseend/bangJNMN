@@ -78,12 +78,12 @@ const Web_AdminSearch = () => {
       if (selectedOption === 'team') {
         // 'team'이 선택된 경우
         filteredUsers = data.filter((user) =>
-          user[selectedOption].value.toLowerCase().includes(searchTerm.toLowerCase())
+        user[selectedOption] && user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
         );
       } else {
         // 'name'이나 'stuNum'이 선택된 경우
         filteredUsers = data.filter((user) =>
-          user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
+        user[selectedOption] && user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
         );
       }
       

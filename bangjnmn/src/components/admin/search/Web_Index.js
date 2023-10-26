@@ -33,7 +33,7 @@ const User = () => {
       </div>
       <div>
         <label>팀</label>
-        <input value={user.team ? user.team.value : ''} name="team"/>
+        <input value={user.team} name="team"/>
       </div>
       <div>
         <label>전공</label>
