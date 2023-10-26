@@ -165,7 +165,7 @@ const ClientMyPage = () => {
         RC: {userData && userData.rc ? userData.rc: "로딩 중..."}
       </div>
       <div>
-        팀: {userData && userData.team ? userData.team.label : "로딩 중..."}
+        팀: {userData && userData.team ? userData.team : "로딩 중..."}
       </div>
       <div>인실: {userData ? userData.roommateNum : "로딩 중..."}</div>
       <div>기숙사: {userData ? userData.dorm : "로딩 중..."}</div>
