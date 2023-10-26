@@ -8,13 +8,22 @@ const ClientSurvey = () => {
   const [user, setUser] = useState("");
   const [name, setName] = useState("");
   const [answers, setAnswers] = useState({
-    Q1: "",
-    Q2: "",
-    Q3: "",
-    Q4: "",
-    Q5: "",
-    Q6: "",
-    Q7: "",
+    Q1: 0,
+    Q2: 0,
+    Q3: 0,
+    Q4: 0,
+    Q5: 0,
+    Q6: 0,
+    Q7: 0,
+  });
+  const [questionsAnswered, setQuestionsAnswered] = useState({
+    Q1: false,
+    Q2: false,
+    Q3: false,
+    Q4: false,
+    Q5: false,
+    Q6: false,
+    Q7: false,
   });
   const navigate = useNavigate();
 
@@ -62,23 +71,20 @@ const ClientSurvey = () => {
     const usersCollection = collection(dbService, "user"); // "user" 컬렉션으로 수정
     const userDocRef = doc(usersCollection, name); // 사용자 이름을 문서로 사용
     const subCollectionName = collection(userDocRef, "survey");
-
     const userDocExists = (await getDoc(userDocRef)).exists();
-   /* if (!userDocExists) {
-      try {
-        await setDoc(userDocRef, {});
-        console.log("사용자 문서 생성됨.");
-      } catch (error) {
-        console.error("사용자 문서를 생성하지 못했습니다.", error);
-        return;
-      }
-    }*/
 
-    // Filter out keys with falsy (empty string) values from answers
+    const unansweredQuestions = [];
+    
     const filteredAnswers = {};
     for (const key in answers) {
       if (answers[key]) {
         filteredAnswers[key] = answers[key];
+        setQuestionsAnswered((prevQuestions) => ({
+          ...prevQuestions,
+          [key]: true,
+        }));
+      } else {
+        unansweredQuestions.push(key);
       }
     }
 
@@ -87,13 +93,25 @@ const ClientSurvey = () => {
       return;
     }
 
+    for (const key in questionsAnswered) {
+      if (!questionsAnswered[key]) {
+        alert(`질문 ${unansweredQuestions.join(", ")}에 답변해주세요.`);
+        return;
+      }
+    }
+
     try {
       await setDoc(doc(userDocRef, "survey", name), filteredAnswers);
 
-      console.log("설문 결과를 저장했습니다.");
+      // 제출 후 알림 표시
+      alert("설문이 제출되었습니다.");
+
+      // ClientHome 페이지로 리디렉션
+      navigate("/client");
     } catch (error) {
-      console.error("설문 결과를 저장하지 못 했습니다.", error);
+      console.error("설문 제출 실패하였습니다.", error);
     }
+
   };
 
   const handleAnswerChange = (e) => {
@@ -103,6 +121,12 @@ const ClientSurvey = () => {
       ...prevAnswers,
       [name]: value,
     }));
+
+    setQuestionsAnswered((prevQuestions) => ({
+      ...prevQuestions,
+      [name]: true,
+    }));
+
   };
 
   const Div = styled.div`
@@ -209,10 +233,6 @@ const ClientSurvey = () => {
     margin-bottom: 19px;
   `;
 
-  const Button = styled.button`
-    cursor: pointer;
-  `;
-
   const Submit = styled.button`
     display: flex;
     padding: 10px 24px;
@@ -237,6 +257,8 @@ const ClientSurvey = () => {
     font-weight: 600;
     line-height: 20px;
     letter-spacing: 0.1px;
+
+    cursor: pointer;
   `;
 
   const SubmitContainer = styled.div`
