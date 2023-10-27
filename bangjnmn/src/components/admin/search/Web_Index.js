@@ -14,32 +14,15 @@ const User = () => {
     setUser({ ...state })
   }, [])
 
+  const handleGoBack = () => {
+    navigate("../search"); // 이동할 경로를 지정합니다
+  };
+
   console.log(user)
-
-  // async function updateUser() {
-  //   await updateDoc(doc(fruitCollection, productId), {
-  //     name: fruit.name,
-  //     season: fruit.season,
-  //     color: fruit.color,
-  //     taste: fruit.taste,
-  //     count: fruit.count,
-  //     price: fruit.price,
-  //   })
-  //   navigate('/products')
-  // }
-
-  // async function deleteFruit() {
-  //   await deleteDoc(doc(fruitCollection, productId))
-  //   navigate('/products')
-  // }
-
-  // const changeHandler = e => {
-  //   setFruit(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  // }
 
   return (
     <div>
-      <h1>{userId} 제품 상세 페이지</h1>
+      <h1>{userId} 학생 상세 페이지</h1>
       <div>
         <label>이름</label>
         <input value={user.name} name="name"/>
@@ -64,10 +47,23 @@ const User = () => {
         <label>호실</label>
         <input value={user.roommateNum} name="roommateNum"/>
       </div>
-      {/* <div>
-        <button onClick={updateFruit}>수정</button>
-        <button onClick={deleteFruit}>제거</button>
-      </div> */}
+      <div>
+        <label>이메일</label>
+        <input value={user.email} name="email"/>
+      </div>
+      <div>
+        <label>성별</label>
+        <input value={user.gender} name="gender"/>
+      </div>
+      <div>
+        <label>전화번호</label>
+        <input value={user.phoneNumber} name="phoneNumber"/>
+      </div>
+      <div>
+        <label>기숙사</label>
+        <input value={user.dorm} name="dorm"/>
+      </div>
+      <button onClick={handleGoBack}>돌아가기</button>
     </div>
   )
 }

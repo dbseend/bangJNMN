@@ -96,7 +96,8 @@ const ClientMeet = () => {
   }
 
   const checkTime = async () => {
-    alert(user.meetCreated);
+    setReserveTF(Array(5).fill(false));
+
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
 
@@ -149,6 +150,7 @@ const ClientMeet = () => {
         [selectedTime]: {
           time: selectedTime,
           name: user.name,
+          access: user.access,
         },
       };
 
@@ -170,34 +172,40 @@ const ClientMeet = () => {
   };
 
   const deleteMeet = async () => {
-    const [year, month, day, time] = user.meetTime.split(" ")[0].split("-");
-    const meetReservationRef = collection(dbService, "meetReservation");
-    const dayRef = doc(collection(meetReservationRef, month, "day"), day);
-    const userRef = doc(collection(dbService, "user"), user.name);
-    const meetIdx = user.meetIdx;
-
-    const currentTime = Math.floor(Date.now() / 1000); // 현재 시간을 초로 변환
-    const reserveTime = user.meetCreated.seconds; // 예약 시간을 초로 가정합니다.
-    const timeDiff = currentTime - reserveTime; // 시간 차이 계산
-    const timeDiffHours = timeDiff / 3600;
-
-    if (timeDiffHours < 24) {
-      await updateDoc(dayRef, {
-        [meetIdx]: deleteField(),
-      });
-
-      await updateDoc(userRef, {
-        meetTF: false,
-        meetTime: "",
-        meetIdx: 0,
-        meetCreated: "",
-      });
-    }
-    if (timeDiffHours >= 24) {
-      alert("취소 할 수 없습니다(24시간 이내 가능)");
+    try {
+      const [year, month, day, time] = user.meetTime.split(" ")[0].split("-");
+      const formattedMonth = (parseInt(month, 10)).toString();
+      const formattedDay = (parseInt(day, 10)).toString();
+  
+      const meetReservationRef = collection(dbService, "meetReservation");
+      const dayRef = doc(collection(meetReservationRef, formattedMonth, "day"), formattedDay);
+      const userRef = doc(collection(dbService, "user"), user.name);
+      const meetIdx = user.meetIdx;
+  
+      const currentTime = Math.floor(Date.now() / 1000); // 현재 시간을 초로 변환
+      const reserveTime = user.meetCreated.seconds; // 예약 시간을 초로 가정합니다.
+      const timeDiff = currentTime - reserveTime; // 시간 차이 계산
+      const timeDiffHours = timeDiff / 3600;
+  
+      if (timeDiffHours < 24) {
+        await updateDoc(dayRef, {
+          [meetIdx]: deleteField(),
+        });
+  
+        await updateDoc(userRef, {
+          meetTF: false,
+          meetTime: "",
+          meetIdx: -1,
+          meetCreated: "",
+        });
+      } else {
+        alert("취소 할 수 없습니다(24시간 이내 가능)");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
     }
   };
-
+  
   const handleSelectTime = (index) => {
     if (meetDate == "") {
       alert("날짜를 먼저 선택해주세요!");
@@ -237,16 +245,12 @@ const ClientMeet = () => {
                     : selectedTime === index
                     ? "lightblue"
                     : "",
-                  cursor: reservationList[index] ? "not-allowed" : "pointer",
+                  cursor: reserveTF[index] ? "not-allowed" : "pointer",
                 }}
                 onClick={() => {
                   handleSelectTime(index);
                 }}
               >
-                {reservationList[index] &&
-                reservationList[index].auth == "client"
-                  ? item + reservationList[index].name
-                  : item}
               </TableCell>
             </tr>
           ))}
