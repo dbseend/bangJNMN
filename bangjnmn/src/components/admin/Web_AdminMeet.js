@@ -104,10 +104,21 @@ const AdminMeet = () => {
       const docSnap = await getDoc(dayRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
-        const reservationList = Object.values(data);
-        setReservationList(reservationList);
-        console.log(reservationList[0].access);
-
+        const list = Object.values(data);
+        const newList = [...reservationList];
+        for(let i =0; i<list.length; i++){
+          for(let j=0; j<5; j++){
+            if(list[i] && list[i].time === j){
+              newList[j] = list[i];
+            }
+          }
+          setReservationList(newList);
+        }
+        console.log(reservationList);
+        // setReservationList(list);
+        // console.log(list);
+        // console.log(reservationList);
+        
         reservationList.forEach((item) => {
           setReserveTF((prevReserveTF) => {
             const updatedReserveTF = [...prevReserveTF];
@@ -200,10 +211,10 @@ const AdminMeet = () => {
                 }}
               >
                 {reservationList[index] &&
-                reservationList[index].access === "client"
-                && index === reservationList[index].time
-                  ? item + reservationList[index].name + index
-                  : item + " " +index}
+                reservationList[index].access === "client" &&
+                reservationList[index].time === index
+                  ? item +" " +reservationList[index].name
+                  : item}
               </TableCell>
             </tr>
           ))}
