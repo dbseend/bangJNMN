@@ -1,9 +1,8 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { dbService } from "../../api/fbase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Select from "react-select";
 import styled from "styled-components";
 
 const Div = styled.div`
@@ -15,11 +14,11 @@ const Div = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: #38373c;
+  background: #204e4a;
 `;
 
 const Logo = styled.h1`
-  color: #f26938;
+  color: #fff9f3;
   text-align: center;
   font-family: Roboto;
   font-size: 48px;
@@ -46,7 +45,7 @@ const LoginButton = styled.button`
   top: 504px;
   left: 563px;
 
-  color: #f26938;
+  color: #38373c;
   text-align: center;
   font-family: Roboto;
   font-size: 40px;
@@ -66,52 +65,70 @@ const LogIn = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
+  try {
     const auth = getAuth();
     const provider = new GoogleAuthProvider(); // provider를 구글로 설정
-    signInWithPopup(auth, provider) // popup을 이용한 signup
-      .then(async (result) => {
-        setInit(true);
-        setUserData(result.user); // user data 설정
-        setName(result.user.displayName);
-        setEmail(result.user.email);
-        setUid(result.user.uid);
-        console.log("유저 ", result.user);
+    await signInWithPopup(auth, provider); // popup을 이용한 signup
+    const user = auth.currentUser;
+    setInit(true);
+    setUserData(user); // user data 설정
+    setName(user.displayName);
+    setEmail(user.email);
+    setUid(user.uid);
+    console.log("유저 ", user);
 
-        // 이메일 도메인 확인
-        checkEmailDomain(result.user.email);
-        checkNewUser(result.user.displayName);
-      })
-      .catch((error) => {
-        console.error("Google 로그인 에러:", error);
-      });
-  };
+    // 이메일 도메인 확인
+    checkEmailDomain(user);
+  } catch (error) {
+    console.error("Google 로그인 에러:", error);
+  }
+};
 
-  const checkEmailDomain = (email) => {
-    const emailDomain = email.split("@")[1]; // 이메일 주소에서 도메인 추출
+const checkEmailDomain = (user) => {
+  const emailDomain = user.email.split('@')[1]; // 이메일 주소에서 도메인 추출
 
-    if (emailDomain !== "handong.ac.kr") {
-      console.log("handong.ac.kr 메일이 아님");
-      alert("학교 메일 계정 (@handong.ac.kr)으로 로그인하세요.");
-      const auth = getAuth();
-      //   const uiConfig = {
-      //     callbacks: {
-      //       signInSuccessWithAuthResult: (authResult) => {
-      //         if (authResult.user.email.split('@')[1] !== "handong.ac.kr") {
-      //           return false; // 로그인 실패로 처리하여 팝업을 닫는다.
-      //         }
-      //         return true; // 로그인 성공으로 처리
-      //       },
-      //     },
-      //   };
-      // const ui = new firebaseui.auth.AuthUI(auth);
-      // ui.start('#firebaseui-auth-container', uiConfig);
-    }
-  };
+  if (emailDomain !== "handong.ac.kr") {
+    // 오버레이 레이어를 추가하여 메시지 표시
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.display = 'flex';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
 
+    const message = document.createElement('div');
+    message.textContent = '학교 메일 계정 (@handong.ac.kr)으로 로그인하세요.';
+    message.style.backgroundColor = '#fff';
+    message.style.padding = '20px';
+    message.style.borderRadius = '8px';
+
+    overlay.appendChild(message);
+    document.body.appendChild(overlay);
+
+    // 오버레이 레이어를 클릭하면 닫기
+    overlay.addEventListener('click', () => {
+      document.body.removeChild(overlay);
+    });
+
+    navigate("/");
+  } else {
+    checkNewUser(user.displayName);
+  }
+};
+
+
+    
   const checkNewUser = async (displayName) => {
+    if (!displayName) {
+      console.log("displayName이 없습니다.");
+      return;
+    }
     const docRef = doc(dbService, "user", displayName);
-
     try {
       const docSnap = await getDoc(docRef);
 
@@ -145,6 +162,7 @@ const LogIn = () => {
         localStorage.setItem("accessData", JSON.stringify(itemToStore));
 
         console.log("기존 유저");
+        navigate("/client");
       } else {
         console.log("새로운 유저");
         navigate("/signup");
