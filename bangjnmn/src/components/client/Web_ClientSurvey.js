@@ -266,9 +266,6 @@ const ClientSurvey = () => {
     justify-content: center;
     align-items: center;
   `;
-  const Radio = styled.div`
-    color: black;
-  `;
 
   return (
     <Div>
