@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { checkStatus } from "../../utils/AccountStatus";
+import { checkStatus } from "../../utils/CheckStatus";
 
 const AdminStudents = () => {
+  const [user, setUser] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkStatus(navigate);
-  }, [navigate]);
+    checkStatus(setUser);
+  }, []);
 
   return (
     <div>
