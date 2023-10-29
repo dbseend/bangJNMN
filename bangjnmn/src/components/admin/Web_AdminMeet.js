@@ -104,9 +104,21 @@ const AdminMeet = () => {
       const docSnap = await getDoc(dayRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
-        const reservationList = Object.values(data);
-        setReservationList(reservationList);
-
+        const list = Object.values(data);
+        const newList = [...reservationList];
+        for(let i =0; i<list.length; i++){
+          for(let j=0; j<5; j++){
+            if(list[i] && list[i].time === j){
+              newList[j] = list[i];
+            }
+          }
+          setReservationList(newList);
+        }
+        console.log(reservationList);
+        // setReservationList(list);
+        // console.log(list);
+        // console.log(reservationList);
+        
         reservationList.forEach((item) => {
           setReserveTF((prevReserveTF) => {
             const updatedReserveTF = [...prevReserveTF];
@@ -134,6 +146,7 @@ const AdminMeet = () => {
           [selectedTime]: {
             time: selectedTime,
             name: user.name,
+            access: user.access,
           },
         };
 
@@ -146,24 +159,6 @@ const AdminMeet = () => {
       console.error("day 문서 업데이트 실패: ", error);
       alert("예약에 실패했습니다.");
     }
-  };
-
-  const deleteMeet = async () => {
-    const [year, month, day, time] = user.meetTime.split(" ")[0].split("-");
-    const meetReservationRef = collection(dbService, "meetReservation");
-    const dayRef = doc(collection(meetReservationRef, month, "day"), day);
-    const userRef = doc(collection(dbService, "user"), user.name);
-    const meetIdx = user.meetIdx;
-
-    await updateDoc(dayRef, {
-      [meetIdx]: deleteField(),
-    });
-
-    await updateDoc(userRef, {
-      meetTF: false,
-      meetTime: "",
-      meetIdx: 0,
-    });
   };
 
   const handleSelectTime = (index) => {
@@ -216,8 +211,9 @@ const AdminMeet = () => {
                 }}
               >
                 {reservationList[index] &&
-                reservationList[index].auth === "client"
-                  ? item + reservationList[index].name
+                reservationList[index].access === "client" &&
+                reservationList[index].time === index
+                  ? item +" " +reservationList[index].name
                   : item}
               </TableCell>
             </tr>
@@ -225,12 +221,6 @@ const AdminMeet = () => {
         </tbody>
       </Table>
       <button onClick={reserveMeet}>예약하기</button>
-      {user.meetTF ? (
-        <p>예약한 시간: {user.meetTime}</p>
-      ) : (
-        <p>예약된 정보가 없습니다.</p>
-      )}
-      <button onClick={deleteMeet}>예약 취소하기</button>
     </Div>
   );
 };

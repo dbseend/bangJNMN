@@ -40,25 +40,12 @@ const Web_AdminSearch = () => {
   useEffect(() => {
     async function getUsers() {
       const data = await getDocs(userCollection)
-      console.log(data)
+      console.log(doc)
       setData(data.docs.map(doc => ({ id: doc.id, ...doc.data() })))
     }
     getUsers()
   }, [data.length])
 
-  // useEffect(() => {
-  //   if (selectedOption && searchTerm) {
-  //     // 선택된 옵션과 검색어에 따라 데이터 필터링
-  //     const filteredUsers = data.filter((user) =>
-  //       user[selectedOption].includes(searchTerm)
-  //     );
-  //     setFilteredData(filteredUsers);
-  //   } 
-  //   //else {
-  //   //   // 선택된 옵션이 없거나 검색어가 없으면 모든 데이터 표시
-  //   //   setFilteredData(data);
-  //   // }
-  // }, [selectedOption, searchTerm]);
 
   const options = [
     { value: 'name', label: '이름' },
@@ -74,18 +61,10 @@ const Web_AdminSearch = () => {
 
     if (selectedOption && searchTerm) {
       let filteredUsers;
-    
-      if (selectedOption === 'team') {
-        // 'team'이 선택된 경우
-        filteredUsers = data.filter((user) =>
-        user[selectedOption] && user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      } else {
-        // 'name'이나 'stuNum'이 선택된 경우
-        filteredUsers = data.filter((user) =>
-        user[selectedOption] && user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
+
+      filteredUsers = data.filter((user) =>
+      user[selectedOption] && user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
+      );
       
       setFilteredData(filteredUsers);
     } else {

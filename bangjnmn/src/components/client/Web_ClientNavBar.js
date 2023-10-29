@@ -32,20 +32,6 @@ color: #fff9f3;
 margin-right:532px;
 margin-top:16px;
 margin-bottom: 16px;
-`
-const Menu = styled.div`
-width: Fixed (331px);
-height: Hug (48px);
-gap: 16px;
-
-//styleName: Other/Menu M;
-font-family: Roboto;
-font-size: 16px;
-font-weight: 500;
-line-height: 16px;
-letter-spacing: 0em;
-text-align: left;
-color: #fff9f3;
 
 `
 
@@ -66,7 +52,42 @@ text-align: center;
 padding: 0px, 16px, 0px, 16px;
 gap: 10px;
 `
-
+const Merong1 = styled.div`
+width: 105px;
+height: hug 40px;
+cursor: pointer;
+font-family: Roboto;
+font-size: 16px;
+font-weight: 500;
+line-height: 16px;
+letter-spacing: 0em;
+text-align: center;
+color: #fff9f3;
+`
+const Merong2 = styled.div`
+width: 105px;
+height: hug 40px;
+cursor: pointer;
+font-family: Roboto;
+font-size: 16px;
+font-weight: 500;
+line-height: 16px;
+letter-spacing: 0em;
+text-align: center;
+color: #fff9f3;
+`
+const Merong3 = styled.div`
+width: 105px;
+height: hug 40px;
+cursor: pointer;
+font-family: Roboto;
+font-size: 16px;
+font-weight: 500;
+line-height: 16px;
+letter-spacing: 0em;
+text-align: center;
+color: #fff9f3;
+`
 const Web_clientNavBar = () => {
   const navigate = useNavigate();
 
@@ -74,6 +95,7 @@ const Web_clientNavBar = () => {
     // 로그아웃
     auth.signOut();
     console.log("logout");
+    alert("로그아웃 되었습니다.");
   };
 
   const moveToHome = () => {
@@ -92,11 +114,10 @@ const Web_clientNavBar = () => {
     <Div>
         <Home onClick={moveToHome}>방주니마니</Home>
       {/* <Margin></Margin> */}
-        <Menu onClick={moveToSurvey}>설문하기</Menu>
-        <Menu onClick={moveToMeet}>면담 예약하기</Menu>
-        <Menu onClick={moveToMyPage}>마이페이지</Menu>
-        <Menu></Menu> <Menu></Menu>
-          <Logout onClick={onLogOutClick}> 로그아웃</Logout>
+        <Merong1 onClick={moveToSurvey}>설문하기</Merong1>
+        <Merong2 onClick={moveToMeet}>면담 예약하기</Merong2>
+        <Merong3 onClick={moveToMyPage}>마이페이지</Merong3>
+        <Logout onClick={onLogOutClick}> 로그아웃</Logout>
     </Div>
   );
 };
