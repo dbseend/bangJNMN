@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const Item = ({ data }) => {
-  console.log(data.team); // 여기 추가
+  console.log(data)
   const navigate = useNavigate()
   return (
     <tr>
