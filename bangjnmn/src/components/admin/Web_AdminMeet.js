@@ -1,6 +1,5 @@
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { dbService } from "../../api/fbase";
 import { checkStatus } from "../../utils/CheckStatus";
@@ -31,14 +30,12 @@ const TableCell = styled.td`
 const AdminMeet = () => {
   const [user, setUser] = useState("");
   const [selectedTimes, setSelectedTimes] = useState([]);
-  const [selectedTime, setSelectedTime] = useState(-1);
   const [reservationList, setReservationList] = useState([]);
   const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const times = Array.from({ length: 5 }, (_, index) => formatTime(index));
-  const navigate = useNavigate();
 
   useEffect(() => {
     checkStatus(setUser);
@@ -57,6 +54,44 @@ const AdminMeet = () => {
   }
 
   const checkTime = async () => {
+    setReserveTF(Array(5).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
+  
+    // 조회하고 싶은 날짜 문서 참조
+    const meetReservationRef = collection(dbService, "meetReservation");
+    const dayRef = doc(collection(meetReservationRef, month, "day"), day);
+  
+    try {
+      const docSnap = await getDoc(dayRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data(); // 날짜에 해당하는 문서
+        const list = Object.values(data); // 문서의 value 값들만 뽑아내기
+  
+        // reservationList와 reserveTF를 업데이트하는 루프
+        for (let i = 0; i < list.length; i++) {
+          if (list[i] && list[i].time >= 0 && list[i].time < 5) {
+            const time = list[i].time;
+            // reservationList를 업데이트
+            reservationList[time] = list[i];
+            // reserveTF를 업데이트
+            setReserveTF((prevReserveTF) => {
+              const updatedReserveTF = [...prevReserveTF];
+              updatedReserveTF[time] = true;
+              return updatedReserveTF;
+            });
+          }
+        }
+  
+        console.log("Document data:", data);
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  /*
+    const checkTime = async () => {
     setReserveTF(Array(5).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
 
     // 조회하고 싶은 날짜 문서 참조
@@ -101,8 +136,9 @@ const AdminMeet = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-
+  }; 
+  */
+  
   const reserveMeet = () => {
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
@@ -135,6 +171,10 @@ const AdminMeet = () => {
     if (meetDate != "") {
       const selectedIndex = selectedTimes.indexOf(index);
 
+      console.log(reserveTF[selectedIndex], selectedIndex);
+      if(reserveTF[selectedIndex] === true){
+        alert("이미 선택된 시간입니다!");
+      }
       if (selectedIndex === -1) {
         setSelectedTimes([...selectedTimes, index]);
       } else {
@@ -168,10 +208,8 @@ const AdminMeet = () => {
                 style={{
                   backgroundColor: reserveTF[index]
                     ? "red"
-                    : selectedTimes.includes(index)
-                    ? "lightblue"
                     : "",
-                  cursor: reservationList[index] ? "not-allowed" : "pointer",
+                  cursor: reserveTF[index] ? "not-allowed" : "pointer",
                 }}
                 onClick={() => {
                   handleSelectTime(index);
