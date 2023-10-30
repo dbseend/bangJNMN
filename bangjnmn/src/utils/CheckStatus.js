@@ -10,6 +10,7 @@ export const checkStatus = async (setUser) => {
       const stuRef = doc(dbService, "user", user.displayName);
       const stuSnap = await getDoc(stuRef);
       if (stuSnap.exists()) {
+        console.log(stuSnap.data().access);
         setUser(stuSnap.data());
       }
       if (
