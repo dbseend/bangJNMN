@@ -35,6 +35,7 @@ const ClientSurvey = () => {
 
   useEffect(() => {
     checkStatus(setUser);
+    setName(user.name);
   }, []);
 
   // 각 질문에 대한 답변을 저장하는 state
@@ -272,6 +273,7 @@ const ClientSurvey = () => {
           <br></br>
         </Question>
         <Answer>
+          <label for="Q1">위치</label>
           <input
             type="radio"
             name="Q1"
