@@ -10,21 +10,17 @@ export const checkStatus = async (setUser) => {
       const stuRef = doc(dbService, "user", user.displayName);
       const stuSnap = await getDoc(stuRef);
       if (stuSnap.exists()) {
+        const access = stuSnap.data().access;
         console.log(stuSnap.data().access);
         setUser(stuSnap.data());
-      }
-      if (
-        localStorage.getItem("access") === "client" &&
-        currentPath.includes("admin")
-      ) {
-        alert("접근할 수 없습니다.");
-        window.location.href = "/client"; // 페이지를 '/client'로 이동
-      } else if (
-        localStorage.getItem("access") === "admin" &&
-        currentPath.includes("client")
-      ) {
-        alert("접근할 수 없습니다.");
-        window.location.href = "/admin"; // 페이지를 '/client'로 이동
+
+        if (access === "client" && currentPath.includes("admin")) {
+          alert("접근할 수 없습니다.");
+          window.location.href = "/client"; // 페이지를 '/client'로 이동
+        } else if (access === "admin" && currentPath.includes("client")) {
+          alert("접근할 수 없습니다.");
+          window.location.href = "/admin"; // 페이지를 '/client'로 이동
+        }
       }
     } else {
       console.log("로그인이 필요합니다.");
