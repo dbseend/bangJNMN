@@ -3,7 +3,6 @@ import { collection, doc, setDoc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { auth, dbService } from "../../api/fbase";
 import styled from "styled-components";
-import { checkStatus } from "../../utils/CheckStatus";
 
 const ClientSurvey = () => {
   const [user, setUser] = useState("");
@@ -34,7 +33,42 @@ const ClientSurvey = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkStatus(setUser);
+    const checkStatus = async () => {
+      const currentPath = window.location.pathname;
+
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          console.log("로그인 되어있습니다.");
+          const stuRef = doc(dbService, "user", user.displayName);
+          const stuSnap = await getDoc(stuRef);
+          if (stuSnap.exists()) {
+            setUser(stuSnap.data());
+            setName(user.displayName);
+          }
+          if (
+            // client -> admin 접근 차단
+            localStorage.getItem("access") === "client" &&
+            currentPath.includes("admin")
+          ) {
+            alert("접근할 수 없습니다.");
+            navigate("/client");
+          } else if (
+            // admin -> client 접근 차단
+            localStorage.getItem("access") === "admin" &&
+            currentPath.includes("client")
+          ) {
+            alert("접근할 수 없습니다.");
+            navigate("/admin");
+          }
+        } else {
+          // 로그인 안 함
+          console.log("로그인이 필요합니다.");
+          navigate("/");
+        }
+      });
+    };
+
+    checkStatus();
   }, []);
 
   // 각 질문에 대한 답변을 저장하는 state
@@ -72,16 +106,17 @@ const ClientSurvey = () => {
       if (key === "Sub" && !questionsAnswered[key]) {
         continue; // Q10 질문은 선택사항이므로 답변이 없어도 괜찮습니다.
       }
-
+    
       if (!questionsAnswered[key]) {
         missingQuestions.push(key);
       }
     }
-
+    
     if (missingQuestions.length > 0) {
       alert(`질문 ${missingQuestions.join(", ")}에 답변해주세요.`);
       return;
     }
+  
 
     try {
       await setDoc(doc(userDocRef, "survey", name), filteredAnswers);
@@ -606,13 +641,7 @@ const ClientSurvey = () => {
           <br></br>
         </Question>
         <Answer>
-          <textarea
-            name="Sub"
-            value={answers.Sub}
-            onChange={handleAnswerChange}
-            rows="4"
-            cols="45"
-          ></textarea>
+          <textarea name="Sub" value={answers.Sub} onChange={handleAnswerChange} rows="4" cols="45"></textarea>
         </Answer>
       </Rect1>
       <SubmitContainer>
