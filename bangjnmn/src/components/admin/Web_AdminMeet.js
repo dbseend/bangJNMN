@@ -1,9 +1,4 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  setDoc
-} from "firebase/firestore";
+import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -45,11 +40,10 @@ const AdminMeet = () => {
   const times = Array.from({ length: 5 }, (_, index) => formatTime(index));
   const navigate = useNavigate();
 
-
   useEffect(() => {
     checkStatus(setUser);
   }, []);
-  
+
   function formatTime(index) {
     const startTime = 9 * 60;
     const interval = 30;
@@ -63,37 +57,42 @@ const AdminMeet = () => {
   }
 
   const checkTime = async () => {
-    setReserveTF(Array(5).fill(false));
+    setReserveTF(Array(5).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
 
+    // 조회하고 싶은 날짜 문서 참조
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
 
     try {
       const docSnap = await getDoc(dayRef);
       if (docSnap.exists()) {
-        const data = docSnap.data();
-        const list = Object.values(data);
-        const newList = [...reservationList];
-        for(let i =0; i<list.length; i++){
-          for(let j=0; j<5; j++){
-            if(list[i] && list[i].time === j){
+        const data = docSnap.data(); // 날짜에 해당하는 문서
+        const list = Object.values(data); // 문서의 value 값들만 뽑아내기
+        const newList = [...reservationList]; // reservationList 복사
+
+        for (let i = 0; i < list.length; i++) {
+          for (let j = 0; j < 5; j++) {
+            if (list[i] && list[i].time === j) {
               newList[j] = list[i];
             }
           }
-          setReservationList(newList);
         }
+        console.log(newList);
         console.log(reservationList);
-        // setReservationList(list);
-        // console.log(list);
-        // console.log(reservationList);
+        setReservationList(newList);
         
-        reservationList.forEach((item) => {
+        for (let i = 0; i < newList.length; i++) {
+          const item = newList[i];
           setReserveTF((prevReserveTF) => {
             const updatedReserveTF = [...prevReserveTF];
-            updatedReserveTF[item.time] = true;
+            if (item) {
+              updatedReserveTF[item.time] = true;
+            } else {
+              updatedReserveTF[i] = false;
+            }
             return updatedReserveTF;
           });
-        });
+        }
 
         console.log("Document data:", data);
       } else {
@@ -144,7 +143,7 @@ const AdminMeet = () => {
         setSelectedTimes(newSelectedTimes);
       }
     }
-  };  
+  };
 
   const handleSelectDate = (e) => {
     const dateObject = new Date(e.target.value);
@@ -179,9 +178,8 @@ const AdminMeet = () => {
                 }}
               >
                 {reservationList[index] &&
-                reservationList[index].access === "client" &&
-                reservationList[index].time === index
-                  ? item +" " +reservationList[index].name
+                reservationList[index].access === "client"
+                  ? item + " " + reservationList[index].name
                   : item}
               </TableCell>
             </tr>
