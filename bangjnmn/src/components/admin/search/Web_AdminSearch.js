@@ -34,7 +34,7 @@ const Web_AdminSearch = () => {
   const userCollection = collection(dbService, "user");
 
   useEffect(() => {
-    // checkStatus(setUser);
+    checkStatus(setUser);
     async function getUsers() {
       const data = await getDocs(userCollection);
       console.log(doc);
