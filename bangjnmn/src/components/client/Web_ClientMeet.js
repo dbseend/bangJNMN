@@ -38,11 +38,11 @@ const ClientMeet = () => {
   const [user, setUser] = useState("");
   const [selectedTime, setSelectedTime] = useState(-1);
   const [reservationList, setReservationList] = useState([]);
-  const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
+  const [reserveTF, setReserveTF] = useState(Array().fill(false));
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  const times = Array.from({ length: 5 }, (_, index) => formatTime(index));
+  const times = Array.from({ length: 40 }, (_, index) => formatTime(index));
 
   useEffect(() => {
     checkStatus(setUser);
