@@ -33,42 +33,9 @@ const ClientSurvey = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkStatus = async () => {
-      const currentPath = window.location.pathname;
+    checkStatus(setUser);
+    setName(user.name);
 
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          console.log("로그인 되어있습니다.");
-          const stuRef = doc(dbService, "user", user.displayName);
-          const stuSnap = await getDoc(stuRef);
-          if (stuSnap.exists()) {
-            setUser(stuSnap.data());
-            setName(user.displayName);
-          }
-          if (
-            // client -> admin 접근 차단
-            localStorage.getItem("access") === "client" &&
-            currentPath.includes("admin")
-          ) {
-            alert("접근할 수 없습니다.");
-            navigate("/client");
-          } else if (
-            // admin -> client 접근 차단
-            localStorage.getItem("access") === "admin" &&
-            currentPath.includes("client")
-          ) {
-            alert("접근할 수 없습니다.");
-            navigate("/admin");
-          }
-        } else {
-          // 로그인 안 함
-          console.log("로그인이 필요합니다.");
-          navigate("/");
-        }
-      });
-    };
-
-    checkStatus();
   }, []);
 
   // 각 질문에 대한 답변을 저장하는 state
@@ -307,6 +274,7 @@ const ClientSurvey = () => {
           <br></br>
         </Question>
         <Answer>
+          <label for="Q1">위치</label>
           <input
             type="radio"
             name="Q1"
