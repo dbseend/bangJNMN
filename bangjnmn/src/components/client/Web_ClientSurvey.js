@@ -98,23 +98,26 @@ const ClientSurvey = () => {
 
   const handleAnswerChange = (e) => {
     const { name, value } = e.target;
-
+  
     if (name === "Sub") {
       setAnswers((prevAnswers) => ({
         ...prevAnswers,
         [name]: value,
       }));
     } else {
-      setAnswers((prevAnswers) => ({
-        ...prevAnswers,
+      const updatedAnswers = {
+        ...answers,
         [name]: value,
-      }));
-      setQuestionsAnswered((prevQuestions) => ({
-        ...prevQuestions,
-        [name]: true,
-      }));
+      };
+      setAnswers(updatedAnswers);
+  
+      // 라디오 버튼이 선택되었는지 확인하고 선택 상태 업데이트
+      const updatedQuestionsAnswered = { ...questionsAnswered };
+      updatedQuestionsAnswered[name] = true;
+      setQuestionsAnswered(updatedQuestionsAnswered);
     }
   };
+  
 
   const Div = styled.div`
     display: flex;
@@ -131,67 +134,69 @@ const ClientSurvey = () => {
   `;
 
   const Rect1 = styled.div`
-    width: 650px;
+    width: 770px;
     max-width: 100%;
-    height: 900px;
+    height: 1100px;
     flex-shrink: 0;
     background: white;
     margin: 0 auto;
   `;
 
   const Rect2 = styled.div`
-    width: 323px;
-    height: 46px;
+    width: 490px;
+    height: 55px;
     flex-shrink: 0;
     background: #f1f1f1;
     text-align: left;
     margin-left: 160px;
     margin-right: 167;
-    border-radius: 7px;
+    border-radius: 6px;
   `;
 
   const Font1 = styled.div`
     font-family: Roboto;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 20px;
     margin-left: 166px;
+    margin-top: 10px;
     text-align: left;
     color: #797979;
-    margin-bottom: 5px;
+    margin-bottom: 17px;
   `;
 
   const Font2 = styled.div`
     font-family: Roboto;
     font-style: normal;
     font-weight: 700;
-    font-size: 28px;
+    font-size: 36px;
     line-height: 22px;
     margin-left: 166px;
     text-align: left;
     color: black;
-    margin-bottom: 14px;
+    margin-bottom: 19px;
   `;
 
   const Font3 = styled.div`
     font-family: Roboto;
     font-style: normal;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
     line-height: 15.5px;
-    margin-left: 8px;
-    padding-top: 7px;
+    margin-left: 13px;
+    padding-top: 10px;
     //text-align: left;
     color: black;
   `;
 
   const Font4 = styled.div`
     font-family: Roboto;
-    font-size: 10px;
+    font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: 15.5px;
-    margin-left: 8px;
+    margin-top: 4px;
+    margin-left: 13px;
     //text-align: left;
     color: black;
   `;
@@ -199,26 +204,26 @@ const ClientSurvey = () => {
   const Question = styled.div`
     margin-top: 30px;
     font-family: Roboto;
-    font-size: 13px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    margin-left: 166px;
+    margin-left: 160px;
     text-align: left;
     color: black;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   `;
 
   const Answer = styled.div`
     font-family: Roboto;
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    margin-left: 166px;
+    margin-left: 163px;
     text-align: left;
     color: black;
-    margin-bottom: 19px;
+    margin-bottom: 33px;
   `;
 
   const Submit = styled.button`
@@ -273,11 +278,11 @@ const ClientSurvey = () => {
           <br></br>
         </Question>
         <Answer>
-          <label for="Q1">위치</label>
           <input
             type="radio"
             name="Q1"
             value="새섬"
+            checked={answers.Q1 === "새섬"}
             onChange={handleAnswerChange}
           />{" "}
           새섬
@@ -285,6 +290,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q1"
             value="새내기"
+            checked={answers.Q1 === "새내기"}
             onChange={handleAnswerChange}
           />{" "}
           새내기
@@ -292,6 +298,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q1"
             value="팀원"
+            checked={answers.Q1 === "팀원"}
             onChange={handleAnswerChange}
           />{" "}
           팀원
@@ -305,6 +312,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q2"
             value="1"
+            checked={answers.Q2 === "1"}
             onChange={handleAnswerChange}
           />{" "}
           06시 이전
@@ -312,6 +320,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q2"
             value="2"
+            checked={answers.Q2 === "2"}
             onChange={handleAnswerChange}
           />{" "}
           06 ~ 08시
@@ -319,6 +328,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q2"
             value="3"
+            checked={answers.Q2 === "3"}
             onChange={handleAnswerChange}
           />{" "}
           08 ~ 10시
@@ -326,13 +336,15 @@ const ClientSurvey = () => {
             type="radio"
             name="Q2"
             value="4"
+            checked={answers.Q2 === "4"}
             onChange={handleAnswerChange}
           />{" "}
           10 ~ 12시
           <input
             type="radio"
             name="Q2"
-            value="4"
+            value="5"
+            checked={answers.Q2 === "5"}
             onChange={handleAnswerChange}
           />{" "}
           12시 이후
@@ -346,6 +358,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q3"
             value="1"
+            checked={answers.Q3 === "1"}
             onChange={handleAnswerChange}
           />{" "}
           10시 이전
@@ -353,6 +366,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q3"
             value="2"
+            checked={answers.Q3 === "2"}
             onChange={handleAnswerChange}
           />{" "}
           10 ~ 12시
@@ -360,6 +374,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q3"
             value="3"
+            checked={answers.Q3 === "3"}
             onChange={handleAnswerChange}
           />{" "}
           12 ~ 14시
@@ -367,6 +382,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q3"
             value="4"
+            checked={answers.Q3 === "4"}
             onChange={handleAnswerChange}
           />{" "}
           14 ~ 16시
@@ -374,6 +390,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q3"
             value="5"
+            checked={answers.Q3 === "5"}
             onChange={handleAnswerChange}
           />{" "}
           16시 이후
@@ -387,6 +404,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q4"
             value="1"
+            checked={answers.Q4 === "1"}
             onChange={handleAnswerChange}
           />{" "}
           1 (예민하지 않음)
@@ -394,6 +412,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q4"
             value="2"
+            checked={answers.Q4 === "2"}
             onChange={handleAnswerChange}
           />{" "}
           2
@@ -401,6 +420,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q4"
             value="3"
+            checked={answers.Q4 === "3"}
             onChange={handleAnswerChange}
           />{" "}
           3 (보통)
@@ -408,6 +428,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q4"
             value="4"
+            checked={answers.Q4 === "4"}
             onChange={handleAnswerChange}
           />{" "}
           4
@@ -415,6 +436,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q4"
             value="5"
+            checked={answers.Q4 === "5"}
             onChange={handleAnswerChange}
           />{" "}
           5 (예민함)
@@ -428,6 +450,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q5"
             value="1"
+            checked={answers.Q5 === "1"}
             onChange={handleAnswerChange}
           />{" "}
           1 (예민하지 않음)
@@ -435,6 +458,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q5"
             value="2"
+            checked={answers.Q5 === "2"}
             onChange={handleAnswerChange}
           />{" "}
           2
@@ -442,6 +466,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q5"
             value="3"
+            checked={answers.Q5 === "3"}
             onChange={handleAnswerChange}
           />{" "}
           3
@@ -449,6 +474,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q5"
             value="4"
+            checked={answers.Q5 === "4"}
             onChange={handleAnswerChange}
           />{" "}
           4
@@ -456,6 +482,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q5"
             value="5"
+            checked={answers.Q5 === "5"}
             onChange={handleAnswerChange}
           />{" "}
           5 (예민함)
@@ -469,13 +496,15 @@ const ClientSurvey = () => {
             type="radio"
             name="Q6"
             value="1"
+            checked={answers.Q6 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          1
+          1 (예민하지 않음)
           <input
             type="radio"
             name="Q6"
             value="2"
+            checked={answers.Q6 === "2"}
             onChange={handleAnswerChange}
           />{" "}
           2
@@ -483,6 +512,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q6"
             value="3"
+            checked={answers.Q6 === "3"}
             onChange={handleAnswerChange}
           />{" "}
           3
@@ -490,6 +520,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q6"
             value="4"
+            checked={answers.Q6 === "4"}
             onChange={handleAnswerChange}
           />{" "}
           4
@@ -497,9 +528,10 @@ const ClientSurvey = () => {
             type="radio"
             name="Q6"
             value="5"
+            checked={answers.Q6 === "5"}
             onChange={handleAnswerChange}
           />{" "}
-          5
+          5 (예민함)
         </Answer>
         <Question>
           7. 자신의 더위 예민도는 어느정도 입니까?
@@ -510,13 +542,15 @@ const ClientSurvey = () => {
             type="radio"
             name="Q7"
             value="1"
+            checked={answers.Q7 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          1
+          1 (예민하지 않음)
           <input
             type="radio"
             name="Q7"
             value="2"
+            checked={answers.Q7 === "2"}
             onChange={handleAnswerChange}
           />{" "}
           2
@@ -524,6 +558,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q7"
             value="3"
+            checked={answers.Q7 === "3"}
             onChange={handleAnswerChange}
           />{" "}
           3
@@ -531,6 +566,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q7"
             value="4"
+            checked={answers.Q7 === "4"}
             onChange={handleAnswerChange}
           />{" "}
           4
@@ -538,9 +574,10 @@ const ClientSurvey = () => {
             type="radio"
             name="Q7"
             value="5"
+            checked={answers.Q7 === "5"}
             onChange={handleAnswerChange}
           />{" "}
-          5
+          5 (예민함)
         </Answer>
         <Question>
           8. 자신의 청소주기는 언제입니까?
@@ -551,6 +588,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q8"
             value="1"
+            checked={answers.Q8 === "1"}
             onChange={handleAnswerChange}
           />{" "}
           1주
@@ -558,6 +596,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q8"
             value="2"
+            checked={answers.Q8 === "2"}
             onChange={handleAnswerChange}
           />{" "}
           2주
@@ -565,6 +604,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q8"
             value="3"
+            checked={answers.Q8 === "3"}
             onChange={handleAnswerChange}
           />{" "}
           4주
@@ -572,6 +612,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q8"
             value="4"
+            checked={answers.Q8 === "4"}
             onChange={handleAnswerChange}
           />{" "}
           8주
@@ -579,6 +620,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q8"
             value="5"
+            checked={answers.Q8 === "5"}
             onChange={handleAnswerChange}
           />{" "}
           안함
@@ -592,6 +634,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q9"
             value="1"
+            checked={answers.Q9 === "1"}
             onChange={handleAnswerChange}
           />{" "}
           예 (흡연 합니다.)
@@ -599,6 +642,7 @@ const ClientSurvey = () => {
             type="radio"
             name="Q9"
             value="2"
+            checked={answers.Q9 === "2"}
             onChange={handleAnswerChange}
           />{" "}
           아니요 (흡연 안 합니다.)
@@ -613,7 +657,7 @@ const ClientSurvey = () => {
             value={answers.Sub}
             onChange={handleAnswerChange}
             rows="4"
-            cols="45"
+            cols="53"
           ></textarea>
         </Answer>
       </Rect1>
