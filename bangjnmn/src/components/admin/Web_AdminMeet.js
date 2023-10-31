@@ -1,4 +1,5 @@
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { dbService } from "../../api/fbase";
@@ -57,7 +58,7 @@ const AdminMeet = () => {
     setReserveTF(Array(5).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
   
     // 조회하고 싶은 날짜 문서 참조
-    const meetReservationRef = collection(dbService, "meetReservation");
+    const meetReservationRef = collection(dbService, "meet");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
   
     try {
@@ -149,7 +150,7 @@ const AdminMeet = () => {
           [selectedTime]: {
             time: selectedTime,
             name: user.name,
-            access: user.access,
+            access: "admin",
           },
         };
 
