@@ -6,17 +6,25 @@ import { dbService } from "../../../api/fbase";
 import { checkStatus } from "../../../utils/CheckStatus";
 import Item from "./Web_Item";
 
-const Div = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  width: 100%;
-  overflow: hidden;
+const Back = styled.div`
+  background: #cecccc;
+  margin-top: 7px;
+  height: 100vh;
 `;
+const Div = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100vh;
+    max-width: 1000px; // 중앙 박스의 최대 너비 설정
+    margin: 0 auto; // 중앙 정렬
+    overflow: hidden;
+    background-color: white;
+  `;
 
-const Search = styled.div`
+const Search = styled.form`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -29,7 +37,7 @@ const Web_AdminSearch = () => {
   const [user, setUser] = useState();
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]); // 새로운 상태 변수
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("name");
   const [searchTerm, setSearchTerm] = useState("");
   const userCollection = collection(dbService, "user");
 
@@ -53,7 +61,8 @@ const Web_AdminSearch = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
     if (selectedOption && searchTerm) {
       let filteredUsers;
 
@@ -71,9 +80,10 @@ const Web_AdminSearch = () => {
   };
 
   return (
+    <Back>
     <Div>
-      <h1>AdminSearch</h1>
-      <Search>
+      <h1>학생 정보 조회</h1>
+      <Search onSubmit={handleSearchSubmit}>
         <Select
           options={options}
           onChange={(option) => setSelectedOption(option.value)}
@@ -90,13 +100,13 @@ const Web_AdminSearch = () => {
         <button
           type="submit"
           style={{ marginLeft: "8px" }}
-          onClick={handleSearchSubmit}
         >
           🔍
         </button>
       </Search>
 
       <div>
+      {filteredData.length > 0 && (
         <table>
           <thead>
             <tr>
@@ -115,8 +125,11 @@ const Web_AdminSearch = () => {
             })}
           </tbody>
         </table>
+      )}
       </div>
     </Div>
+    </Back>
+    
   );
 };
 
