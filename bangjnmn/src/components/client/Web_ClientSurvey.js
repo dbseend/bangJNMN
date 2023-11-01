@@ -5,6 +5,152 @@ import { auth, dbService } from "../../api/fbase";
 import styled from "styled-components";
 import { checkStatus } from "../../utils/CheckStatus";
 
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #cecccc;
+  position: relative;
+  z-index: 1;
+  margin-top: 8px;
+`;
+
+const Rect1 = styled.div`
+  width: 770px;
+  max-width: 100%;
+  height: 1900px;
+  flex-shrink: 0;
+  background: white;
+  margin: 0 auto;
+`;
+
+const Rect2 = styled.div`
+  width: 490px;
+  height: 55px;
+  flex-shrink: 0;
+  background: #f1f1f1;
+  text-align: left;
+  margin-left: 160px;
+  margin-right: 167;
+  border-radius: 6px;
+`;
+
+const Font1 = styled.div`
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  margin-left: 166px;
+  margin-top: 10px;
+  text-align: left;
+  color: #797979;
+  margin-bottom: 17px;
+`;
+
+const Font2 = styled.div`
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 22px;
+  margin-left: 166px;
+  text-align: left;
+  color: black;
+  margin-bottom: 19px;
+`;
+
+const Font3 = styled.div`
+  font-family: Roboto;
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 15.5px;
+  margin-left: 13px;
+  padding-top: 10px;
+  //text-align: left;
+  color: black;
+`;
+
+const Font4 = styled.div`
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15.5px;
+  margin-top: 4px;
+  margin-left: 13px;
+  //text-align: left;
+  color: black;
+`;
+
+const Question = styled.div`
+  margin-top: 30px;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-left: 160px;
+  text-align: left;
+  color: black;
+  margin-bottom: 14px;
+`;
+
+const Answer = styled.div`
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-left: 163px;
+  text-align: left;
+  color: black;
+  margin-bottom: 33px;
+`;
+
+const Submit = styled.button`
+  display: flex;
+  padding: 10px 24px;
+  margin-top: 17px;
+  margin-bottom: 20px;
+  width: 88px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  flex: 1 0 0;
+  align-self: stretch;
+  border: none;
+  border-radius: 100px;
+  background-color: #fff9f3;
+  color: #38373c;
+
+  font-family: Roboto;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+
+  cursor: pointer;
+`;
+
+const SubmitContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Margin = styled.div`
+  margin-left: 6px;
+  margin-top: 6px;
+`;
+
 const ClientSurvey = () => {
   const [user, setUser] = useState("");
   const [name, setName] = useState("");
@@ -40,6 +186,7 @@ const ClientSurvey = () => {
 
   // 각 질문에 대한 답변을 저장하는 state
   const handleSubmitAnswers = async () => {
+    console.log('내 이름은', name);
     const usersCollection = collection(dbService, "user"); // "user" 컬렉션으로 수정
     const userDocRef = doc(usersCollection, name); // 사용자 이름을 문서로 사용
     const subCollectionName = collection(userDocRef, "survey");
@@ -98,167 +245,28 @@ const ClientSurvey = () => {
 
   const handleAnswerChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === "Sub") {
-      setAnswers((prevAnswers) => ({
-        ...prevAnswers,
-        [name]: value,
-      }));
-    } else {
+      // Q10의 textarea에 대한 조건을 적용
       const updatedAnswers = {
         ...answers,
         [name]: value,
       };
       setAnswers(updatedAnswers);
-  
+    } else {
+      // 다른 입력 필드에 대한 조건을 적용
+      const updatedAnswers = {
+        ...answers,
+        [name]: value,
+      };
+      setAnswers(updatedAnswers);
+
       // 라디오 버튼이 선택되었는지 확인하고 선택 상태 업데이트
       const updatedQuestionsAnswered = { ...questionsAnswered };
       updatedQuestionsAnswered[name] = true;
       setQuestionsAnswered(updatedQuestionsAnswered);
     }
   };
-  
-
-  const Div = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #cecccc;
-    position: relative;
-    z-index: 1;
-    margin-top: 10px;
-  `;
-
-  const Rect1 = styled.div`
-    width: 770px;
-    max-width: 100%;
-    height: 1100px;
-    flex-shrink: 0;
-    background: white;
-    margin: 0 auto;
-  `;
-
-  const Rect2 = styled.div`
-    width: 490px;
-    height: 55px;
-    flex-shrink: 0;
-    background: #f1f1f1;
-    text-align: left;
-    margin-left: 160px;
-    margin-right: 167;
-    border-radius: 6px;
-  `;
-
-  const Font1 = styled.div`
-    font-family: Roboto;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 20px;
-    margin-left: 166px;
-    margin-top: 10px;
-    text-align: left;
-    color: #797979;
-    margin-bottom: 17px;
-  `;
-
-  const Font2 = styled.div`
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 22px;
-    margin-left: 166px;
-    text-align: left;
-    color: black;
-    margin-bottom: 19px;
-  `;
-
-  const Font3 = styled.div`
-    font-family: Roboto;
-    font-style: normal;
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 15.5px;
-    margin-left: 13px;
-    padding-top: 10px;
-    //text-align: left;
-    color: black;
-  `;
-
-  const Font4 = styled.div`
-    font-family: Roboto;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 15.5px;
-    margin-top: 4px;
-    margin-left: 13px;
-    //text-align: left;
-    color: black;
-  `;
-
-  const Question = styled.div`
-    margin-top: 30px;
-    font-family: Roboto;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin-left: 160px;
-    text-align: left;
-    color: black;
-    margin-bottom: 10px;
-  `;
-
-  const Answer = styled.div`
-    font-family: Roboto;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin-left: 163px;
-    text-align: left;
-    color: black;
-    margin-bottom: 33px;
-  `;
-
-  const Submit = styled.button`
-    display: flex;
-    padding: 10px 24px;
-    margin-top: 17px;
-    margin-bottom: 20px;
-    width: 88px;
-    height: 50px;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-    flex: 1 0 0;
-    align-self: stretch;
-    border: none;
-    border-radius: 100px;
-    background-color: #fff9f3;
-    color: #38373c;
-
-    font-family: Roboto;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 20px;
-    letter-spacing: 0.1px;
-
-    cursor: pointer;
-  `;
-
-  const SubmitContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `;
 
   return (
     <Div>
@@ -284,14 +292,16 @@ const ClientSurvey = () => {
             value="새섬"
             checked={answers.Q1 === "새섬"}
             onChange={handleAnswerChange}
-          />{" "}새섬
+          />{" "}
+          새섬<Margin></Margin>
           <input
             type="radio"
             name="Q1"
             value="새내기"
             checked={answers.Q1 === "새내기"}
             onChange={handleAnswerChange}
-          />{" "}새내기
+          />{" "}
+          새내기 <Margin></Margin>
           <input
             type="radio"
             name="Q1"
@@ -301,7 +311,7 @@ const ClientSurvey = () => {
           />{" "}팀원
         </Answer>
         <Question>
-          2. 평균 기상시간이 몇 시인가요?(오전)
+          2. 평균 기상시간이 몇 시인가요? (오전)
           <br></br>
         </Question>
         <Answer>
@@ -312,7 +322,7 @@ const ClientSurvey = () => {
             checked={answers.Q2 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          06시 이전
+          06시 이전 <Margin></Margin>
           <input
             type="radio"
             name="Q2"
@@ -320,7 +330,7 @@ const ClientSurvey = () => {
             checked={answers.Q2 === "2"}
             onChange={handleAnswerChange}
           />{" "}
-          06 ~ 08시
+          06 ~ 08시 <Margin></Margin>
           <input
             type="radio"
             name="Q2"
@@ -328,7 +338,7 @@ const ClientSurvey = () => {
             checked={answers.Q2 === "3"}
             onChange={handleAnswerChange}
           />{" "}
-          08 ~ 10시
+          08 ~ 10시 <Margin></Margin>
           <input
             type="radio"
             name="Q2"
@@ -336,7 +346,7 @@ const ClientSurvey = () => {
             checked={answers.Q2 === "4"}
             onChange={handleAnswerChange}
           />{" "}
-          10 ~ 12시
+          10 ~ 12시 <Margin></Margin>
           <input
             type="radio"
             name="Q2"
@@ -347,7 +357,7 @@ const ClientSurvey = () => {
           12시 이후
         </Answer>
         <Question>
-          3. 평균 취침시간이 몇 시인가요?(오후)
+          3. 평균 취침시간이 몇 시인가요? (오후)
           <br></br>
         </Question>
         <Answer>
@@ -358,7 +368,7 @@ const ClientSurvey = () => {
             checked={answers.Q3 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          10시 이전
+          10시 이전 <Margin></Margin>
           <input
             type="radio"
             name="Q3"
@@ -366,7 +376,7 @@ const ClientSurvey = () => {
             checked={answers.Q3 === "2"}
             onChange={handleAnswerChange}
           />{" "}
-          10 ~ 12시
+          10 ~ 12시 <Margin></Margin>
           <input
             type="radio"
             name="Q3"
@@ -374,7 +384,7 @@ const ClientSurvey = () => {
             checked={answers.Q3 === "3"}
             onChange={handleAnswerChange}
           />{" "}
-          12 ~ 14시
+          12 ~ 14시 <Margin></Margin>
           <input
             type="radio"
             name="Q3"
@@ -382,7 +392,7 @@ const ClientSurvey = () => {
             checked={answers.Q3 === "4"}
             onChange={handleAnswerChange}
           />{" "}
-          14 ~ 16시
+          14 ~ 16시 <Margin></Margin>
           <input
             type="radio"
             name="Q3"
@@ -404,7 +414,7 @@ const ClientSurvey = () => {
             checked={answers.Q4 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          1 (예민하지 않음)
+          1 (예민하지 않음) <Margin></Margin>
           <input
             type="radio"
             name="Q4"
@@ -412,7 +422,7 @@ const ClientSurvey = () => {
             checked={answers.Q4 === "2"}
             onChange={handleAnswerChange}
           />{" "}
-          2
+          2 <Margin></Margin>
           <input
             type="radio"
             name="Q4"
@@ -420,7 +430,7 @@ const ClientSurvey = () => {
             checked={answers.Q4 === "3"}
             onChange={handleAnswerChange}
           />{" "}
-          3 (보통)
+          3 (보통) <Margin></Margin>
           <input
             type="radio"
             name="Q4"
@@ -428,7 +438,7 @@ const ClientSurvey = () => {
             checked={answers.Q4 === "4"}
             onChange={handleAnswerChange}
           />{" "}
-          4
+          4 <Margin></Margin>
           <input
             type="radio"
             name="Q4"
@@ -436,7 +446,7 @@ const ClientSurvey = () => {
             checked={answers.Q4 === "5"}
             onChange={handleAnswerChange}
           />{" "}
-          5 (예민함)
+          5 (예민함) 
         </Answer>
         <Question>
           5. 자신의 빛 예민도는 어느정도 입니까?
@@ -450,7 +460,7 @@ const ClientSurvey = () => {
             checked={answers.Q5 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          1 (예민하지 않음)
+          1 (예민하지 않음) <Margin></Margin>
           <input
             type="radio"
             name="Q5"
@@ -458,7 +468,7 @@ const ClientSurvey = () => {
             checked={answers.Q5 === "2"}
             onChange={handleAnswerChange}
           />{" "}
-          2
+          2 <Margin></Margin>
           <input
             type="radio"
             name="Q5"
@@ -466,7 +476,7 @@ const ClientSurvey = () => {
             checked={answers.Q5 === "3"}
             onChange={handleAnswerChange}
           />{" "}
-          3
+          3 <Margin></Margin>
           <input
             type="radio"
             name="Q5"
@@ -474,7 +484,7 @@ const ClientSurvey = () => {
             checked={answers.Q5 === "4"}
             onChange={handleAnswerChange}
           />{" "}
-          4
+          4 <Margin></Margin>
           <input
             type="radio"
             name="Q5"
@@ -496,7 +506,7 @@ const ClientSurvey = () => {
             checked={answers.Q6 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          1 (예민하지 않음)
+          1 (예민하지 않음) <Margin></Margin>
           <input
             type="radio"
             name="Q6"
@@ -504,7 +514,7 @@ const ClientSurvey = () => {
             checked={answers.Q6 === "2"}
             onChange={handleAnswerChange}
           />{" "}
-          2
+          2 <Margin></Margin>
           <input
             type="radio"
             name="Q6"
@@ -512,7 +522,7 @@ const ClientSurvey = () => {
             checked={answers.Q6 === "3"}
             onChange={handleAnswerChange}
           />{" "}
-          3
+          3 <Margin></Margin>
           <input
             type="radio"
             name="Q6"
@@ -520,7 +530,7 @@ const ClientSurvey = () => {
             checked={answers.Q6 === "4"}
             onChange={handleAnswerChange}
           />{" "}
-          4
+          4 <Margin></Margin>
           <input
             type="radio"
             name="Q6"
@@ -542,7 +552,7 @@ const ClientSurvey = () => {
             checked={answers.Q7 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          1 (예민하지 않음)
+          1 (예민하지 않음) <Margin></Margin>
           <input
             type="radio"
             name="Q7"
@@ -550,7 +560,7 @@ const ClientSurvey = () => {
             checked={answers.Q7 === "2"}
             onChange={handleAnswerChange}
           />{" "}
-          2
+          2 <Margin></Margin>
           <input
             type="radio"
             name="Q7"
@@ -558,7 +568,7 @@ const ClientSurvey = () => {
             checked={answers.Q7 === "3"}
             onChange={handleAnswerChange}
           />{" "}
-          3
+          3 <Margin></Margin>
           <input
             type="radio"
             name="Q7"
@@ -566,7 +576,7 @@ const ClientSurvey = () => {
             checked={answers.Q7 === "4"}
             onChange={handleAnswerChange}
           />{" "}
-          4
+          4 <Margin></Margin>
           <input
             type="radio"
             name="Q7"
@@ -588,7 +598,7 @@ const ClientSurvey = () => {
             checked={answers.Q8 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          1주
+          1주 <Margin></Margin>
           <input
             type="radio"
             name="Q8"
@@ -596,7 +606,7 @@ const ClientSurvey = () => {
             checked={answers.Q8 === "2"}
             onChange={handleAnswerChange}
           />{" "}
-          2주
+          2주 <Margin></Margin>
           <input
             type="radio"
             name="Q8"
@@ -604,7 +614,7 @@ const ClientSurvey = () => {
             checked={answers.Q8 === "3"}
             onChange={handleAnswerChange}
           />{" "}
-          4주
+          4주 <Margin></Margin>
           <input
             type="radio"
             name="Q8"
@@ -612,7 +622,7 @@ const ClientSurvey = () => {
             checked={answers.Q8 === "4"}
             onChange={handleAnswerChange}
           />{" "}
-          8주
+          8주 <Margin></Margin>
           <input
             type="radio"
             name="Q8"
@@ -634,7 +644,7 @@ const ClientSurvey = () => {
             checked={answers.Q9 === "1"}
             onChange={handleAnswerChange}
           />{" "}
-          예 (흡연 합니다.)
+          예 (흡연 합니다.) <Margin></Margin>
           <input
             type="radio"
             name="Q9"
