@@ -89,7 +89,7 @@ const ClientMyPage = () => {
     background: #cecccc;
     position: relative;
     z-index: 1;
-    margin-top: 10px;
+    margin-top: 8px;
   `;
 
   const Rect1 = styled.div`
@@ -218,6 +218,7 @@ const ClientMyPage = () => {
                   placeholder="ex) 01012345678"
                 />
                 <Button onClick={handleSave}>저장</Button>
+                <span style={{ color: "red" }}>{errorMessage}</span>
               </div>
             ) : userData ? (
               userData.phoneNumber ? (
