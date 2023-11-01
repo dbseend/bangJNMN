@@ -3,9 +3,11 @@ import {
   deleteField,
   doc,
   getDoc,
+  serverTimestamp,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { dbService } from "../../api/fbase";
@@ -38,11 +40,11 @@ const ClientMeet = () => {
   const [user, setUser] = useState("");
   const [selectedTime, setSelectedTime] = useState(-1);
   const [reservationList, setReservationList] = useState([]);
-  const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
+  const [reserveTF, setReserveTF] = useState(Array().fill(false));
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  const times = Array.from({ length: 5 }, (_, index) => formatTime(index));
+  const times = Array.from({ length: 40 }, (_, index) => formatTime(index));
 
   useEffect(() => {
     checkStatus(setUser);
@@ -91,7 +93,7 @@ const ClientMeet = () => {
   };
 
   const reserveMeet = async () => {
-    const meetReservationRef = collection(dbService, "meetReservation");
+    const meetReservationRef = collection(dbService, "meet");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
     const userRef = doc(collection(dbService, "user"), user.name);
 
@@ -115,7 +117,8 @@ const ClientMeet = () => {
         [selectedTime]: {
           time: selectedTime,
           name: user.name,
-          access: user.access,
+          access: "client",
+          meetCreated: serverTimestamp(),
         },
       };
 
@@ -124,8 +127,6 @@ const ClientMeet = () => {
       await updateDoc(userRef, {
         meetTF: true,
         meetTime: meetTime,
-        meetIdx: selectedTime,
-        meetCreated: meetCreated,
       });
 
       console.log("day 문서 업데이트 성공!");
@@ -163,8 +164,6 @@ const ClientMeet = () => {
         await updateDoc(userRef, {
           meetTF: false,
           meetTime: "",
-          meetIdx: -1,
-          meetCreated: "",
         });
       } else {
         alert("취소 할 수 없습니다(24시간 이내 가능)");
