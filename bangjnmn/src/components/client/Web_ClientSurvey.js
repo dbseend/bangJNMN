@@ -278,30 +278,27 @@ const ClientSurvey = () => {
           <br></br>
         </Question>
         <Answer>
-          <input
+            <input
             type="radio"
             name="Q1"
             value="새섬"
             checked={answers.Q1 === "새섬"}
             onChange={handleAnswerChange}
-          />{" "}
-          새섬
+          />{" "}새섬
           <input
             type="radio"
             name="Q1"
             value="새내기"
             checked={answers.Q1 === "새내기"}
             onChange={handleAnswerChange}
-          />{" "}
-          새내기
+          />{" "}새내기
           <input
             type="radio"
             name="Q1"
             value="팀원"
             checked={answers.Q1 === "팀원"}
             onChange={handleAnswerChange}
-          />{" "}
-          팀원
+          />{" "}팀원
         </Answer>
         <Question>
           2. 평균 기상시간이 몇 시인가요?(오전)
