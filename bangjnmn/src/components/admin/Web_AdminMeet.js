@@ -1,15 +1,9 @@
+import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  collection,
-  doc,
-  updateDoc,
-  getDoc,
-  setDoc,
-  deleteField,
-} from "firebase/firestore";
-import { auth, dbService } from "../../api/fbase";
-import { useNavigate } from "react-router-dom";
+import { dbService } from "../../api/fbase";
+import { checkStatus } from "../../utils/CheckStatus";
 
 const Div = styled.div`
   display: flex;
@@ -37,51 +31,17 @@ const TableCell = styled.td`
 const AdminMeet = () => {
   const [user, setUser] = useState("");
   const [selectedTimes, setSelectedTimes] = useState([]);
-  const [selectedTime, setSelectedTime] = useState(-1);
   const [reservationList, setReservationList] = useState([]);
   const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const times = Array.from({ length: 5 }, (_, index) => formatTime(index));
-  const navigate = useNavigate();
-
 
   useEffect(() => {
-    const checkStatus = async () => {
-      const currentPath = window.location.pathname;
-
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          console.log("로그인 되어있습니다.");
-          const stuRef = doc(dbService, "user", user.displayName);
-          const stuSnap = await getDoc(stuRef);
-          if (stuSnap.exists()) {
-            setUser(stuSnap.data());
-          }
-          if ( // client -> admin 접근 차단
-            localStorage.getItem("access") === "client" &&
-            currentPath.includes("admin")
-          ) {
-            alert("접근할 수 없습니다.");
-            navigate("/client");
-          } else if ( // admin -> client 접근 차단
-            localStorage.getItem("access") === "admin" &&
-            currentPath.includes("client")
-          ) {
-            alert("접근할 수 없습니다.");
-            navigate("/admin");
-          }
-        } else { // 로그인 안 함
-          console.log("로그인이 필요합니다.");
-          navigate("/");
-        }
-      });
-    };
-
-    checkStatus();
+    checkStatus(setUser);
   }, []);
-  
+
   function formatTime(index) {
     const startTime = 9 * 60;
     const interval = 30;
@@ -95,24 +55,33 @@ const AdminMeet = () => {
   }
 
   const checkTime = async () => {
-    const meetReservationRef = collection(dbService, "meetReservation");
+    setReserveTF(Array(5).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
+  
+    // 조회하고 싶은 날짜 문서 참조
+    const meetReservationRef = collection(dbService, "meet");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
-
+  
     try {
       const docSnap = await getDoc(dayRef);
       if (docSnap.exists()) {
-        const data = docSnap.data();
-        const reservationList = Object.values(data);
-        setReservationList(reservationList);
-
-        reservationList.forEach((item) => {
-          setReserveTF((prevReserveTF) => {
-            const updatedReserveTF = [...prevReserveTF];
-            updatedReserveTF[item.time] = true;
-            return updatedReserveTF;
-          });
-        });
-
+        const data = docSnap.data(); // 날짜에 해당하는 문서
+        const list = Object.values(data); // 문서의 value 값들만 뽑아내기
+  
+        // reservationList와 reserveTF를 업데이트하는 루프
+        for (let i = 0; i < list.length; i++) {
+          if (list[i] && list[i].time >= 0 && list[i].time < 5) {
+            const time = list[i].time;
+            // reservationList를 업데이트
+            reservationList[time] = list[i];
+            // reserveTF를 업데이트
+            setReserveTF((prevReserveTF) => {
+              const updatedReserveTF = [...prevReserveTF];
+              updatedReserveTF[time] = true;
+              return updatedReserveTF;
+            });
+          }
+        }
+  
         console.log("Document data:", data);
       } else {
         console.log("No such document!");
@@ -122,6 +91,55 @@ const AdminMeet = () => {
     }
   };
 
+  /*
+    const checkTime = async () => {
+    setReserveTF(Array(5).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
+
+    // 조회하고 싶은 날짜 문서 참조
+    const meetReservationRef = collection(dbService, "meetReservation");
+    const dayRef = doc(collection(meetReservationRef, month, "day"), day);
+
+    try {
+      const docSnap = await getDoc(dayRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data(); // 날짜에 해당하는 문서
+        const list = Object.values(data); // 문서의 value 값들만 뽑아내기
+        const newList = [...reservationList]; // reservationList 복사
+
+        for (let i = 0; i < list.length; i++) {
+          for (let j = 0; j < 5; j++) {
+            if (list[i] && list[i].time === j) {
+              newList[j] = list[i];
+            }
+          }
+        }
+        console.log(newList);
+        console.log(reservationList);
+        setReservationList(newList);
+        
+        for (let i = 0; i < newList.length; i++) {
+          const item = newList[i];
+          setReserveTF((prevReserveTF) => {
+            const updatedReserveTF = [...prevReserveTF];
+            if (item) {
+              updatedReserveTF[item.time] = true;
+            } else {
+              updatedReserveTF[i] = false;
+            }
+            return updatedReserveTF;
+          });
+        }
+
+        console.log("Document data:", data);
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }; 
+  */
+  
   const reserveMeet = () => {
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
@@ -132,6 +150,7 @@ const AdminMeet = () => {
           [selectedTime]: {
             time: selectedTime,
             name: user.name,
+            access: "admin",
           },
         };
 
@@ -146,24 +165,6 @@ const AdminMeet = () => {
     }
   };
 
-  const deleteMeet = async () => {
-    const [year, month, day, time] = user.meetTime.split(" ")[0].split("-");
-    const meetReservationRef = collection(dbService, "meetReservation");
-    const dayRef = doc(collection(meetReservationRef, month, "day"), day);
-    const userRef = doc(collection(dbService, "user"), user.name);
-    const meetIdx = user.meetIdx;
-
-    await updateDoc(dayRef, {
-      [meetIdx]: deleteField(),
-    });
-
-    await updateDoc(userRef, {
-      meetTF: false,
-      meetTime: "",
-      meetIdx: 0,
-    });
-  };
-
   const handleSelectTime = (index) => {
     if (meetDate == "") {
       alert("날짜를 먼저 선택해주세요!");
@@ -171,6 +172,10 @@ const AdminMeet = () => {
     if (meetDate != "") {
       const selectedIndex = selectedTimes.indexOf(index);
 
+      console.log(reserveTF[selectedIndex], selectedIndex);
+      if(reserveTF[selectedIndex] === true){
+        alert("이미 선택된 시간입니다!");
+      }
       if (selectedIndex === -1) {
         setSelectedTimes([...selectedTimes, index]);
       } else {
@@ -204,18 +209,16 @@ const AdminMeet = () => {
                 style={{
                   backgroundColor: reserveTF[index]
                     ? "red"
-                    : selectedTimes.includes(index)
-                    ? "lightblue"
                     : "",
-                  cursor: reservationList[index] ? "not-allowed" : "pointer",
+                  cursor: reserveTF[index] ? "not-allowed" : "pointer",
                 }}
                 onClick={() => {
                   handleSelectTime(index);
                 }}
               >
                 {reservationList[index] &&
-                reservationList[index].auth === "client"
-                  ? item + reservationList[index].name
+                reservationList[index].access === "client"
+                  ? item + " " + reservationList[index].name
                   : item}
               </TableCell>
             </tr>
@@ -223,12 +226,6 @@ const AdminMeet = () => {
         </tbody>
       </Table>
       <button onClick={reserveMeet}>예약하기</button>
-      {user.meetTF ? (
-        <p>예약한 시간: {user.meetTime}</p>
-      ) : (
-        <p>예약된 정보가 없습니다.</p>
-      )}
-      <button onClick={deleteMeet}>예약 취소하기</button>
     </Div>
   );
 };

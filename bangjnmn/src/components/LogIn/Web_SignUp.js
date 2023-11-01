@@ -13,12 +13,12 @@ const Div = styled.div`
   margin: 0 auto;
   width: 100%;
   overflow: hidden;
-  background: #38373c;
+  background: #204e4a;
 `;
 
 const Title = styled.div`
   margin-top: 85px;
-  color: #f26938;
+  color: #fff9f3;
   text-align: center;
   font-family: Roboto;
   font-size: 24px;
@@ -78,14 +78,14 @@ const Radio = styled.input`
   width: 18px;
   height: 18px;
   border-radius: 2px;
-  border: 2px solid var(--m-3-sys-light-on-surface-variant, #49454f);
+  border: 2px solid var(--m-3-sys-light-on-surface-variant, #204e4a);
   /* 선택되지 않은 상태의 배경색과 기타 스타일 */
   &:not(:checked) {
     background-color: transparent; /* 선택되지 않은 상태에서는 배경색이 투명합니다. */
   }
   /* 선택된 상태에서의 배경색과 기타 스타일 */
   &:checked {
-    background-color: #49454f; /* 선택된 상태에서의 배경색 */
+    background-color: #204e4a; /* 선택된 상태에서의 배경색 */
   }
   margin-top: 21px;
   margin-right: 11px;
@@ -139,7 +139,8 @@ const Submit = styled.button`
   line-height: 20px;
   letter-spacing: 0.10000000149011612px;
   text-align: center;
-  color: #f26938;
+  color: #000000;
+  border: 1px solid #79747e;
 `;
 // const SubmitContainer = styled.div`
 //   display: flex;
@@ -182,7 +183,7 @@ const SearchAndDropdown = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isFocused ? "#f26938" : "white",
+    backgroundColor: state.isFocused ? "#204E4A" : "white",
     color: state.isFocused ? "white" : "black",
     fontSize: "12px",
   }),
@@ -284,29 +285,65 @@ const SignUp = () => {
     checkStatus();
   }, []);
 
+  const isValidPhoneNumber = (value) => {
+    // 정규 표현식을 사용하여 유효한 전화번호 확인
+    const phonePattern = /^(010\d{8})$/;
+    return phonePattern.test(value);
+  };
+
+  const isValidStuNum = (value) => {
+    // 정규 표현식을 사용하여 유효한 학번 확인
+    const stuNumPattern = /^2\d{7}$/;
+    return stuNumPattern.test(value);
+  };
+
   //회원가입
   const signUp = async (e) => {
     e.preventDefault();
-    const docRef = setDoc(doc(dbService, "user", name), {
-      name: name,
-      email: email,
-      gender: gender,
-      birth: birth,
-      phoneNumber: phoneNumber,
-      stuNum: stuNum,
-      major: major,
-      rc: rc,
-      team: team,
-      dorm: dorm,
-      roommateNum: roommateNum,
-      roomNum: "",
-      access: "client",
-      meetTime: 0,
-      meetTF: false,
-      meetIdx: 0,
-    });
+    if (
+      name === "" ||
+      email === "" ||
+      gender === 0 ||
+      birth === "" ||
+      phoneNumber === "" ||
+      stuNum === "" ||
+      major === "" ||
+      rc === "" ||
+      team === "" ||
+      dorm === "" ||
+      roommateNum === 0 ||
+      !isValidPhoneNumber(phoneNumber) ||
+      !isValidStuNum(stuNum)
+    ) {
+      alert("누락되거나 틀린 내용이 있습니다.");
+      return; // 필드가 하나라도 비어 있을 경우 함수 종료
+    }
+
+    const signUpData = [
+      {
+        name: name,
+        email: email,
+        gender: gender,
+        birth: birth,
+        phoneNumber: phoneNumber,
+        stuNum: stuNum,
+        major: major,
+        rc: rc,
+        dorm: dorm,
+        team: team.label,
+        roommateNum: roommateNum,
+        roomNum: "",
+        access: "client",
+        meetTime: 0,
+        meetTF: false,
+      },
+    ];
+
+    const docRef = setDoc(doc(dbService, "user", name), signUpData);
+
     if (docRef) {
       console.log("회원가입에 저장 성공");
+      alert("회원가입 되었습니다.");
       navigate("/client");
     }
   };
@@ -409,7 +446,7 @@ const SignUp = () => {
               type="text"
               name="phoneNumber"
               onChange={changePhoneNumber}
-              placeholder="전화번호를 입력하세요"
+              placeholder="숫자만 입력하세요"
               required="required"
               pattern="01[0-9]{9}"
               maxLength={13}
@@ -456,7 +493,7 @@ const SignUp = () => {
             </label>
             <Dropdown value={rc} onChange={changeRc}>
               <option value="" disabled>
-                rc 선택
+                RC 선택
               </option>
               {rcs.map((rcOption) => (
                 <option key={rcOption} value={rcOption}>
