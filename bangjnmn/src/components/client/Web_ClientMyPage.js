@@ -47,7 +47,25 @@ const ClientMyPage = () => {
     setPhoneNumber(userData ? userData.phoneNumber : ""); // 전화번호 수정 모드 진입 시 기존 번호를 표시
   };
 
+  const handleBlur = () => {
+    console.log("포커스 놓침");
+    // 입력값의 유효성 검사를 수행
+    const phoneNumberPattern = /^010\d{4}\d{4}$/;
+
+    if (!phoneNumberPattern.test(phoneNumber)) {
+      // 유효성 검사 실패 시 오류 메시지를 표시
+      setErrorMessage("올바른 형식이 아닙니다.");
+      setIsModified(false); // 수정되지 않은 상태로 표시
+    } else {
+      // 유효성 검사 통과 시 오류 메시지를 초기화
+      setErrorMessage("");
+      setIsModified(true); // 수정된 상태로 표시
+    }
+  };
+
   const handleFieldChange = (e) => {
+    console.log(phoneNumber);
+    console.log(e.target.value);
     const newPhoneNumber = e.target.value;
     const phoneNumberPattern = /^010\d{4}\d{4}$/;
 
@@ -150,6 +168,7 @@ const ClientMyPage = () => {
     line-height: 15.5px;
     margin-top: 10px;
     margin-left: 10px;
+    width: 100px;
     color: black;
     justify-content: center;
     display: inline; /* 이 부분을 추가하세요 */
@@ -216,6 +235,7 @@ const ClientMyPage = () => {
                   value={phoneNumber}
                   onChange={handleFieldChange}
                   placeholder="ex) 01012345678"
+                  onBlur={handleBlur}
                 />
                 <Button onClick={handleSave}>저장</Button>
                 <span style={{ color: "red" }}>{errorMessage}</span>
