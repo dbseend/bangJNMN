@@ -92,6 +92,9 @@ const ClientMeet = () => {
     }
   };
 
+  // 1. 지난 날이면 안됨
+  // 2. 예약 날짜 지나면 자동으로 예약여부는 F로
+  // 3. 예약 기한 정하기
   const reserveMeet = async () => {
     const meetReservationRef = collection(dbService, "meet");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);

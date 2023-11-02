@@ -319,25 +319,23 @@ const SignUp = () => {
       return; // 필드가 하나라도 비어 있을 경우 함수 종료
     }
 
-    const signUpData = [
-      {
-        name: name,
-        email: email,
-        gender: gender,
-        birth: birth,
-        phoneNumber: phoneNumber,
-        stuNum: stuNum,
-        major: major,
-        rc: rc,
-        dorm: dorm,
-        team: team.label,
-        roommateNum: roommateNum,
-        roomNum: "",
-        access: "client",
-        meetTime: 0,
-        meetTF: false,
-      },
-    ];
+    const signUpData = {
+      name: name,
+      email: email,
+      gender: gender,
+      birth: birth,
+      phoneNumber: phoneNumber,
+      stuNum: stuNum,
+      major: major,
+      rc: rc,
+      dorm: dorm,
+      team: team.label,
+      roommateNum: roommateNum,
+      roomNum: "",
+      access: "client",
+      meetTime: 0,
+      meetTF: false,
+    };
 
     const docRef = setDoc(doc(dbService, "user", name), signUpData);
 
