@@ -11,6 +11,16 @@ const Back = styled.div`
   margin-top: 7px;
   height: 100vh;
 `;
+
+const Table = styled.table`
+  border-collapse: separate; // 변경된 부분
+  border-spacing: 0;
+`;  
+
+const TableHeaderRow = styled.tr`
+  border: none;
+`;
+
 const Div = styled.div`
     display: flex;
     flex-direction: column;
@@ -32,6 +42,9 @@ const Search = styled.form`
   width: 30%;
   margin-bottom: 10%;
 `;
+
+
+
 
 const Web_AdminSearch = () => {
   const [user, setUser] = useState();
@@ -107,24 +120,23 @@ const Web_AdminSearch = () => {
 
       <div>
       {filteredData.length > 0 && (
-        <table>
-          <thead>
-            <tr>
+        <Table>
+            <TableHeaderRow>
               <th>이름</th>
               <th>학번</th>
               <th>팀</th>
               <th>학부</th>
               <th>생년월일</th>
               <th>호실</th>
-            </tr>
-          </thead>
+            </TableHeaderRow>
+          
           <tbody>
             {filteredData.map((user, idx) => {
               // change 'data' to 'filteredData'
               return <Item key={idx} data={user} />;
             })}
           </tbody>
-        </table>
+        </Table>
       )}
       </div>
     </Div>

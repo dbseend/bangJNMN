@@ -45,23 +45,22 @@ const Info = styled.label`
 const Head = styled.h3`
   color: #000;
   padding-top: 41px;
-font-family: Roboto;
-font-size: 20px;
-font-style: normal;
-font-weight: 700;
-line-height: 16px; /* 80% */
-letter-spacing: 0.5px;
-text-decoration-line: underline;
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px; /* 80% */
+  letter-spacing: 0.5px;
+  text-decoration-line: underline;
 `
 const SH = styled.p`
   color: #000;
-
-font-family: Roboto;
-font-size: 15px;
-font-style: normal;
-font-weight: 400;
-//line-height: 39px; /* 260% */
-letter-spacing: 0.5px;
+  font-family: Roboto;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  //line-height: 39px; /* 260% */
+  letter-spacing: 0.5px;
 `
 
 const User = () => {
