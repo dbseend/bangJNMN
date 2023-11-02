@@ -285,10 +285,10 @@ const AdminRoom = () => {
   }
 
   function info() {
-    console.log("남자 4인실", male4);
-    // console.log("남자 2인실", male2);
-    // console.log("여자 4인실", female4);
-    // console.log("여자 2인실", female2);
+    console.log("남자 4인실", male4.length);
+    console.log("남자 2인실", male2.length);
+    console.log("여자 4인실", female4.length);
+    console.log("여자 2인실", female2.length);
   }
 
   // 새섬,새내기,팀원을 기준으로 오름차순으로 정렬
