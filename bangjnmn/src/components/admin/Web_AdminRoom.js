@@ -37,6 +37,7 @@ const AdminRoom = () => {
 
   async function settingUsers() {
     const userCollection = collection(dbService, "user");
+    const roomCollection = collection(dbService, "room");
     const q = query(
       userCollection,
       where("access", "==", "client"), //client 정보만 불러오도록
