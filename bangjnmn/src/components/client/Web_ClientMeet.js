@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import {
   collection,
-  doc,
-  updateDoc,
-  getDoc,
-  setDoc,
   deleteField,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
 } from "firebase/firestore";
-import { auth, dbService } from "../../api/fbase";
-import { useNavigate } from "react-router-dom";
+import { Timestamp } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { dbService } from "../../api/fbase";
+import { checkStatus } from "../../utils/CheckStatus";
 
 const Div = styled.div`
   display: flex;
@@ -38,49 +40,14 @@ const ClientMeet = () => {
   const [user, setUser] = useState("");
   const [selectedTime, setSelectedTime] = useState(-1);
   const [reservationList, setReservationList] = useState([]);
-  const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
+  const [reserveTF, setReserveTF] = useState(Array().fill(false));
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  const times = Array.from({ length: 5 }, (_, index) => formatTime(index));
-  const navigate = useNavigate();
+  const times = Array.from({ length: 40 }, (_, index) => formatTime(index));
 
   useEffect(() => {
-    const checkStatus = async () => {
-      const currentPath = window.location.pathname;
-
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          console.log("로그인 되어있습니다.");
-          const stuRef = doc(dbService, "user", user.displayName);
-          const stuSnap = await getDoc(stuRef);
-          if (stuSnap.exists()) {
-            setUser(stuSnap.data());
-          }
-          if (
-            // client -> admin 접근 차단
-            localStorage.getItem("access") === "client" &&
-            currentPath.includes("admin")
-          ) {
-            alert("접근할 수 없습니다.");
-            navigate("/client");
-          } else if (
-            // admin -> client 접근 차단
-            localStorage.getItem("access") === "admin" &&
-            currentPath.includes("client")
-          ) {
-            alert("접근할 수 없습니다.");
-            navigate("/admin");
-          }
-        } else {
-          // 로그인 안 함
-          console.log("로그인이 필요합니다.");
-          navigate("/");
-        }
-      });
-    };
-
-    checkStatus();
+    checkStatus(setUser);
   }, []);
 
   function formatTime(index) {
@@ -125,8 +92,11 @@ const ClientMeet = () => {
     }
   };
 
+  // 1. 지난 날이면 안됨
+  // 2. 예약 날짜 지나면 자동으로 예약여부는 F로
+  // 3. 예약 기한 정하기
   const reserveMeet = async () => {
-    const meetReservationRef = collection(dbService, "meetReservation");
+    const meetReservationRef = collection(dbService, "meet");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
     const userRef = doc(collection(dbService, "user"), user.name);
 
@@ -150,7 +120,8 @@ const ClientMeet = () => {
         [selectedTime]: {
           time: selectedTime,
           name: user.name,
-          access: user.access,
+          access: "client",
+          meetCreated: serverTimestamp(),
         },
       };
 
@@ -159,8 +130,6 @@ const ClientMeet = () => {
       await updateDoc(userRef, {
         meetTF: true,
         meetTime: meetTime,
-        meetIdx: selectedTime,
-        meetCreated: meetCreated,
       });
 
       console.log("day 문서 업데이트 성공!");
@@ -174,29 +143,30 @@ const ClientMeet = () => {
   const deleteMeet = async () => {
     try {
       const [year, month, day, time] = user.meetTime.split(" ")[0].split("-");
-      const formattedMonth = (parseInt(month, 10)).toString();
-      const formattedDay = (parseInt(day, 10)).toString();
-  
+      const formattedMonth = parseInt(month, 10).toString();
+      const formattedDay = parseInt(day, 10).toString();
+
       const meetReservationRef = collection(dbService, "meetReservation");
-      const dayRef = doc(collection(meetReservationRef, formattedMonth, "day"), formattedDay);
+      const dayRef = doc(
+        collection(meetReservationRef, formattedMonth, "day"),
+        formattedDay
+      );
       const userRef = doc(collection(dbService, "user"), user.name);
       const meetIdx = user.meetIdx;
-  
+
       const currentTime = Math.floor(Date.now() / 1000); // 현재 시간을 초로 변환
       const reserveTime = user.meetCreated.seconds; // 예약 시간을 초로 가정합니다.
       const timeDiff = currentTime - reserveTime; // 시간 차이 계산
       const timeDiffHours = timeDiff / 3600;
-  
+
       if (timeDiffHours < 24) {
         await updateDoc(dayRef, {
           [meetIdx]: deleteField(),
         });
-  
+
         await updateDoc(userRef, {
           meetTF: false,
           meetTime: "",
-          meetIdx: -1,
-          meetCreated: "",
         });
       } else {
         alert("취소 할 수 없습니다(24시간 이내 가능)");
@@ -205,7 +175,7 @@ const ClientMeet = () => {
       console.error("An error occurred:", error);
     }
   };
-  
+
   const handleSelectTime = (index) => {
     if (meetDate == "") {
       alert("날짜를 먼저 선택해주세요!");
@@ -250,8 +220,7 @@ const ClientMeet = () => {
                 onClick={() => {
                   handleSelectTime(index);
                 }}
-              >
-              </TableCell>
+              ></TableCell>
             </tr>
           ))}
         </tbody>

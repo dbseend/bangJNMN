@@ -99,14 +99,14 @@ const Radio = styled.input`
   width: 18px;
   height: 18px;
   border-radius: 2px;
-  border: 2px solid var(--m-3-sys-light-on-surface-variant, #204E4A);
+  border: 2px solid var(--m-3-sys-light-on-surface-variant, #204e4a);
   /* 선택되지 않은 상태의 배경색과 기타 스타일 */
   &:not(:checked) {
     background-color: transparent; /* 선택되지 않은 상태에서는 배경색이 투명합니다. */
   }
   /* 선택된 상태에서의 배경색과 기타 스타일 */
   &:checked {
-    background-color: #204E4A; /* 선택된 상태에서의 배경색 */
+    background-color: #204e4a; /* 선택된 상태에서의 배경색 */
   }
   margin-top: 21px;
   margin-right: 11px;
@@ -306,21 +306,18 @@ const SignUp = () => {
     checkStatus();
   }, []);
 
-
   const isValidPhoneNumber = (value) => {
     // 정규 표현식을 사용하여 유효한 전화번호 확인
     const phonePattern = /^(010\d{8})$/;
     return phonePattern.test(value);
   };
-  
+
   const isValidStuNum = (value) => {
     // 정규 표현식을 사용하여 유효한 학번 확인
     const stuNumPattern = /^2\d{7}$/;
     return stuNumPattern.test(value);
   };
-  
-  
-  
+
   //회원가입
   const signUp = async (e) => {
     e.preventDefault();
@@ -338,13 +335,12 @@ const SignUp = () => {
       roommateNum === 0 ||
       !isValidPhoneNumber(phoneNumber) ||
       !isValidStuNum(stuNum)
-      )
-    {
+    ) {
       alert("누락되거나 틀린 내용이 있습니다.");
       return; // 필드가 하나라도 비어 있을 경우 함수 종료
     }
-  
-    const docRef = setDoc(doc(dbService, "user", name), {
+
+    const signUpData = {
       name: name,
       email: email,
       gender: gender,
@@ -353,18 +349,20 @@ const SignUp = () => {
       stuNum: stuNum,
       major: major,
       rc: rc,
-      team: team.label,
       dorm: dorm,
+      team: team.label,
       roommateNum: roommateNum,
       roomNum: "",
       access: "client",
       meetTime: 0,
       meetTF: false,
-      meetIdx: 0,
-    });
+    };
+
+    const docRef = setDoc(doc(dbService, "user", name), signUpData);
+
     if (docRef) {
       console.log("회원가입에 저장 성공");
-      alert ("회원가입 되었습니다.");
+      alert("회원가입 되었습니다.");
       navigate("/client");
     }
   };
