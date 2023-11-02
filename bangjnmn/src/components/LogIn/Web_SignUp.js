@@ -4,6 +4,14 @@ import { auth, dbService } from "../../api/fbase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin : 0;
+    padding: 0;
+  }
+`
 
 const Div = styled.div`
   display: flex;
@@ -11,29 +19,42 @@ const Div = styled.div`
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  width: 100%;
   overflow: hidden;
-  background: #204E4A;
+  background: #F4F4F4;
+`;
+
+const Top = styled.div`
+background:#04589C;
+width: 100%;
+height: 72px;
 `;
 
 const Title = styled.div`
-  margin-top: 85px;
-  color: #fff9f3;
-  text-align: center;
-  font-family: Roboto;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20px; /* 83.333% */
-  letter-spacing: 0.1px;
-  width: 111px;
-  height: 20px;
-  left: 665px;
+color:#FFFFFF;
+/* width: 111px;
+height: 20px; */
+top: 35px;
+left: 60px;
+font-family: Roboto;
+font-size: 24px;
+font-weight: 700;
+line-height: 20px;
+letter-spacing: 0.10000000149011612px;
+padding-top: 26px;
+padding-left: 50px;
 `;
 
+const Do = styled.div`
+font-family: Roboto;
+font-size: 20px;
+font-weight: 700;
+line-height: 20px;
+letter-spacing: 0.10000000149011612px;
+margin-top: 39px;
+margin-left: -540px;
+`;
 const Mass1 = styled.div`
-  margin-top: 90px;
-  margin-bottom: 52px;
+  margin-top: 25px;
 `;
 
 const Mass = styled.div`
@@ -78,14 +99,14 @@ const Radio = styled.input`
   width: 18px;
   height: 18px;
   border-radius: 2px;
-  border: 2px solid var(--m-3-sys-light-on-surface-variant, #204E4A);
+  border: 2px solid var(--m-3-sys-light-on-surface-variant, #204e4a);
   /* 선택되지 않은 상태의 배경색과 기타 스타일 */
   &:not(:checked) {
     background-color: transparent; /* 선택되지 않은 상태에서는 배경색이 투명합니다. */
   }
   /* 선택된 상태에서의 배경색과 기타 스타일 */
   &:checked {
-    background-color: #204E4A; /* 선택된 상태에서의 배경색 */
+    background-color: #204e4a; /* 선택된 상태에서의 배경색 */
   }
   margin-top: 21px;
   margin-right: 11px;
@@ -285,21 +306,18 @@ const SignUp = () => {
     checkStatus();
   }, []);
 
-
   const isValidPhoneNumber = (value) => {
     // 정규 표현식을 사용하여 유효한 전화번호 확인
     const phonePattern = /^(010\d{8})$/;
     return phonePattern.test(value);
   };
-  
+
   const isValidStuNum = (value) => {
     // 정규 표현식을 사용하여 유효한 학번 확인
     const stuNumPattern = /^2\d{7}$/;
     return stuNumPattern.test(value);
   };
-  
-  
-  
+
   //회원가입
   const signUp = async (e) => {
     e.preventDefault();
@@ -317,13 +335,12 @@ const SignUp = () => {
       roommateNum === 0 ||
       !isValidPhoneNumber(phoneNumber) ||
       !isValidStuNum(stuNum)
-      )
-    {
+    ) {
       alert("누락되거나 틀린 내용이 있습니다.");
       return; // 필드가 하나라도 비어 있을 경우 함수 종료
     }
-  
-    const docRef = setDoc(doc(dbService, "user", name), {
+
+    const signUpData = {
       name: name,
       email: email,
       gender: gender,
@@ -332,18 +349,20 @@ const SignUp = () => {
       stuNum: stuNum,
       major: major,
       rc: rc,
-      team: team.label,
       dorm: dorm,
+      team: team.label,
       roommateNum: roommateNum,
       roomNum: "",
       access: "client",
       meetTime: 0,
       meetTF: false,
-      meetIdx: 0,
-    });
+    };
+
+    const docRef = setDoc(doc(dbService, "user", name), signUpData);
+
     if (docRef) {
       console.log("회원가입에 저장 성공");
-      alert ("회원가입 되었습니다.");
+      alert("회원가입 되었습니다.");
       navigate("/client");
     }
   };
@@ -395,8 +414,9 @@ const SignUp = () => {
 
   return (
     <Div>
-      <Title>방주니마니</Title>
-
+      <GlobalStyle/>
+      <Top> <Title>방주니마니</Title> </Top>
+      <Do> 회원가입하기</Do>
       <form>
         <Mass1>
           <Table>
