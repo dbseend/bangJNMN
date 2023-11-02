@@ -20,65 +20,29 @@ const ClientMyPage = () => {
         e.returnValue = "";
       }
     };
-
     checkStatus(setUserData);
   }, [isModified]);
-
-  const fetchData = async (displayName) => {
-    try {
-      const docRef = doc(dbService, "user", displayName);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        return docSnap.data();
-      } else {
-        console.log("No such document!");
-        return { message: "정보 없음" };
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return { message: "데이터 불러오기 실패" };
-    }
-  };
 
   const handleEdit = () => {
     setEditMode(true);
     setPhoneNumber(userData ? userData.phoneNumber : ""); // 전화번호 수정 모드 진입 시 기존 번호를 표시
   };
 
-  const handleBlur = () => {
-    console.log("포커스 놓침");
-    // 입력값의 유효성 검사를 수행
-    const phoneNumberPattern = /^010\d{4}\d{4}$/;
-
-    if (!phoneNumberPattern.test(phoneNumber)) {
-      // 유효성 검사 실패 시 오류 메시지를 표시
-      setErrorMessage("올바른 형식이 아닙니다.");
-      setIsModified(false); // 수정되지 않은 상태로 표시
-    } else {
-      // 유효성 검사 통과 시 오류 메시지를 초기화
-      setErrorMessage("");
-      setIsModified(true); // 수정된 상태로 표시
-    }
-  };
-
   const handleFieldChange = (e) => {
-    console.log(phoneNumber);
-    console.log(e.target.value);
     const newPhoneNumber = e.target.value;
     const phoneNumberPattern = /^010\d{4}\d{4}$/;
-
-    setPhoneNumber(newPhoneNumber); // 입력 값을 항상 상태에 업데이트
-
-    // if (newPhoneNumber === "" || phoneNumberPattern.test(newPhoneNumber)) {
-    //   // 조건을 만족하거나 빈 문자열일 경우 오류 메시지 초기화
-    //   setErrorMessage("");
-    // } else {
-    //   // 조건을 만족하지 않을 경우 오류 메시지 표시
-    //   setErrorMessage("올바른 형식이 아닙니다.");
-    // }
-  };
+  
+    setPhoneNumber((prevPhoneNumber) => {
+      // Use the previous state to update the new state
+      if (newPhoneNumber === "" || phoneNumberPattern.test(newPhoneNumber)) {
+        setErrorMessage("");
+      } else {
+        setErrorMessage("   올바른 형식이 아닙니다.");
+      }
+  
+      return newPhoneNumber; // Update the state with the new value
+    });
+  };  
 
   const handleSave = async () => {
     if (errorMessage) {
@@ -89,11 +53,11 @@ const ClientMyPage = () => {
     try {
       const docRef = doc(dbService, "user", userData.name);
       await updateDoc(docRef, { phoneNumber: phoneNumber });
-      alert("전화번호 정보가 업데이트되었습니다.");
+      alert("전화번호 정보가 변경되었습니다.");
       setEditMode(false);
     } catch (error) {
       console.error("전화번호 정보 업데이트 오류:", error);
-      alert("전화번호 정보 업데이트에 실패했습니다.");
+      alert("전화번호 정보 변경에 실패했습니다.");
     }
   };
 
@@ -104,7 +68,7 @@ const ClientMyPage = () => {
     justify-content: center;
     width: 100%;
     overflow: hidden;
-    background: #cecccc;
+    background: #F4F4F4;
     position: relative;
     z-index: 1;
     margin-top: 8px;
@@ -235,10 +199,9 @@ const ClientMyPage = () => {
                   value={phoneNumber}
                   onChange={handleFieldChange}
                   placeholder="ex) 01012345678"
-                  autoFocus
                 />
                 <Button onClick={handleSave}>저장</Button>
-                <span style={{ color: "red" }}>{errorMessage}</span>
+                <span style={{ color: "red", fontSize: "12px" }}>{errorMessage}</span>
               </div>
             ) : userData ? (
               userData.phoneNumber ? (
