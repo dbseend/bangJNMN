@@ -180,9 +180,11 @@ const ClientSurvey = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkStatus(setUser);
-    setName(user.name);
-  }, []);
+    checkStatus(setUser).then(() => {
+      setName(user.name);
+    });
+  }, [user]);
+  
 
   // 각 질문에 대한 답변을 저장하는 state
   const handleSubmitAnswers = async () => {
