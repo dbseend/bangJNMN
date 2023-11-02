@@ -4,6 +4,14 @@ import { auth, dbService } from "../../api/fbase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin : 0;
+    padding: 0;
+  }
+`
 
 const Div = styled.div`
   display: flex;
@@ -11,29 +19,42 @@ const Div = styled.div`
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  width: 100%;
   overflow: hidden;
-  background: #204e4a;
+  background: #F4F4F4;
+`;
+
+const Top = styled.div`
+background:#04589C;
+width: 100%;
+height: 72px;
 `;
 
 const Title = styled.div`
-  margin-top: 85px;
-  color: #fff9f3;
-  text-align: center;
-  font-family: Roboto;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20px; /* 83.333% */
-  letter-spacing: 0.1px;
-  width: 111px;
-  height: 20px;
-  left: 665px;
+color:#FFFFFF;
+/* width: 111px;
+height: 20px; */
+top: 35px;
+left: 60px;
+font-family: Roboto;
+font-size: 24px;
+font-weight: 700;
+line-height: 20px;
+letter-spacing: 0.10000000149011612px;
+padding-top: 26px;
+padding-left: 50px;
 `;
 
+const Do = styled.div`
+font-family: Roboto;
+font-size: 20px;
+font-weight: 700;
+line-height: 20px;
+letter-spacing: 0.10000000149011612px;
+margin-top: 39px;
+margin-left: -540px;
+`;
 const Mass1 = styled.div`
-  margin-top: 90px;
-  margin-bottom: 52px;
+  margin-top: 25px;
 `;
 
 const Mass = styled.div`
@@ -393,8 +414,9 @@ const SignUp = () => {
 
   return (
     <Div>
-      <Title>방주니마니</Title>
-
+      <GlobalStyle/>
+      <Top> <Title>방주니마니</Title> </Top>
+      <Do> 회원가입하기</Do>
       <form>
         <Mass1>
           <Table>
