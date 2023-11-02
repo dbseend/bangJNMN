@@ -71,13 +71,13 @@ const ClientMyPage = () => {
 
     setPhoneNumber(newPhoneNumber); // 입력 값을 항상 상태에 업데이트
 
-    if (newPhoneNumber === "" || phoneNumberPattern.test(newPhoneNumber)) {
-      // 조건을 만족하거나 빈 문자열일 경우 오류 메시지 초기화
-      setErrorMessage("");
-    } else {
-      // 조건을 만족하지 않을 경우 오류 메시지 표시
-      setErrorMessage("올바른 형식이 아닙니다.");
-    }
+    // if (newPhoneNumber === "" || phoneNumberPattern.test(newPhoneNumber)) {
+    //   // 조건을 만족하거나 빈 문자열일 경우 오류 메시지 초기화
+    //   setErrorMessage("");
+    // } else {
+    //   // 조건을 만족하지 않을 경우 오류 메시지 표시
+    //   setErrorMessage("올바른 형식이 아닙니다.");
+    // }
   };
 
   const handleSave = async () => {
@@ -235,7 +235,7 @@ const ClientMyPage = () => {
                   value={phoneNumber}
                   onChange={handleFieldChange}
                   placeholder="ex) 01012345678"
-                  onBlur={handleBlur}
+                  autoFocus
                 />
                 <Button onClick={handleSave}>저장</Button>
                 <span style={{ color: "red" }}>{errorMessage}</span>
