@@ -199,6 +199,7 @@ const ClientMyPage = () => {
                   value={phoneNumber}
                   onChange={handleFieldChange}
                   placeholder="ex) 01012345678"
+                  autoFocus
                 />
                 <Button onClick={handleSave}>저장</Button>
                 <span style={{ color: "red", fontSize: "12px" }}>{errorMessage}</span>
