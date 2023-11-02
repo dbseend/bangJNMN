@@ -31,7 +31,7 @@ height: 72px;
 
 const Title = styled.div`
 color:#FFFFFF;
-/* width: 112px;
+/* width: 111px;
 height: 20px; */
 top: 35px;
 left: 60px;
