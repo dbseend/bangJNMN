@@ -107,30 +107,32 @@ const AdminRoom = () => {
     setRestFemale2(restUserFemale2);
   }
 
-  async function makeRoom() {}
-  //4인실
-  //새섬/새내기
-  const freshManAndHelper = male4.filter(
-    (user) => user.access === 1 || user.access === 2
-  );
-  //새섬/새내기가 4명인 경우
-  if(freshManAndHelper.length === 4){
-
+  async function makeRoom() {
+    //새섬/새내기/팀원
+    //4인실
+    //새섬/새내기
+    const freshManAndHelper = male4.filter(
+      (user) => user.access === 1 || user.access === 2
+    );
+    //새섬/새내기가 4명인 경우
+    if(freshManAndHelper.length === 4){
+  
+    }
+    //새섬/새내기가 4명 미만인 경우
+    else if(freshManAndHelper.length < 4){
+  
+    }
+    //새섬/새내기가 4명 초과인 경우
+    else if(freshManAndHelper.length > 4){
+  
+    }
+  
+    //팀원
+    const access3Num = male4.filter(
+      (user) => user.access === 3
+    );
+    //2인실
   }
-  //새섬/새내기가 4명 미만인 경우
-  else if(freshManAndHelper.length < 4){
-
-  }
-  //새섬/새내기가 4명 초과인 경우
-  else if(freshManAndHelper.length > 4){
-
-  }
-
-  //팀원
-  const access3Num = male4.filter(
-    (user) => user.access === 3
-  );
-  //2인실
 
   return (
     <div>
