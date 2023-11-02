@@ -34,7 +34,7 @@ margin-top:16px;
 margin-bottom: 16px;
 `
 const Menu = styled.div`
-width: Fixed (331px);
+/* width: Fixed (331px); */
 height: Hug (48px);
 gap: 16px;
 
