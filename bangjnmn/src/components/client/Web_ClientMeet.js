@@ -13,6 +13,7 @@ import styled from "styled-components";
 import { dbService } from "../../api/fbase";
 import { checkStatus } from "../../utils/CheckStatus";
 import { createGlobalStyle } from "styled-components";
+import icon from "../../assets/img/hh.svg";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -31,12 +32,22 @@ const Div = styled.div`
   overflow: hidden;
   background: #f4f4f4;
 `;
+const Pont = styled.p`
+color: #000;
+font-family: Roboto;
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: 20px; /* 125% */
+letter-spacing: 0.1px;
+margin-right:20px;
+`
 const Universe = styled.div`
   width: 1026px;
   /* height: 957px; */
   flex-shrink: 0;
   background: #ffffff;
-  display: flex;
+  /* display: flex; */
   flex-direction: center;
   align-items: center;
   padding-left: 189px;
@@ -45,8 +56,18 @@ const Up = styled.div`
   align-items: center;
 `;
 const Check = styled.div`
-  align-self: center;
+  display: flex;
+  /* justify-content: space-between; */
 `;
+const Cancel = styled.button`
+margin-top:10px;
+width: 88px;
+height: 38px;
+
+border-radius: 100px;
+border: 1px solid #000;
+background: #CECCCC;
+`
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
@@ -104,23 +125,26 @@ const Box = styled.div`
   padding-bottom: 16px;
   padding-left: 24px;
 `;
+const TextNIcon = styled.div`
+display: flex;
+margin-bottom: 36px;
+`
 const Text = styled.div`
   font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  /* font-weight: 500; */
   line-height: 20px; /* 142.857% */
   letter-spacing: 0.1px;
-  margin-bottom: 36px;
+  margin-bottom: 46px;
 `;
 const Text2 = styled.div`
   color: #fff;
   font-family: Roboto;
-  font-size: 20px;
+  font-size: 23px;
   font-style: normal;
   font-weight: 400;
   line-height: 40px; /* 200% */
-  margin-bottom: 26px;
 `;
 
 const DateSelect = styled.input`
@@ -136,21 +160,57 @@ const DateSelect = styled.input`
   border-color: #ffffff;
   color: #ffffff;
   margin-bottom: 24px;
+
+  /* Hide the calendar icon in webkit-based browsers (Chrome, Safari) */
+  &::-webkit-calendar-picker-indicator {
+    display: none;
+  }
 `;
+
+const IconImg =styled.img`
+margin-left:173px;
+/* display: flex; */
+/* padding: 16px 12px 8px 24px; */
+/* flex-direction: column;
+align-items: flex-start;
+gap: 36px;
+align-self: stretch; */
+`
+const ConfirmWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right:24px;
+  margin-top:50px;
+`;
+
 const Confirm = styled.div`
   cursor: pointer;
-  width: 26px;
   height: 20px;
   color: #fff;
   text-align: center;
   font-family: Roboto;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 500;
+  /* font-weight: 500; */
   line-height: 20px; /* 142.857% */
   letter-spacing: 0.1px;
 `;
-
+const Reserve = styled.button`
+display: flex;
+width: 88px;
+height: 38px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 8px;
+flex-shrink: 0;
+border-radius: 100px;
+border: 1px solid #000;
+background: #CECCCC;
+margin-top: 28px;
+margin-left:395px;
+margin-bottom: 25px;
+`
 const ClientMeet = () => {
   const [user, setUser] = useState("");
   const [selectedTime, setSelectedTime] = useState(-1);
@@ -322,12 +382,13 @@ const ClientMeet = () => {
           <Up>
             <Check>
               {user.meetTF ? (
-                <p>예약한 시간: {user.meetTime}</p>
+                <Pont>예약한 시간: {user.meetTime}</Pont>
               ) : (
-                <p>예약된 정보가 없습니다.</p>
+                <Pont>예약된 정보가 없습니다.</Pont>
               )}
+              <Cancel onClick={deleteMeet}>예약 취소하기</Cancel>
             </Check>
-
+            
             <Top> 가능한 시간을 선택하세요. </Top>
             <Table>
               <tbody>
@@ -352,18 +413,23 @@ const ClientMeet = () => {
             </Table>
           </Up>
           <Box>
-            <Text> 상담 예약 날짜 </Text>
-            <Text2> 날짜 선택 </Text2>
-            <DateSelect type="date" onChange={handleSelectDate} />
+  <Text>상담 예약 날짜</Text>
+  <TextNIcon> <Text2>날짜 선택 </Text2>
+  <IconImg src = {icon}/> </TextNIcon>
+  
+  <DateSelect type="date" onChange={handleSelectDate} />
+  
+  <ConfirmWrapper>
+    <Confirm onClick={checkTime}>확인</Confirm>
+  </ConfirmWrapper>
+</Box>
 
-            <Confirm onClick={checkTime}> 확인 </Confirm>
-          </Box>
         </Row>
+        <Reserve onClick={reserveMeet}>확인</Reserve>
       </Universe>
-      {/* <button onClick={checkTime}>조회</button>
       
-      <button onClick={reserveMeet}>예약하기</button>
-      <button onClick={deleteMeet}>예약 취소하기</button> */}
+      {/* <button onClick={checkTime}>조회</button>
+       */}
     </Div>
   );
 };
