@@ -11,7 +11,7 @@ export const checkStatus = async (setUser) => {
       const stuSnap = await getDoc(stuRef);
       if (stuSnap.exists()) {
         const access = stuSnap.data().access;
-        console.log(stuSnap.data().access);
+        // console.log(stuSnap.data().access);
         setUser(stuSnap.data());
 
         if (access === "client" && currentPath.includes("admin")) {

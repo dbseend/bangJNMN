@@ -4,6 +4,14 @@ import { auth, dbService } from "../../api/fbase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin : 0;
+    padding: 0;
+  }
+`
 
 const Div = styled.div`
   display: flex;
@@ -11,33 +19,46 @@ const Div = styled.div`
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  width: 100%;
   overflow: hidden;
-  background: #204e4a;
+  background: #F4F4F4;
+`;
+
+const Top = styled.div`
+background:#04589C;
+width: 100%;
+height: 72px;
 `;
 
 const Title = styled.div`
-  margin-top: 85px;
-  color: #fff9f3;
-  text-align: center;
-  font-family: Roboto;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20px; /* 83.333% */
-  letter-spacing: 0.1px;
-  width: 111px;
-  height: 20px;
-  left: 665px;
+color:#FFFFFF;
+/* width: 111px;
+height: 20px; */
+top: 35px;
+left: 60px;
+font-family: Roboto;
+font-size: 24px;
+font-weight: 700;
+line-height: 20px;
+letter-spacing: 0.10000000149011612px;
+padding-top: 26px;
+padding-left: 50px;
 `;
 
+const Do = styled.div`
+font-family: Roboto;
+font-size: 20px;
+font-weight: 700;
+line-height: 20px;
+letter-spacing: 0.10000000149011612px;
+margin-top: 39px;
+margin-left: -540px;
+`;
 const Mass1 = styled.div`
-  margin-top: 90px;
-  margin-bottom: 52px;
+  margin-top: 25px;
 `;
 
 const Mass = styled.div`
-  margin-bottom: 52px;
+  margin-bottom: 9px;
 `;
 const Table = styled.div`
   width: 645px;
@@ -58,7 +79,7 @@ const Typo = styled.div`
   letter-spacing: 0.1px;
   padding-top: 21px;
   padding-left: 16px;
-  margin-right: 81px;
+  margin-right: 41px;
   width: 60px;
 `;
 
@@ -85,7 +106,7 @@ const Radio = styled.input`
   }
   /* 선택된 상태에서의 배경색과 기타 스타일 */
   &:checked {
-    background-color: #204e4a; /* 선택된 상태에서의 배경색 */
+    background-color: #04589C; /* 선택된 상태에서의 배경색 */
   }
   margin-top: 21px;
   margin-right: 11px;
@@ -94,7 +115,7 @@ const Date = styled.input`
   width: 150px;
   height: 32px;
   gap: 8px;
-  border: 1px solid #79747e;
+  border: 1px solid #ffffff;
   margin-top: 12px;
   font-family: Roboto;
   font-size: 12px;
@@ -111,7 +132,7 @@ const Text = styled.input`
   height: 32px;
   padding: 6px, 8px, 6px, 16px;
   gap: 8px;
-  border: 1px solid #79747e;
+  border: 1px solid #ffffff;
   margin-top: 10px;
   font-family: Roboto;
   font-size: 12px;
@@ -124,23 +145,23 @@ const Text = styled.input`
 `;
 
 const Submit = styled.button`
-  width: 157px;
-  height: 50px;
+  width: 88px;
+  height: 38px;
   padding: 10px, 24px, 10px, 24px;
 
   border-radius: 100px;
   gap: 8px;
   background: #cecccc;
   margin-bottom: 74px;
-
+  margin-left: 560px;
   font-family: Roboto;
-  font-size: 24px;
+  font-size: 13px;
   font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.10000000149011612px;
   text-align: center;
   color: #000000;
-  border: 1px solid #79747e;
+  border: 1px solid #38373C;
 `;
 // const SubmitContainer = styled.div`
 //   display: flex;
@@ -183,7 +204,7 @@ const SearchAndDropdown = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isFocused ? "#204E4A" : "white",
+    backgroundColor: state.isFocused ? "#04589C" : "white",
     color: state.isFocused ? "white" : "black",
     fontSize: "12px",
   }),
@@ -393,8 +414,9 @@ const SignUp = () => {
 
   return (
     <Div>
-      <Title>방주니마니</Title>
-
+      <GlobalStyle/>
+      <Top> <Title>방주니마니</Title> </Top>
+      <Do> 회원가입하기</Do>
       <form>
         <Mass1>
           <Table>
@@ -444,7 +466,7 @@ const SignUp = () => {
               type="text"
               name="phoneNumber"
               onChange={changePhoneNumber}
-              placeholder="숫자만 입력하세요"
+              placeholder="숫자만 입력하세요."
               required="required"
               pattern="01[0-9]{9}"
               maxLength={13}
@@ -462,7 +484,7 @@ const SignUp = () => {
               type="text"
               name="stuNum"
               onChange={changeStuNum}
-              placeholder="학번을 입력하세요"
+              placeholder="학번을 입력하세요."
               pattern="2[0-9]{2}00[0-9]{3}"
               maxLength={8}
             />
@@ -502,22 +524,6 @@ const SignUp = () => {
           </Table>
 
           <Table>
-            <label htmlFor="dorm">
-              {" "}
-              <Typo> 거주호관 </Typo>{" "}
-            </label>
-            <Dropdown value={dorm} onChange={changeDorm}>
-              <option value="" disabled>
-                호관 선택
-              </option>
-              {dorms.map((dormOption) => (
-                <option key={dormOption} value={dormOption}>
-                  {dormOption}
-                </option>
-              ))}
-            </Dropdown>
-          </Table>
-          <Table>
             <label htmlFor="team">
               {" "}
               <Typo> 팀 </Typo>{" "}
@@ -533,6 +539,22 @@ const SignUp = () => {
               placeholder="팀 선택"
               styles={SearchAndDropdown}
             />
+          </Table>
+          <Table>
+            <label htmlFor="dorm">
+              {" "}
+              <Typo> 거주호관 </Typo>{" "}
+            </label>
+            <Dropdown value={dorm} onChange={changeDorm}>
+              <option value="" disabled>
+                호관 선택
+              </option>
+              {dorms.map((dormOption) => (
+                <option key={dormOption} value={dormOption}>
+                  {dormOption}
+                </option>
+              ))}
+            </Dropdown>
           </Table>
           <Table>
             <label htmlFor="roommateNum">
