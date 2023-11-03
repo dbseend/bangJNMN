@@ -184,11 +184,10 @@ const ClientSurvey = () => {
       setName(user.name);
     });
   }, [user]);
-  
 
   // 각 질문에 대한 답변을 저장하는 state
   const handleSubmitAnswers = async () => {
-    console.log('내 이름은', name);
+    console.log("내 이름은", name);
     const usersCollection = collection(dbService, "user"); // "user" 컬렉션으로 수정
     const userDocRef = doc(usersCollection, name); // 사용자 이름을 문서로 사용
     const subCollectionName = collection(userDocRef, "survey");
@@ -288,7 +287,7 @@ const ClientSurvey = () => {
           <br></br>
         </Question>
         <Answer>
-            <input
+          <input
             type="radio"
             name="Q1"
             value="새섬"
@@ -310,7 +309,8 @@ const ClientSurvey = () => {
             value="팀원"
             checked={answers.Q1 === "팀원"}
             onChange={handleAnswerChange}
-          />{" "}팀원
+          />{" "}
+          팀원
         </Answer>
         <Question>
           2. 평균 기상시간이 몇 시인가요? (오전)
@@ -448,7 +448,7 @@ const ClientSurvey = () => {
             checked={answers.Q4 === "5"}
             onChange={handleAnswerChange}
           />{" "}
-          5 (예민함) 
+          5 (예민함)
         </Answer>
         <Question>
           5. 자신의 빛 예민도는 어느정도 입니까?

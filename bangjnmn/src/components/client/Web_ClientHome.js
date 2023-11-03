@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { checkStatus } from "../../utils/CheckStatus";
 import styled from "styled-components";
 import main from "../../assets/img/main.png";
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
   `;
 
 const Div = styled.div`
-display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -21,10 +21,10 @@ display: flex;
   overflow: hidden;
 `;
 const MainImg = styled.img`
-width: 1500px;
-height: 900px;
+  width: 1500px;
+  height: 900px;
+`;
 
-`
 const ClientHome = () => {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
@@ -35,8 +35,8 @@ const ClientHome = () => {
 
   return (
     <Div>
-      <GlobalStyle/>
-      <MainImg src = {main}/>
+      <GlobalStyle />
+      <MainImg src={main} draggable="false" />
     </Div>
   );
 };

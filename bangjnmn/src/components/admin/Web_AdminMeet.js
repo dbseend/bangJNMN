@@ -4,21 +4,63 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { dbService } from "../../api/fbase";
 import { checkStatus } from "../../utils/CheckStatus";
+import { createGlobalStyle } from "styled-components";
+import icon from "../../assets/img/hh.svg";
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin : 0;
+    padding: 0;
+  }
+  `;
 const Div = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
   width: 100%;
+  height: 100vh;
   overflow: hidden;
+  background: #f4f4f4;
 `;
-
+const Universe = styled.div`
+  width: 1026px;
+  height: 100vh;
+  flex-shrink: 0;
+  background: #ffffff;
+  /* display: flex; */
+  flex-direction: center;
+  align-items: center;
+  padding-left: 189px;
+`;
+const Title = styled.div`
+  color: #000;
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px; /* 80% */
+  letter-spacing: 0.5px;
+  text-decoration-line: underline;
+  margin-top: 42px;
+  margin-bottom: 16px;
+`;
+const Info = styled.div`
+  color: #000;
+  font-family: Roboto;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 39px; /* 260% */
+  letter-spacing: 0.5px;
+`;
 const Table = styled.table`
   border-collapse: collapse;
   border: 1px solid black;
-  width: 200px;
+  width: 482px;
+  height: 42px;
+  flex-shrink: 0;
 `;
 
 const TableCell = styled.td`
@@ -26,6 +68,108 @@ const TableCell = styled.td`
   padding: 8px;
   text-align: center;
   cursor: pointer;
+  width: 482px;
+  height: 42px;
+  flex-shrink: 0;
+`;
+const Box = styled.div`
+  position: fixed;
+  top: 320px;
+  /* right: 300px;  */
+  width: 311px;
+  height: 276px;
+  background: #38373c;
+  color: #ffffff;
+  margin-left: 500px;
+  border-radius: 28px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 24px;
+`;
+const TextNIcon = styled.div`
+  display: flex;
+  margin-bottom: 36px;
+`;
+const Text = styled.div`
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  /* font-weight: 500; */
+  line-height: 20px; /* 142.857% */
+  letter-spacing: 0.1px;
+  margin-bottom: 46px;
+`;
+const Text2 = styled.div`
+  color: #fff;
+  font-family: Roboto;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 40px; /* 200% */
+`;
+const DateSelect = styled.input`
+  width: 263px;
+  height: 36px;
+  background: transparent;
+  display: flex;
+  padding: 8px 0px 8px 16px;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 4px 4px 0px 0px;
+  border: solid 1px #ffffff;
+  border-color: #ffffff;
+  color: #ffffff;
+  margin-bottom: 24px;
+
+  /* Hide the calendar icon in webkit-based browsers (Chrome, Safari) */
+  &::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+`;
+
+const IconImg = styled.img`
+  margin-left: 173px;
+  /* display: flex; */
+  /* padding: 16px 12px 8px 24px; */
+  /* flex-direction: column;
+align-items: flex-start;
+gap: 36px;
+align-self: stretch; */
+`;
+const ConfirmWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 24px;
+  margin-top: 50px;
+`;
+
+const Confirm = styled.div`
+  cursor: pointer;
+  height: 20px;
+  color: #fff;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  /* font-weight: 500; */
+  line-height: 20px; /* 142.857% */
+  letter-spacing: 0.1px;
+`;
+const Reserve = styled.button`
+  display: flex;
+  width: 88px;
+  height: 38px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 100px;
+  border: 1px solid #000;
+  background: #cecccc;
+  margin-top: 28px;
+  margin-left: 395px;
+  margin-bottom: 25px;
 `;
 
 const AdminMeet = () => {
@@ -56,17 +200,17 @@ const AdminMeet = () => {
 
   const checkTime = async () => {
     setReserveTF(Array(5).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
-  
+
     // 조회하고 싶은 날짜 문서 참조
     const meetReservationRef = collection(dbService, "meet");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
-  
+
     try {
       const docSnap = await getDoc(dayRef);
       if (docSnap.exists()) {
         const data = docSnap.data(); // 날짜에 해당하는 문서
         const list = Object.values(data); // 문서의 value 값들만 뽑아내기
-  
+
         // reservationList와 reserveTF를 업데이트하는 루프
         for (let i = 0; i < list.length; i++) {
           if (list[i] && list[i].time >= 0 && list[i].time < 5) {
@@ -81,7 +225,7 @@ const AdminMeet = () => {
             });
           }
         }
-  
+
         console.log("Document data:", data);
       } else {
         console.log("No such document!");
@@ -139,7 +283,7 @@ const AdminMeet = () => {
     }
   }; 
   */
-  
+
   const reserveMeet = () => {
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
@@ -173,7 +317,7 @@ const AdminMeet = () => {
       const selectedIndex = selectedTimes.indexOf(index);
 
       console.log(reserveTF[selectedIndex], selectedIndex);
-      if(reserveTF[selectedIndex] === true){
+      if (reserveTF[selectedIndex] === true) {
         alert("이미 선택된 시간입니다!");
       }
       if (selectedIndex === -1) {
@@ -198,34 +342,50 @@ const AdminMeet = () => {
 
   return (
     <Div>
-      <h1>간사님 스케줄</h1>
-      <input type="date" onChange={handleSelectDate} />
-      <button onClick={checkTime}>조회</button>
-      <Table>
-        <tbody>
-          {times.map((item, index) => (
-            <tr key={index}>
-              <TableCell
-                style={{
-                  backgroundColor: reserveTF[index]
-                    ? "red"
-                    : "",
-                  cursor: reserveTF[index] ? "not-allowed" : "pointer",
-                }}
-                onClick={() => {
-                  handleSelectTime(index);
-                }}
-              >
-                {reservationList[index] &&
-                reservationList[index].access === "client"
-                  ? item + " " + reservationList[index].name
-                  : item}
-              </TableCell>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <button onClick={reserveMeet}>예약하기</button>
+      <GlobalStyle />
+      <Universe>
+        <Title>면담 예약</Title>
+        <Info>현재 페이지에서는 면담 예약 수정이 가능합니다.</Info>
+        <Table>
+          <tbody>
+            {times.map((item, index) => (
+              <tr key={index}>
+                <TableCell
+                  style={{
+                    backgroundColor: reserveTF[index] ? "#FA9989" : "",
+                    cursor: reserveTF[index] ? "not-allowed" : "pointer",
+                  }}
+                  onClick={() => {
+                    handleSelectTime(index);
+                  }}
+                >
+                  {reservationList[index] &&
+                  reservationList[index].access === "client"
+                    ? item + " " + reservationList[index].name
+                    : item}
+                </TableCell>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+
+        <Box>
+          <Text>간사 일정 등록</Text>
+          <TextNIcon>
+            {" "}
+            <Text2>예약 날짜 </Text2>
+            <IconImg src={icon} />{" "}
+          </TextNIcon>
+
+          <DateSelect type="date" onChange={handleSelectDate} />
+
+          <ConfirmWrapper>
+            <Confirm onClick={checkTime}>확인</Confirm>
+          </ConfirmWrapper>
+        </Box>
+
+        <Reserve onClick={reserveMeet}>예약 취소</Reserve>
+      </Universe>
     </Div>
   );
 };
