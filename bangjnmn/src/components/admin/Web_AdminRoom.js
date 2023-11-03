@@ -11,6 +11,17 @@ import {
   where,
   addDoc,
 } from "firebase/firestore";
+import Select from "react-select";
+import styled from "styled-components";
+
+const Search = styled.form`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  margin-bottom: 10%;
+`;
 
 const AdminRoom = () => {
   const [user, setUser] = useState("");
@@ -27,12 +38,24 @@ const AdminRoom = () => {
   const [restMale2, setRestMale2] = useState([]);
   const [restFemale4, setRestFemale4] = useState([]);
   const [restFemale2, setRestFemale2] = useState([]);
+  const [selectedGender, setSelectedGender] = useState("");
+  const [selectedmumNum, setSelectedMemNum] = useState("");
+
+  const gender = { male: "male", female: "female" };
+  const memNum = { num4: "num4", num2: "num2" };
+
+  const [selectedOption, setSelectedOption] = useState("team");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState([]); // 새로운 상태 변수
+  const [data, setData] = useState([]);
+
+  const options = [{ value: "team", label: "팀" }];
 
   useEffect(() => {
     checkStatus(setUser);
   }, []);
 
-  async function settingUsers() {
+  async function setUsersInfo() {
     const m4 = []; //남자 4인실
     const restM4 = []; //남자 남은 4인실
     const m2 = []; //남자 2인실
@@ -147,148 +170,191 @@ const AdminRoom = () => {
     setRestFemale4(restF2);
   }
 
-  async function makeRoom() {
+  async function makeTeamRoom() {
+    //남자, 여자 => 4인실, 2인실
     sortByRole(); //새섬,새내기,팀원을 기준 오름차순으로 정렬
 
-    let m4Cnt = 0; // 남자 4인실 현재까지 만들어진 방 개수
-    let m4FhCnt = 0; //남자 4인실 새섬, 새내기 방에 들어간 인원
-    let m4TCnt = 0; //남자 4인실 팀원 방에 들어간 인원
-    let roomMates = {}; // 방 룸메 정보(최대 4명)
-    let roommateKey; // 방 룸메 번호(1~4)
-    let memData = {}; // 방 룸메 한명당 정보
-
-    //4인실
-    const freshAndHelper = male4.filter(
-      //새섬, 새내기 정보
-      (user) => user.q1 === "새내기" || user.q1 === "새섬"
-    );
-    console.log("남자 4인실: 새섬, 새내기", freshAndHelper);
-    const teamMate = male4.filter((user) => user.q1 === "팀원"); //팀원 정보
-    console.log("남자 4인실: 팀원", teamMate);
-
-    //새섬,새내기가 4명일 때
-    if (freshAndHelper.length === 4) {
-      for (let i = 0; i < 4; i++) {
-        roommateKey = `m${i + 1}`;
-        memData = {
-          name: freshAndHelper[m4FhCnt].name,
-          stsuNum: freshAndHelper[m4FhCnt].stuNum,
-        };
-        m4FhCnt++;
-        roomMates[roommateKey] = memData;
+    //4번 반복 -> 남자 4인실, 남자 2인실, 여자 4인실, 여자 2인실
+    for (let k = 0; k < 1; k++) {
+      let roomCnt = 0; // 현재까지 만들어진 방 개수
+      let fhCnt = 0; //새섬, 새내기 방에 들어간 인원
+      let m4TCnt = 0; //4인실 팀원 방에 들어간 인원
+      let roomMates = {}; // 방 룸메 정보(최대 4명)
+      let roommateKey; // 방 룸메 번호(1~4)
+      let memData = {}; // 방 룸메 한명당 정보
+      let currenRoom = []; // 현재 사용하고 있는 배열
+      let memNum = 0;
+      let gender = "";
+      let memNums = "";
+      switch (k) {
+        case 0:
+          currenRoom = male4;
+          memNum = 4;
+          gender = "남자";
+          memNums ="4인실";
+          break;
+        case 1:
+          currenRoom = male2;
+          memNum = 2;
+          gender = "남자";
+          memNums ="2인실";
+          break;
+        case 2:
+          currenRoom = female4;
+          memNum = 4;
+          gender = "여자";
+          memNums ="4인실";
+          break;
+        case 3:
+          currenRoom = female2;
+          memNum = 2;
+          gender = "여자";
+          memNums ="2인실";
+          break;
       }
-    }
-    //새섬, 새내기가 4명보다 작을 때
-    else if (freshAndHelper.length < 4) {
-      console.log("4명보다 작음 !");
 
-      for (let i = 0; i < 4; i++) {
-        roommateKey = `m${i + 1}`;
-        memData = {};
-
-        if (i < freshAndHelper.length) {
-          memData = {
-            name: freshAndHelper[m4FhCnt].name,
-            stuNum: freshAndHelper[m4FhCnt].stuNum,
-          };
-          m4FhCnt++;
-        } else {
-          memData = {
-            name: teamMate[m4Cnt].name,
-            stuNum: teamMate[m4Cnt].stuNum,
-          };
-          m4TCnt++;
-        }
-
-        roomMates[roommateKey] = memData;
-      }
-    }
-
-    //새섬, 새내기가 4명보다 많을 때 - 5,6
-    else if (freshAndHelper.length > 4) {
-      console.log("4명보다 많음 !");
-
-      for (let i = 0; i < 4; i++) {
-        roommateKey = `m${i + 1}`;
-        memData = {};
-
-        if (i < freshAndHelper.length) {
-          memData = {
-            name: freshAndHelper[m4FhCnt].name,
-            stuNum: freshAndHelper[m4FhCnt].stuNum,
-          };
-          m4FhCnt++;
-        } else {
-          memData = {
-            name: teamMate[m4TCnt].name,
-            stuNum: teamMate[m4TCnt].stuNum,
-          };
-          m4TCnt++;
-        }
-
-        roomMates[roommateKey] = memData;
-      }
-    }
-
-    try {
-      const roomRef = doc(
-        dbService,
-        "room",
-        "카이퍼",
-        "박찬송",
-        "남자",
-        "4인실",
-        `${m4Cnt + 1}번방` // 문자열에 변수 값 넣으려면 백틱(`) 사용
+      //4인실
+      const freshAndHelper = currenRoom.filter(
+        //새섬, 새내기 정보
+        (user) => user.q1 === "새내기" || user.q1 === "새섬"
       );
-      await setDoc(roomRef, roomMates);
-      console.log("데이터를 저장하였습니다.");
-      m4Cnt++;
-      console.log(m4Cnt, " 번 방입니다");
-      roomMates = {};
-      roommateKey = 0;
-      memData = {};
-    } catch (error) {
-      console.error("데이터를 저장하지 못 했습니다.", error);
-    }
+      console.log("4인실: 새섬, 새내기", freshAndHelper);
+      const teamMate = currenRoom.filter((user) => user.q1 === "팀원"); //팀원 정보
+      console.log("4인실: 팀원", teamMate);
 
-    //나머지
-    let j = 0;
-    console.log(male4.length - (m4FhCnt + m4TCnt));
-    const restMem = male4.length - (m4FhCnt + m4TCnt);
-    for (let i = 0; i < restMem; i++) {
-      roommateKey = `m${j + 1}`;
-      memData = {
-        name: teamMate[m4TCnt].name,
-        stsuNum: teamMate[m4TCnt].stuNum,
-      };
-      m4TCnt++;
-      roomMates[roommateKey] = memData;
-      j++;
+      if (memNum === 4) {
+        //새섬,새내기가 4명일 때
+        if (freshAndHelper.length === 4) {
+          for (let i = 0; i < memNum; i++) {
+            roommateKey = `m${i + 1}`;
+            memData = {
+              name: freshAndHelper[fhCnt].name,
+              stsuNum: freshAndHelper[fhCnt].stuNum,
+            };
+            fhCnt++;
+            roomMates[roommateKey] = memData;
+          }
+        }
+        //새섬, 새내기가 4명보다 작을 때
+        else if (freshAndHelper.length < 4) {
+          console.log("4명보다 작음 !");
 
-      if (j % 4 === 0) {
-        //방 인원수 채웠을 때
-        console.log("4명 채웠습니당");
+          for (let i = 0; i < memNum; i++) {
+            roommateKey = `m${i + 1}`;
+            memData = {};
+
+            if (i < freshAndHelper.length) {
+              memData = {
+                name: freshAndHelper[fhCnt].name,
+                stuNum: freshAndHelper[fhCnt].stuNum,
+              };
+              fhCnt++;
+            } else {
+              memData = {
+                name: teamMate[m4TCnt].name,
+                stuNum: teamMate[m4TCnt].stuNum,
+              };
+              m4TCnt++;
+            }
+
+            roomMates[roommateKey] = memData;
+          }
+        }
+
+        //새섬, 새내기가 4명보다 많을 때 - 5,6 => 2/3, 3/3 으로 나누기
+        else if (freshAndHelper.length > memNum) {
+          console.log("4명보다 많음 !");
+
+          for (let i = 0; i < memNum; i++) {
+            roommateKey = `m${i + 1}`;
+            memData = {};
+
+            if (i < 3) {
+              memData = {
+                name: freshAndHelper[fhCnt].name,
+                stuNum: freshAndHelper[fhCnt].stuNum,
+              };
+              fhCnt++;
+            } else {
+              memData = {
+                name: teamMate[m4TCnt].name,
+                stuNum: teamMate[m4TCnt].stuNum,
+              };
+              m4TCnt++;
+            }
+
+            roomMates[roommateKey] = memData;
+          }
+        }
+
         try {
           const roomRef = doc(
             dbService,
             "room",
             "카이퍼",
             "박찬송",
-            "남자",
-            "4인실",
-            `${m4Cnt + 1}번방` // 문자열에 변수 값 넣으려면 백틱(`) 사용
+            gender,
+            memNums,
+            `${roomCnt + 1}번방` // 문자열에 변수 값 넣으려면 백틱(`) 사용
           );
           await setDoc(roomRef, roomMates);
           console.log("데이터를 저장하였습니다.");
-          m4Cnt++;
-          console.log(m4Cnt, " 번 방입니다");
+          roomCnt++;
+          console.log(roomCnt, " 번 방입니다");
           roomMates = {};
           roommateKey = 0;
           memData = {};
         } catch (error) {
           console.error("데이터를 저장하지 못 했습니다.", error);
         }
-        j = 0;
+      }
+
+      //나머지 + 2인실
+      let j = 0;
+      const restMem = currenRoom.length - (fhCnt + m4TCnt);
+      for (let i = 0; i < restMem; i++) {
+        roommateKey = `m${j + 1}`;
+        if (fhCnt < freshAndHelper.length) {
+          memData = {
+            name: freshAndHelper[fhCnt].name,
+            stsuNum: freshAndHelper[fhCnt].stuNum,
+          };
+          fhCnt++;
+        } else {
+          memData = {
+            name: teamMate[m4TCnt].name,
+            stsuNum: teamMate[m4TCnt].stuNum,
+          };
+          m4TCnt++;
+        }
+        roomMates[roommateKey] = memData;
+        j++;
+
+        if (j % memNum === 0) {
+          //방 인원수 채웠을 때
+          console.log("4명 채웠습니당");
+          try {
+            const roomRef = doc(
+              dbService,
+              "room",
+              "카이퍼",
+              "박찬송",
+              gender,
+              memNums,
+              `${roomCnt + 1}번방` // 문자열에 변수 값 넣으려면 백틱(`) 사용
+            );
+            await setDoc(roomRef, roomMates);
+            console.log("데이터를 저장하였습니다.");
+            roomCnt++;
+            console.log(roomCnt, " 번 방입니다");
+            roomMates = {};
+            roommateKey = 0;
+            memData = {};
+          } catch (error) {
+            console.error("데이터를 저장하지 못 했습니다.", error);
+          }
+          j = 0;
+        }
       }
     }
   }
@@ -318,11 +384,52 @@ const AdminRoom = () => {
     setMale2(sortedFemale2);
   };
 
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    if (selectedOption && searchTerm) {
+      let filteredUsers;
+
+      filteredUsers = data.filter(
+        (user) =>
+          user[selectedOption] &&
+          user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      setFilteredData(filteredUsers);
+    } else {
+      // 선택된 옵션이 없거나 검색어가 없으면 필터링된 데이터를 초기화
+      setFilteredData([]);
+    }
+  };
+
+  const handleInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <div>
       <h1>AdminRoom</h1>
-      <button onClick={settingUsers}>방배정</button>
-      <button onClick={makeRoom}>방짜줘</button>
+      <Search onSubmit={handleSearchSubmit}>
+        <Select
+          options={options}
+          onChange={(option) => setSelectedOption(option.value)}
+          placeholder="Select a search type"
+        />
+
+        <input
+          style={{ marginLeft: "8px" }}
+          type="text"
+          value={searchTerm}
+          onChange={handleInputChange}
+          placeholder="검색어 입력"
+        />
+        <button type="submit" style={{ marginLeft: "8px" }}>
+          🔍
+        </button>
+      </Search>
+      <button onClick={setUsersInfo}>방배정</button>
+      <button onClick={makeTeamRoom}>방짜줘</button>
+      {/* <button onClick={makeRestRoom}>방짜줘</button> */}
       <button onClick={info}>정보 확인</button>
     </div>
   );
