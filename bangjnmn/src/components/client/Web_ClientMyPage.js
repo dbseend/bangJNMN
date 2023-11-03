@@ -71,7 +71,6 @@ const ClientMyPage = () => {
     background: #F4F4F4;
     position: relative;
     z-index: 1;
-    margin-top: 8px;
   `;
 
   const Rect1 = styled.div`
@@ -199,6 +198,7 @@ const ClientMyPage = () => {
                   value={phoneNumber}
                   onChange={handleFieldChange}
                   placeholder="ex) 01012345678"
+                  autoFocus
                 />
                 <Button onClick={handleSave}>저장</Button>
                 <span style={{ color: "red", fontSize: "12px" }}>{errorMessage}</span>
