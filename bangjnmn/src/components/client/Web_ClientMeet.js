@@ -68,6 +68,7 @@ const Cancel = styled.button`
   border: 1px solid #000;
   background: #cecccc;
 `;
+
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
@@ -388,7 +389,7 @@ const ClientMeet = () => {
               )}
               <Cancel onClick={deleteMeet}>예약 취소하기</Cancel>
             </Check>
-
+            
             <Top> 가능한 시간을 선택하세요. </Top>
             <Table>
               <tbody>
