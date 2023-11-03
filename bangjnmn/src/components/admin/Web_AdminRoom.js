@@ -7,20 +7,61 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 import styled from "styled-components";
 import { dbService } from "../../api/fbase";
 import { checkStatus } from "../../utils/CheckStatus";
 
-const Search = styled.form`
+const Div = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 30%;
-  margin-bottom: 10%;
+  margin: 0 auto;
+  width: 100%;
+  overflow: hidden;
 `;
+
+const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const AsignRoomButton = styled.button`
+  width: 88px;
+  height: 38px;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 100px;
+  border: 1px solid #000;
+  background: #cecccc;
+`;
+
+const SearchAndDropdown = {
+  control: (provided, state) => ({
+    ...provided,
+    border: "1px solid #79747E",
+    width: "150px",
+    height: "32px",
+    gap: "8px",
+    marginTop: "9px",
+    fontFamily: "Roboto",
+    fontSize: "12px",
+    fontStyle: "normal",
+    fontWeight: "700",
+    lineHeight: "20px",
+    letterSpacing: "0.1px",
+    borderRadius: "10px",
+    cursor: state.isFocused ? "pointer" : "default",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? "#04589C" : "white",
+    color: state.isFocused ? "white" : "black",
+    fontSize: "12px",
+  }),
+};
 
 const AdminRoom = () => {
   const [user, setUser] = useState("");
@@ -29,6 +70,7 @@ const AdminRoom = () => {
   const [dorm, setDorm] = useState("");
   const [selectedRc, setSelectedRc] = useState("");
   const [selectedTeam, setSeletedTeam] = useState("");
+  const [selectedStandard, setSeletedStandard] = useState("");
   const [male4, setMale4] = useState([]);
   const [male2, setMale2] = useState([]);
   const [female4, setFemale4] = useState([]);
@@ -42,12 +84,31 @@ const AdminRoom = () => {
   const female4Ref = useRef([]);
   const female2Ref = useRef([]);
 
-  const [selectedOption, setSelectedOption] = useState("team");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredData, setFilteredData] = useState([]); // 새로운 상태 변수
-  const [data, setData] = useState([]);
+  const optionsTeam = [
+    { value: "김군오", label: "김군오 교수님 팀" },
+    { value: "김민재", label: "김민재 교수님 팀" },
+    { value: "김제니", label: "김제니 교수님 팀" },
+    { value: "김주일", label: "김주일 교수님 팀" },
+    { value: "도형기", label: "도형기 교수님 팀" },
+    { value: "라영안", label: "라영안 교수님 팀" },
+    { value: "박찬송", label: "박찬송 교수님 팀" },
+    { value: "신성만", label: "신성만 교수님 팀" },
+    { value: "용환기", label: "용환기 교수님 팀" },
+    { value: "이정민", label: "이정민 교수님 팀" },
+    { value: "정모니카", label: "정모니카 교수님 팀" },
+    { value: "제양규", label: "제양규 교수님 팀" },
+    { value: "조규봉", label: "조규봉 교수님 팀" },
+    { value: "조현지", label: "조현지 교수님 팀" },
+    { value: "차승만", label: "차승만 교수님 팀" },
+    { value: "최혜봉", label: "최혜봉 교수님 팀" },
+    { value: "황성수", label: "황성수 교수님 팀" },
+  ];
 
-  const options = [{ value: "team", label: "팀" }];
+  const optionsStandard = [
+    { value: "수면패턴", label: "수면패턴" },
+    { value: "예민도", label: "예민도" },
+    { value: "삶의질", label: "삶의질" },
+  ];
 
   useEffect(() => {
     checkStatus(setUser);
@@ -56,6 +117,7 @@ const AdminRoom = () => {
   async function assignRoom() {
     await setUsersInfo(); // setUsersInfo가 완료될 때까지 기다립니다.
     makeTeamRoom(); // setUsersInfo가 완료된 후에 실행됩니다.
+    makeRestRoom(); // setUsersInfo가 완료된 후에 실행됩니다.
   }
 
   async function setUsersInfo() {
@@ -73,7 +135,7 @@ const AdminRoom = () => {
       userCollection,
       where("access", "==", "client"), // client 정보만 불러오도록
       where("rc", "==", "카이퍼"), // rc 필터
-      where("team", "==", "박찬송 교수님 팀"), // 팀 필터
+      where("team", "==", selectedTeam), // 팀 필터
       where("dorm", "==", "하용조관") // 생활관 필터
     );
     const clientInfo = await getDocs(q); // 필터(client, rc, 팀, 생활관)를 통해 나온 유저 정보
@@ -163,24 +225,24 @@ const AdminRoom = () => {
       }
     }
 
-    setMale4(m4);
-    setRestMale4(restM4);
-    setMale2(m2);
-    setRestMale2(restM2);
-    setFemale4(f4);
-    setRestFemale4(restF4);
-    setFemale2(f2);
-    setRestFemale2(restF2);
+    // setMale4(m4);
+    // setRestMale4(restM4);
+    // setMale2(m2);
+    // setRestMale2(restM2);
+    // setFemale4(f4);
+    // setRestFemale4(restF4);
+    // setFemale2(f2);
+    // setRestFemale2(restF2);
+    male4Ref.current = m4;
+    male2Ref.current = m2;
+    female4Ref.current = f4;
+    female2Ref.current = f2;
 
     console.log("다 끝남 유저인포!");
   }
 
   async function makeTeamRoom() {
     console.log("방 배정 해볼까?");
-    console.log(male4);
-    console.log(male2);
-    console.log(female4);
-    console.log(female2);
     //남자, 여자 => 4인실, 2인실
     sortByRole(); //새섬,새내기,팀원을 기준 오름차순으로 정렬
 
@@ -199,25 +261,25 @@ const AdminRoom = () => {
 
       switch (k) {
         case 0:
-          currenRoom = male4;
+          currenRoom = male4Ref.current;
           memNum = 4;
           gender = "남자";
           memNums = "4인실";
           break;
         case 1:
-          currenRoom = male2;
+          currenRoom = male2Ref.current;
           memNum = 2;
           gender = "남자";
           memNums = "2인실";
           break;
         case 2:
-          currenRoom = female4;
+          currenRoom = female4Ref.current;
           memNum = 4;
           gender = "여자";
           memNums = "4인실";
           break;
         case 3:
-          currenRoom = female2;
+          currenRoom = female2Ref.current;
           memNum = 2;
           gender = "여자";
           memNums = "2인실";
@@ -232,6 +294,26 @@ const AdminRoom = () => {
       // console.log("4인실: 새섬, 새내기", freshAndHelper);
       const teamMate = currenRoom.filter((user) => user.q1 === "팀원"); //팀원 정보
       // console.log("4인실: 팀원", teamMate);
+
+      //1. 수면 패턴: 기상시간 + 취침시간
+      //2. 예민도: 합
+      //3. 삶의 질: 합
+      //청소주기는 기간이 짧으면 점수 작게 부여, 기간이 길면 점수를 크게 부여함.
+      //담배는 안피면 점수 낮게, 피면 점수 높게 부여함.
+      if (selectedStandard === "수면패턴") {
+        freshAndHelper.sort((a, b) => a.q2 + a.q3 - (b.q2 + b.q3));
+        teamMate.sort((a, b) => a.q2 + a.q3 - (b.q2 + b.q3));
+      } else if (selectedStandard === "예민도") {
+        freshAndHelper.sort(
+          (a, b) => a.q4 + a.q5 + a.q6 + a.q7 - (b.q4 + b.q5 + b.q7 + b.q8)
+        );
+        teamMate.sort(
+          (a, b) => a.q4 + a.q5 + a.q6 + a.q7 - (b.q4 + b.q5 + b.q7 + b.q8)
+        );
+      } else if (selectedStandard === "삶의질") {
+        freshAndHelper.sort((a, b) => a.q8 + a.q9 - (b.q8 + b.q9));
+        teamMate.sort((a, b) => a.q8 + a.q9 - (b.q8 + b.q9));
+      }
 
       if (memNum === 4 && currenRoom.length !== 0) {
         //새섬,새내기가 4명일 때
@@ -303,7 +385,7 @@ const AdminRoom = () => {
             dbService,
             "room",
             "카이퍼",
-            "박찬송",
+            selectedTeam,
             gender,
             memNums,
             `${roomCnt + 1}번방` // 문자열에 변수 값 넣으려면 백틱(`) 사용
@@ -349,7 +431,7 @@ const AdminRoom = () => {
               dbService,
               "room",
               "카이퍼",
-              "박찬송",
+              selectedTeam,
               gender,
               memNums,
               `${roomCnt + 1}번방` // 문자열에 변수 값 넣으려면 백틱(`) 사용
@@ -394,54 +476,42 @@ const AdminRoom = () => {
     setMale2(sortedFemale2);
   };
 
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    if (selectedOption && searchTerm) {
-      let filteredUsers;
-
-      filteredUsers = data.filter(
-        (user) =>
-          user[selectedOption] &&
-          user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      setFilteredData(filteredUsers);
-    } else {
-      // 선택된 옵션이 없거나 검색어가 없으면 필터링된 데이터를 초기화
-      setFilteredData([]);
-    }
+  const changeTeam = (selectedTeam) => {
+    setSeletedTeam(selectedTeam);
+    console.log(selectedTeam);
   };
 
-  const handleInputChange = (event) => {
-    setSearchTerm(event.target.value);
+  const changeStandard = (selectedStandard) => {
+    setSeletedStandard(selectedStandard);
+    console.log(selectedStandard);
   };
 
   return (
-    <div>
-      <h1>AdminRoom</h1>
-      <Search onSubmit={handleSearchSubmit}>
+    <Div>
+      <SelectContainer>
         <Select
-          options={options}
-          onChange={(option) => setSelectedOption(option.value)}
-          placeholder="Select a search type"
-        />
-
-        <input
-          style={{ marginLeft: "8px" }}
+          onChange={changeTeam}
           type="text"
-          value={searchTerm}
-          onChange={handleInputChange}
-          placeholder="검색어 입력"
+          name="team"
+          value={selectedTeam}
+          options={optionsTeam}
+          isSearchable
+          placeholder="팀 선택"
+          styles={SearchAndDropdown}
         />
-        <button type="submit" style={{ marginLeft: "8px" }}>
-          🔍
-        </button>
-      </Search>
-      <button onClick={setUsersInfo}>유저세팅</button>
-      <button onClick={makeTeamRoom}>방배정</button>
-      <button onClick={assignRoom}>한번에 가보자고</button>
-      <button onClick={info}>정보 확인</button>
-    </div>
+        <Select
+          onChange={changeStandard}
+          type="text"
+          name="standard"
+          value={selectedStandard}
+          options={optionsStandard}
+          isSearchable
+          placeholder="기준 선택"
+          styles={SearchAndDropdown}
+        />
+        <AsignRoomButton onClick={assignRoom}>배정하기</AsignRoomButton>
+      </SelectContainer>
+    </Div>
   );
 };
 
