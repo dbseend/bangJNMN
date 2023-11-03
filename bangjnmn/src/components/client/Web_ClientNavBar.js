@@ -14,13 +14,11 @@ const Div = styled.div`
   display: flex;
   flex-direction: center;
   align-items: center; 
-  /* justify-content: center;  */
   overflow: hidden;
   display: flex;
   height: 30px;
   gap: 48px;
   height: 72px;
-  border-bottom: 1px solid var(--cool-gray-20, #DDE1E6);
   background: #04589C;
 `;
 const Home = styled.div`
@@ -38,6 +36,7 @@ margin-left:50px;
 margin-right:770px;
 margin-top:16px;
 margin-bottom: 16px;
+cursor:pointer;
 `
 const Menu = styled.div`
 /* width: Fixed (331px); */
@@ -53,9 +52,8 @@ line-height: 16px;
 letter-spacing: 0em;
 text-align: left;
 color: #fff9f3;
-text-decoration: ${(props) => (props.isSelected ? "underline" : "none")};
-`
 
+`
 // const Logout = styled.button`
 // width: 105px;
 // height: 40px;
@@ -87,46 +85,7 @@ line-height: 16px;
 letter-spacing: 0em;
 text-align: left;
 color: #fff9f3;
-
-/* padding: 0px, 16px, 0px, 16px;
-gap: 10px; */
 `
-// const Merong1 = styled.div`
-// width: 105px;
-// height: hug 40px;
-// cursor: pointer;
-// font-family: Roboto;
-// font-size: 16px;
-// font-weight: 500;
-// line-height: 16px;
-// letter-spacing: 0em;
-// text-align: center;
-// color: #fff9f3;
-// `
-// const Merong2 = styled.div`
-// width: 105px;
-// height: hug 40px;
-// cursor: pointer;
-// font-family: Roboto;
-// font-size: 16px;
-// font-weight: 500;
-// line-height: 16px;
-// letter-spacing: 0em;
-// text-align: center;
-// color: #fff9f3;
-// `
-// const Merong3 = styled.div`
-// width: 105px;
-// height: hug 40px;
-// cursor: pointer;
-// font-family: Roboto;
-// font-size: 16px;
-// font-weight: 500;
-// line-height: 16px;
-// letter-spacing: 0em;
-// text-align: center;
-// color: #fff9f3;
-// `
 const Web_clientNavBar = () => {
   const navigate = useNavigate();
 
