@@ -21,8 +21,8 @@ display: flex;
   overflow: hidden;
 `;
 const MainImg = styled.img`
-width: 1317px;
-/* height: 963px; */
+width: 1500px;
+height: 900px;
 
 `
 const ClientHome = () => {

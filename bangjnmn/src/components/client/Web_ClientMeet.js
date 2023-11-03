@@ -95,11 +95,12 @@ const TableCell = styled.td`
 const Box = styled.div`
   position: fixed;
   top: 320px; 
-  right: 300px; 
+  /* right: 300px;  */
   width: 311px;
   height: 276px;
   background: #38373C;
   color: #ffffff;
+  margin-left:500px;
   border-radius: 28px;
   padding-top: 16px;
   padding-bottom: 16px;
