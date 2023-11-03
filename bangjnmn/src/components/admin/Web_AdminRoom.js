@@ -186,25 +186,25 @@ const AdminRoom = () => {
           currenRoom = male4;
           memNum = 4;
           gender = "남자";
-          memNums ="4인실";
+          memNums = "4인실";
           break;
         case 1:
           currenRoom = male2;
           memNum = 2;
           gender = "남자";
-          memNums ="2인실";
+          memNums = "2인실";
           break;
         case 2:
           currenRoom = female4;
           memNum = 4;
           gender = "여자";
-          memNums ="4인실";
+          memNums = "4인실";
           break;
         case 3:
           currenRoom = female2;
           memNum = 2;
           gender = "여자";
-          memNums ="2인실";
+          memNums = "2인실";
           break;
       }
 
