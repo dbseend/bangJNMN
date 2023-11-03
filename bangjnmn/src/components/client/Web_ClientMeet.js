@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
 
 const Div = styled.div`
   display: flex;
-  flex-direction: center;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
@@ -367,6 +367,7 @@ const ClientMeet = () => {
       <button onClick={reserveMeet}>예약하기</button>
       <button onClick={deleteMeet}>예약 취소하기</button> */}
       
+
     </Div>
   );
 };
