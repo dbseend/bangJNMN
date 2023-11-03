@@ -16,7 +16,7 @@ const Div = styled.div`
   background: #cecccc;
   position: relative;
   z-index: 1;
-  margin-top: 8px;
+  //margin-top: 1px;
 `;
 
 const Rect1 = styled.div`
