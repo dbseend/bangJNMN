@@ -106,7 +106,7 @@ const Radio = styled.input`
   }
   /* 선택된 상태에서의 배경색과 기타 스타일 */
   &:checked {
-    background-color: #204e4a; /* 선택된 상태에서의 배경색 */
+    background-color: #04589C; /* 선택된 상태에서의 배경색 */
   }
   margin-top: 21px;
   margin-right: 11px;
@@ -204,7 +204,7 @@ const SearchAndDropdown = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isFocused ? "#204E4A" : "white",
+    backgroundColor: state.isFocused ? "#04589C" : "white",
     color: state.isFocused ? "white" : "black",
     fontSize: "12px",
   }),

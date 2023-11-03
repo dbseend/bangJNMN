@@ -12,10 +12,19 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { dbService } from "../../api/fbase";
 import { checkStatus } from "../../utils/CheckStatus";
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin : 0;
+    padding: 0;
+  }
+  `;
+
 
 const Div = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
@@ -201,10 +210,10 @@ const ClientMeet = () => {
 
   return (
     <Div>
-      <h1>원하는 상담날짜</h1>
-      <input type="date" onChange={handleSelectDate} />
-      <button onClick={checkTime}>조회</button>
-      <Table>
+      <GlobalStyle/>
+      <div> 
+        <div> 가능한 시간을 선택하세요. </div>
+        <Table>
         <tbody>
           {times.map((item, index) => (
             <tr key={index}>
@@ -225,13 +234,28 @@ const ClientMeet = () => {
           ))}
         </tbody>
       </Table>
+      </div>
+
+      <div>
+        <div> 상담 예약 날짜 </div>
+        <input type="date" onChange={handleSelectDate} />
+        <div> 
+          <div> 취소 </div>
+          <div onClick={checkTime}> 확인 </div>
+        </div>
+      </div>
+      
+      
+
+      {/* <button onClick={checkTime}>조회</button> */}
+      
       <button onClick={reserveMeet}>예약하기</button>
-      {user.meetTF ? (
+      {/* {user.meetTF ? (
         <p>예약한 시간: {user.meetTime}</p>
       ) : (
         <p>예약된 정보가 없습니다.</p>
       )}
-      <button onClick={deleteMeet}>예약 취소하기</button>
+      <button onClick={deleteMeet}>예약 취소하기</button> */}
     </Div>
   );
 };
