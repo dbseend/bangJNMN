@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { checkStatus } from "../../utils/CheckStatus";
-import { dbService } from "../../api/fbase";
 import {
   collection,
   doc,
-  setDoc,
   getDoc,
   getDocs,
   query,
+  setDoc,
   where,
-  addDoc,
 } from "firebase/firestore";
+import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import styled from "styled-components";
+import { dbService } from "../../api/fbase";
+import { checkStatus } from "../../utils/CheckStatus";
 
 const Search = styled.form`
   display: flex;
@@ -38,6 +37,10 @@ const AdminRoom = () => {
   const [restMale2, setRestMale2] = useState([]);
   const [restFemale4, setRestFemale4] = useState([]);
   const [restFemale2, setRestFemale2] = useState([]);
+  const male4Ref = useRef([]);
+  const male2Ref = useRef([]);
+  const female4Ref = useRef([]);
+  const female2Ref = useRef([]);
 
   const [selectedOption, setSelectedOption] = useState("team");
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,22 +53,27 @@ const AdminRoom = () => {
     checkStatus(setUser);
   }, []);
 
+  async function assignRoom() {
+    await setUsersInfo(); // setUsersInfo가 완료될 때까지 기다립니다.
+    makeTeamRoom(); // setUsersInfo가 완료된 후에 실행됩니다.
+  }
+
   async function setUsersInfo() {
-    const m4 = []; //남자 4인실
-    const restM4 = []; //남자 남은 4인실
-    const m2 = []; //남자 2인실
-    const restM2 = []; //남자 남은 2인실
-    const f4 = []; //여자 4인실
-    const restF4 = []; //여자 남은 4인실
-    const f2 = []; //여자 2인실
-    const restF2 = []; //여자 남은 2인실
+    const m4 = []; // 남자 4인실
+    const restM4 = []; // 남자 남은 4인실
+    const m2 = []; // 남자 2인실
+    const restM2 = []; // 남자 남은 2인실
+    const f4 = []; // 여자 4인실
+    const restF4 = []; // 여자 남은 4인실
+    const f2 = []; // 여자 2인실
+    const restF2 = []; // 여자 남은 2인실
 
     const userCollection = collection(dbService, "user");
     const q = query(
       userCollection,
-      where("access", "==", "client"), //client 정보만 불러오도록
+      where("access", "==", "client"), // client 정보만 불러오도록
       where("rc", "==", "카이퍼"), // rc 필터
-      where("team", "==", "박찬송 교수님 팀"), //팀 필터
+      where("team", "==", "박찬송 교수님 팀"), // 팀 필터
       where("dorm", "==", "하용조관") // 생활관 필터
     );
     const clientInfo = await getDocs(q); // 필터(client, rc, 팀, 생활관)를 통해 나온 유저 정보
@@ -117,7 +125,7 @@ const AdminRoom = () => {
       }
     }
 
-    //남자 4인실 인원 남는 경우
+    // 남자 4인실 인원 남는 경우
     let remainder, l;
     if (m4.length % 4 !== 0) {
       l = m4.length;
@@ -127,7 +135,7 @@ const AdminRoom = () => {
         m4.pop();
       }
     }
-    //남자 2인실 인원 남는 경우
+    // 남자 2인실 인원 남는 경우
     if (m2.length % 2 !== 0) {
       l = m2.length;
       remainder = l % 2;
@@ -136,7 +144,7 @@ const AdminRoom = () => {
         m2.pop();
       }
     }
-    //여자 4인실 인원 남는 경우
+    // 여자 4인실 인원 남는 경우
     if (f4.length % 4 !== 0) {
       l = f4.length;
       remainder = l % 4;
@@ -145,7 +153,7 @@ const AdminRoom = () => {
         f4.pop();
       }
     }
-    //여자 2인실 인원 남는 경우
+    // 여자 2인실 인원 남는 경우
     if (f2.length % 2 !== 0) {
       l = f2.length;
       remainder = l % 2;
@@ -162,15 +170,22 @@ const AdminRoom = () => {
     setFemale4(f4);
     setRestFemale4(restF4);
     setFemale2(f2);
-    setRestFemale4(restF2);
+    setRestFemale2(restF2);
+
+    console.log("다 끝남 유저인포!");
   }
 
   async function makeTeamRoom() {
+    console.log("방 배정 해볼까?");
+    console.log(male4);
+    console.log(male2);
+    console.log(female4);
+    console.log(female2);
     //남자, 여자 => 4인실, 2인실
     sortByRole(); //새섬,새내기,팀원을 기준 오름차순으로 정렬
 
     //4번 반복 -> 남자 4인실, 남자 2인실, 여자 4인실, 여자 2인실
-    for (let k = 0; k < 2; k++) {
+    for (let k = 0; k < 4; k++) {
       let roomCnt = 0; // 현재까지 만들어진 방 개수
       let fhCnt = 0; //새섬, 새내기 방에 들어간 인원
       let m4TCnt = 0; //4인실 팀원 방에 들어간 인원
@@ -214,9 +229,9 @@ const AdminRoom = () => {
         //새섬, 새내기 정보
         (user) => user.q1 === "새내기" || user.q1 === "새섬"
       );
-      console.log("4인실: 새섬, 새내기", freshAndHelper);
+      // console.log("4인실: 새섬, 새내기", freshAndHelper);
       const teamMate = currenRoom.filter((user) => user.q1 === "팀원"); //팀원 정보
-      console.log("4인실: 팀원", teamMate);
+      // console.log("4인실: 팀원", teamMate);
 
       if (memNum === 4 && currenRoom.length !== 0) {
         //새섬,새내기가 4명일 때
@@ -355,14 +370,13 @@ const AdminRoom = () => {
     }
   }
 
+  async function makeRestRoom() {}
+
   function info() {
-    // console.log(male4.length);
-    // console.log(restMale4.length);
-    // console.log("남자 4인실", male4);
-    // console.log("남자 4인실 남음", "제발 1명 나와라", restMale4);
+    console.log("남자 4인실", male4);
     console.log("남자 2인실", male2);
-    // console.log("여자 4인실", female4.length);
-    // console.log("여자 2인실", female2.length);
+    console.log("여자 4인실", female4);
+    console.log("여자 2인실", female2);
   }
 
   // 새섬,새내기,팀원을 기준으로 오름차순으로 정렬
@@ -423,9 +437,9 @@ const AdminRoom = () => {
           🔍
         </button>
       </Search>
-      <button onClick={setUsersInfo}>방배정</button>
-      <button onClick={makeTeamRoom}>방짜줘</button>
-      {/* <button onClick={makeRestRoom}>방짜줘</button> */}
+      <button onClick={setUsersInfo}>유저세팅</button>
+      <button onClick={makeTeamRoom}>방배정</button>
+      <button onClick={assignRoom}>한번에 가보자고</button>
       <button onClick={info}>정보 확인</button>
     </div>
   );
