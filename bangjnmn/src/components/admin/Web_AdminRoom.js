@@ -38,11 +38,6 @@ const AdminRoom = () => {
   const [restMale2, setRestMale2] = useState([]);
   const [restFemale4, setRestFemale4] = useState([]);
   const [restFemale2, setRestFemale2] = useState([]);
-  const [selectedGender, setSelectedGender] = useState("");
-  const [selectedmumNum, setSelectedMemNum] = useState("");
-
-  const gender = { male: "male", female: "female" };
-  const memNum = { num4: "num4", num2: "num2" };
 
   const [selectedOption, setSelectedOption] = useState("team");
   const [searchTerm, setSearchTerm] = useState("");
