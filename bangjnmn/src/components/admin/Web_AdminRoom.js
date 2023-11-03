@@ -492,7 +492,7 @@ const AdminRoom = () => {
         <Select
           onChange={changeTeam}
           type="text"
-          name="team"
+          name="selectedTeam"
           value={selectedTeam}
           options={optionsTeam}
           isSearchable
