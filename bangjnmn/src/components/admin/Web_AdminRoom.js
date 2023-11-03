@@ -105,13 +105,13 @@ const AdminRoom = () => {
           if (userData.gender === "남자") {
             m4.push(userAndSurveyData);
           } else if (userData.gender === "여자") {
-            setFemale4((prevArray) => [...prevArray, userAndSurveyData]);
+            f4.push(userAndSurveyData);
           }
         } else if (userData.roommateNum === "room2") {
           if (userData.gender === "남자") {
-            setMale2((prevArray) => [...prevArray, userAndSurveyData]);
+            m2.push(userAndSurveyData);
           } else if (userData.gender === "여자") {
-            setFemale2((prevArray) => [...prevArray, userAndSurveyData]);
+            f2.push(userAndSurveyData);
           }
         }
       }
@@ -170,7 +170,7 @@ const AdminRoom = () => {
     sortByRole(); //새섬,새내기,팀원을 기준 오름차순으로 정렬
 
     //4번 반복 -> 남자 4인실, 남자 2인실, 여자 4인실, 여자 2인실
-    for (let k = 0; k < 1; k++) {
+    for (let k = 0; k < 2; k++) {
       let roomCnt = 0; // 현재까지 만들어진 방 개수
       let fhCnt = 0; //새섬, 새내기 방에 들어간 인원
       let m4TCnt = 0; //4인실 팀원 방에 들어간 인원
@@ -355,11 +355,11 @@ const AdminRoom = () => {
   }
 
   function info() {
-    console.log(male4.length);
-    console.log(restMale4.length);
-    console.log("남자 4인실", male4);
-    console.log("남자 4인실 남음", "제발 1명 나와라", restMale4);
-    // console.log("남자 2인실", male2.length);
+    // console.log(male4.length);
+    // console.log(restMale4.length);
+    // console.log("남자 4인실", male4);
+    // console.log("남자 4인실 남음", "제발 1명 나와라", restMale4);
+    console.log("남자 2인실", male2);
     // console.log("여자 4인실", female4.length);
     // console.log("여자 2인실", female2.length);
   }
