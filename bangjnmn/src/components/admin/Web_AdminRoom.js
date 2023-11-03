@@ -181,6 +181,7 @@ const AdminRoom = () => {
       let memNum = 0;
       let gender = "";
       let memNums = "";
+
       switch (k) {
         case 0:
           currenRoom = male4;
@@ -217,7 +218,7 @@ const AdminRoom = () => {
       const teamMate = currenRoom.filter((user) => user.q1 === "팀원"); //팀원 정보
       console.log("4인실: 팀원", teamMate);
 
-      if (memNum === 4) {
+      if (memNum === 4 && currenRoom.length !== 0) {
         //새섬,새내기가 4명일 때
         if (freshAndHelper.length === 4) {
           for (let i = 0; i < memNum; i++) {
