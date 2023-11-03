@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { dbService } from "../../api/fbase";
 import { checkStatus } from "../../utils/CheckStatus";
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -20,7 +20,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
   `;
-
 
 const Div = styled.div`
   display: flex;
@@ -30,49 +29,48 @@ const Div = styled.div`
   margin: 0 auto;
   width: 100%;
   overflow: hidden;
-  background: #F4F4F4;
+  background: #f4f4f4;
 `;
 const Universe = styled.div`
   width: 1026px;
-/* height: 957px; */
-flex-shrink: 0;
+  /* height: 957px; */
+  flex-shrink: 0;
   background: #ffffff;
   display: flex;
   flex-direction: center;
   align-items: center;
-  padding-left:189px;
-`
+  padding-left: 189px;
+`;
 const Up = styled.div`
   align-items: center;
 `;
 const Check = styled.div`
   align-self: center;
-`
+`;
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 const Top = styled.div`
   width: 483px;
   height: 145px;
   /* margin-top: 42px; */
   /* margin-left: 188px; */
-  background: #38373C;
+  background: #38373c;
   color: #ffffff;
   display: flex;
 
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
 
-flex-direction: column;
-justify-content: center;
-flex-shrink: 0;
-
-color: #FFF;
-text-align: center;
-font-family: Roboto;
-font-size: 15px;
-font-style: normal;
-font-weight: 400;
-line-height: 18px; /* 120% */
+  color: #fff;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 120% */
 `;
 
 const Table = styled.table`
@@ -94,63 +92,64 @@ const TableCell = styled.td`
 `;
 const Box = styled.div`
   position: fixed;
-  top: 320px; 
-  right: 300px; 
+  top: 320px;
+  /* right: 300px;  */
   width: 311px;
   height: 276px;
-  background: #38373C;
+  background: #38373c;
   color: #ffffff;
+  margin-left: 500px;
   border-radius: 28px;
   padding-top: 16px;
   padding-bottom: 16px;
   padding-left: 24px;
 `;
 const Text = styled.div`
-font-family: Roboto;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 20px; /* 142.857% */
-letter-spacing: 0.1px;
-margin-bottom: 36px;
-`
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+  letter-spacing: 0.1px;
+  margin-bottom: 36px;
+`;
 const Text2 = styled.div`
-color: #FFF;
-font-family: Roboto;
-font-size: 20px;
-font-style: normal;
-font-weight: 400;
-line-height: 40px; /* 200% */
-margin-bottom:26px;
-`
+  color: #fff;
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 40px; /* 200% */
+  margin-bottom: 26px;
+`;
 
-const Date = styled.input`
-width: 263px;
-height:36px;
-background: transparent;
-display: flex;
-padding: 8px 0px 8px 16px;
-align-items: center;
-align-self: stretch;
-border-radius: 4px 4px 0px 0px;
-border: solid 1px #ffffff;
-border-color: #ffffff;
-color: #ffffff;
-margin-bottom: 24px;
-`
+const DateSelect = styled.input`
+  width: 263px;
+  height: 36px;
+  background: transparent;
+  display: flex;
+  padding: 8px 0px 8px 16px;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 4px 4px 0px 0px;
+  border: solid 1px #ffffff;
+  border-color: #ffffff;
+  color: #ffffff;
+  margin-bottom: 24px;
+`;
 const Confirm = styled.div`
-cursor: pointer;
-width:26px;
-height:20px;
-color: #FFF;
-text-align: center;
-font-family: Roboto;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 20px; /* 142.857% */
-letter-spacing: 0.1px;
-`
+  cursor: pointer;
+  width: 26px;
+  height: 20px;
+  color: #fff;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+  letter-spacing: 0.1px;
+`;
 
 const ClientMeet = () => {
   const [user, setUser] = useState("");
@@ -179,7 +178,7 @@ const ClientMeet = () => {
   }
 
   const checkTime = async () => {
-    setReserveTF(Array(5).fill(false));
+    setReserveTF(Array(40).fill(false));
 
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
@@ -317,57 +316,54 @@ const ClientMeet = () => {
 
   return (
     <Div>
-      <GlobalStyle/>
+      <GlobalStyle />
       <Universe>
-      <Row>
-      <Up>
-      <Check>
-        {user.meetTF ? (
-          <p>예약한 시간: {user.meetTime}</p>
-        ) : (
-          <p>예약된 정보가 없습니다.</p>
-        )}
-      </Check>
-      
-        <Top> 가능한 시간을 선택하세요. </Top>
-        <Table>
-        <tbody>
-          {times.map((item, index) => (
-            <tr key={index}>
-              <TableCell
-                style={{
-                  backgroundColor: reserveTF[index]
-                    ? "red"
-                    : selectedTime === index
-                    ? "lightblue"
-                    : "",
-                  cursor: reserveTF[index] ? "not-allowed" : "pointer",
-                }}
-                onClick={() => {
-                  handleSelectTime(index);
-                }}
-              ></TableCell>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      </Up>
-      <Box>
-        <Text> 상담 예약 날짜 </Text>
-        <Text2> 날짜 선택 </Text2>
-        <Date type="date" onChange={handleSelectDate} />
-    
-        <Confirm onClick={checkTime}> 확인 </Confirm>
-        
-      </Box>
-      </Row>
+        <Row>
+          <Up>
+            <Check>
+              {user.meetTF ? (
+                <p>예약한 시간: {user.meetTime}</p>
+              ) : (
+                <p>예약된 정보가 없습니다.</p>
+              )}
+            </Check>
+
+            <Top> 가능한 시간을 선택하세요. </Top>
+            <Table>
+              <tbody>
+                {times.map((item, index) => (
+                  <tr key={index}>
+                    <TableCell
+                      style={{
+                        backgroundColor: reserveTF[index]
+                          ? "red"
+                          : selectedTime === index
+                          ? "lightblue"
+                          : "",
+                        cursor: reserveTF[index] ? "not-allowed" : "pointer",
+                      }}
+                      onClick={() => {
+                        handleSelectTime(index);
+                      }}
+                    ></TableCell>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Up>
+          <Box>
+            <Text> 상담 예약 날짜 </Text>
+            <Text2> 날짜 선택 </Text2>
+            <DateSelect type="date" onChange={handleSelectDate} />
+
+            <Confirm onClick={checkTime}> 확인 </Confirm>
+          </Box>
+        </Row>
       </Universe>
-            {/* <button onClick={checkTime}>조회</button>
+      {/* <button onClick={checkTime}>조회</button>
       
       <button onClick={reserveMeet}>예약하기</button>
       <button onClick={deleteMeet}>예약 취소하기</button> */}
-      
-
     </Div>
   );
 };
