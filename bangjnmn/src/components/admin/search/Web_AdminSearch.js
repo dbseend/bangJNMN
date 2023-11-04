@@ -100,6 +100,7 @@ const Divh3 = styled.th`
 
 
 const Div = styled.div`
+
     display: flex;
     flex-direction: column;
     //align-items: center;
@@ -111,6 +112,7 @@ const Div = styled.div`
     overflow: hidden;
     background-color: white;
   `;
+
 
 const Search = styled.form`
   display: flex;
@@ -285,7 +287,6 @@ const Web_AdminSearch = () => {
       </TableContainer>
     </Div>
     </Back>
-    
   );
 };
 

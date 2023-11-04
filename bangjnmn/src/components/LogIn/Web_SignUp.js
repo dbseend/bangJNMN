@@ -4,14 +4,14 @@ import { auth, dbService } from "../../api/fbase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin : 0;
     padding: 0;
   }
-`
+`;
 
 const Div = styled.div`
   display: flex;
@@ -20,38 +20,38 @@ const Div = styled.div`
   justify-content: center;
   margin: 0 auto;
   overflow: hidden;
-  background: #F4F4F4;
+  background: #f4f4f4;
 `;
 
 const Top = styled.div`
-background:#04589C;
-width: 100%;
-height: 72px;
+  background: #04589c;
+  width: 100%;
+  height: 72px;
 `;
 
 const Title = styled.div`
-color:#FFFFFF;
-/* width: 111px;
+  color: #ffffff;
+  /* width: 111px;
 height: 20px; */
-top: 35px;
-left: 60px;
-font-family: Roboto;
-font-size: 24px;
-font-weight: 700;
-line-height: 20px;
-letter-spacing: 0.10000000149011612px;
-padding-top: 26px;
-padding-left: 50px;
+  top: 35px;
+  left: 60px;
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.10000000149011612px;
+  padding-top: 26px;
+  padding-left: 50px;
 `;
 
 const Do = styled.div`
-font-family: Roboto;
-font-size: 20px;
-font-weight: 700;
-line-height: 20px;
-letter-spacing: 0.10000000149011612px;
-margin-top: 39px;
-margin-left: -540px;
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.10000000149011612px;
+  margin-top: 39px;
+  margin-left: -540px;
 `;
 const Mass1 = styled.div`
   margin-top: 25px;
@@ -106,7 +106,7 @@ const Radio = styled.input`
   }
   /* 선택된 상태에서의 배경색과 기타 스타일 */
   &:checked {
-    background-color: #204e4a; /* 선택된 상태에서의 배경색 */
+    background-color: #04589c; /* 선택된 상태에서의 배경색 */
   }
   margin-top: 21px;
   margin-right: 11px;
@@ -161,7 +161,7 @@ const Submit = styled.button`
   letter-spacing: 0.10000000149011612px;
   text-align: center;
   color: #000000;
-  border: 1px solid #38373C;
+  border: 1px solid #38373c;
 `;
 // const SubmitContainer = styled.div`
 //   display: flex;
@@ -204,7 +204,7 @@ const SearchAndDropdown = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isFocused ? "#204E4A" : "white",
+    backgroundColor: state.isFocused ? "#04589C" : "white",
     color: state.isFocused ? "white" : "black",
     fontSize: "12px",
   }),
@@ -414,8 +414,11 @@ const SignUp = () => {
 
   return (
     <Div>
-      <GlobalStyle/>
-      <Top> <Title>방주니마니</Title> </Top>
+      <GlobalStyle />
+      <Top>
+        {" "}
+        <Title>방주니마니</Title>{" "}
+      </Top>
       <Do> 회원가입하기</Do>
       <form>
         <Mass1>

@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import { collection, doc, getDoc, updateDoc, deleteDoc, getDocs} from 'firebase/firestore'
-import { dbService } from '../../../api/fbase'
-import  styled  from "styled-components";
+import React, { useState, useEffect } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import {
+  collection,
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  getDocs,
+} from "firebase/firestore";
+import { dbService } from "../../../api/fbase";
+import styled from "styled-components";
 
 const Back = styled.div`
   background: #cecccc;
@@ -11,17 +18,17 @@ const Back = styled.div`
 `;
 
 const Div = styled.div`
-    display: flex;
-    flex-direction: column;
-    //align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    height: 100vh;
-    max-width: 985px; // 중앙 박스의 최대 너비 설정
-    margin: 0 auto; // 중앙 정렬
-    overflow: auto;
-    background-color: white;
-`
+  display: flex;
+  flex-direction: column;
+  //align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100vh;
+  max-width: 985px; // 중앙 박스의 최대 너비 설정
+  margin: 0 auto; // 중앙 정렬
+  overflow: auto;
+  background-color: white;
+`;
 const UserData = styled.div`
   padding-left: 167px;
   padding-right: 168px;
@@ -60,10 +67,10 @@ const Info = styled.label`
   margin-left: auto;
 `;
 
+
 const Info1 = styled.label`
   margin-left: 70px;
 `;
-
 
 const Head = styled.h3`
   color: #000;
@@ -88,7 +95,6 @@ const Head1 = styled.label`
   letter-spacing: 0.5px;
   text-decoration-line: underline;
 `
-
 const SH = styled.p`
   color: #000;
   font-family: Roboto;
@@ -129,106 +135,109 @@ const Button = styled.button`
 `
 
 const User = () => {
-
-  function Answer2(num){
-    if({num} == 1) return "06시 이전"
-    else if({num} == 2) return "06 ~ 08시"
-    else if({num} == 3) return "08 ~ 10시"
-    else if({num} == 4) return "10 ~ 12시"
-    else return "12시 이후"
+  function Answer2(num) {
+    if ({ num } == 1) return "06시 이전";
+    else if ({ num } == 2) return "06 ~ 08시";
+    else if ({ num } == 3) return "08 ~ 10시";
+    else if ({ num } == 4) return "10 ~ 12시";
+    else return "12시 이후";
   }
 
-  function Answer3(num){
-    if({num} == 1) return "22시 이후"
-    else if({num} == 2) return "22 ~ 00시"
-    else if({num} == 3) return "00 ~ 02시"
-    else if({num} == 4) return "02 ~ 04시"
-    else return "04시 이후"
+  function Answer3(num) {
+    if ({ num } == 1) return "22시 이후";
+    else if ({ num } == 2) return "22 ~ 00시";
+    else if ({ num } == 3) return "00 ~ 02시";
+    else if ({ num } == 4) return "02 ~ 04시";
+    else return "04시 이후";
   }
 
-  function Answer4(num){
-    if({num} == 1) return "매우 둔감"
-    else if({num} == 2) return "둔감"
-    else if({num} == 3) return "보통"
-    else if({num} == 4) return "예민"
-    else return "매우 예민"
+  function Answer4(num) {
+    if ({ num } == 1) return "매우 둔감";
+    else if ({ num } == 2) return "둔감";
+    else if ({ num } == 3) return "보통";
+    else if ({ num } == 4) return "예민";
+    else return "매우 예민";
   }
 
-  function Answer5(num){
-    if({num} == 1) return "매우 둔감"
-    else if({num} == 2) return "둔감"
-    else if({num} == 3) return "보통"
-    else if({num} == 4) return "예민"
-    else return "매우 예민"
+  function Answer5(num) {
+    if ({ num } == 1) return "매우 둔감";
+    else if ({ num } == 2) return "둔감";
+    else if ({ num } == 3) return "보통";
+    else if ({ num } == 4) return "예민";
+    else return "매우 예민";
   }
 
-  function Answer6(num){
-    if({num} == 1) return "매우 둔감"
-    else if({num} == 2) return "둔감"
-    else if({num} == 3) return "보통"
-    else if({num} == 4) return "예민"
-    else return "매우 예민"
+  function Answer6(num) {
+    if ({ num } == 1) return "매우 둔감";
+    else if ({ num } == 2) return "둔감";
+    else if ({ num } == 3) return "보통";
+    else if ({ num } == 4) return "예민";
+    else return "매우 예민";
   }
 
-  function Answer7(num){
-    if({num} == 1) return "매우 둔감"
-    else if({num} == 2) return "둔감"
-    else if({num} == 3) return "보통"
-    else if({num} == 4) return "예민"
-    else return "매우 예민"
+  function Answer7(num) {
+    if ({ num } == 1) return "매우 둔감";
+    else if ({ num } == 2) return "둔감";
+    else if ({ num } == 3) return "보통";
+    else if ({ num } == 4) return "예민";
+    else return "매우 예민";
   }
 
-  function Answer8(num){
-    if({num} == 1) return "1주"
-    else if({num} == 2) return "2주"
-    else if({num} == 3) return "4주"
-    else if({num} == 4) return "8주"
-    else return "안함"
+  function Answer8(num) {
+    if ({ num } == 1) return "1주";
+    else if ({ num } == 2) return "2주";
+    else if ({ num } == 3) return "4주";
+    else if ({ num } == 4) return "8주";
+    else return "안함";
   }
 
-  function Answer9(num){
-    if({num} == 1) return "흡연 안함"
-    else return "흡연 함"
+  function Answer9(num) {
+    if ({ num } == 1) return "흡연 안함";
+    else return "흡연 함";
   }
+
 
   function Room(roommateNum){
     if(roommateNum == "room4") return "4인실"
     if(roommateNum == "room2") return "2인실"
     if(roommateNum == "room1") return "1인실"
+
   }
 
-
-  const [user, setUser] = useState({})
-  const { userId } = useParams()
-  const { state } = useLocation()
-  const navigate = useNavigate()
-  const userCollection = collection(dbService, 'user')
+  const [user, setUser] = useState({});
+  const { userId } = useParams();
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const userCollection = collection(dbService, "user");
   const [surveyData, setSurveyData] = useState([]);
 
   useEffect(() => {
     console.log(state);
-    setUser({ ...state })
+    setUser({ ...state });
     console.log(state.id);
-  }, [])
+  }, []);
 
   useEffect(() => {
     async function getSurvey() {
-      const surveyCollection = collection(dbService, 'user', state.id, 'survey');
+      const surveyCollection = collection(
+        dbService,
+        "user",
+        state.id,
+        "survey"
+      );
       const surveyDocs = await getDocs(surveyCollection);
-      const surveyData = surveyDocs.docs.map(doc => doc.data());
+      const surveyData = surveyDocs.docs.map((doc) => doc.data());
       setSurveyData(surveyData);
       console.log(surveyData); // 'survey' 컬렉션의 데이터를 출력합니다.
     }
     getSurvey();
   }, [state.id]); // 'userId'가 변경될 때마다 'survey' 컬렉션을 가져옵니다.
 
-
   const handleGoBack = () => {
     navigate("../search"); // 이동할 경로를 지정합니다
   };
 
-
-  console.log(user)
+  console.log(user);
 
   return (
     <Back>
@@ -288,11 +297,9 @@ const User = () => {
       </Survey>
       <Button onClick={handleGoBack}>돌아가기</Button>
     </Div>
-    </Back>
-    
-    
-    
-  )
-}
 
-export default User
+    </Back>
+  );
+};
+
+export default User;
