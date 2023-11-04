@@ -131,7 +131,7 @@ const DateSelect = styled.input`
 
   /* Hide the calendar icon in webkit-based browsers (Chrome, Safari) */
   &::-webkit-calendar-picker-indicator {
-    display: none;
+    //display: none;
   }
 `;
 
