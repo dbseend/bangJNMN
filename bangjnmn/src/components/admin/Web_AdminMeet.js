@@ -1,18 +1,16 @@
 import {
   collection,
+  deleteField,
   doc,
   getDoc,
   setDoc,
   updateDoc,
-  deleteField,
 } from "firebase/firestore";
-import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { dbService } from "../../api/fbase";
-import { checkStatus } from "../../utils/CheckStatus";
-import { createGlobalStyle } from "styled-components";
 import icon from "../../assets/img/hh.svg";
+import { checkStatus } from "../../utils/CheckStatus";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -184,7 +182,7 @@ const AdminMeet = () => {
   const [user, setUser] = useState("");
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [reservationList, setReservationList] = useState([]);
-  const [reserveTF, setReserveTF] = useState(Array(5).fill(false));
+  const [reserveTF, setReserveTF] = useState(Array(18).fill(false));
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
@@ -207,7 +205,7 @@ const AdminMeet = () => {
   }
 
   const checkTime = async () => {
-    setReserveTF(Array(5).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
+    setReserveTF(Array(18).fill(false)); // 각 시간의 예약 여부를 모두 false로 초기화
 
     // 조회하고 싶은 날짜 문서 참조
     const meetReservationRef = collection(dbService, "meet");
@@ -221,7 +219,7 @@ const AdminMeet = () => {
 
         // reservationList와 reserveTF를 업데이트하는 루프
         for (let i = 0; i < list.length; i++) {
-          if (list[i] && list[i].time >= 0 && list[i].time < 5) {
+          if (list[i] && list[i].time >= 0 && list[i].time < 18) {
             const time = list[i].time;
             // reservationList를 업데이트
             reservationList[time] = list[i];
