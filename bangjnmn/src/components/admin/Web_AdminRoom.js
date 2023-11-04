@@ -24,6 +24,8 @@ const Div = styled.div`
 `;
 
 const SelectContainer = styled.div`
+  margin-top: 5px;
+  margin-left: 20px;
   display: flex;
   flex-direction: row;
 `;
@@ -62,6 +64,61 @@ const SearchAndDropdown = {
     fontSize: "12px",
   }),
 };
+const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f4f4f4;
+  position: relative;
+  z-index: 1;
+  //margin-top: 1px;
+`;
+
+const Rect1 = styled.div`
+  width: 1200px;
+  max-width: 100%;
+  height: 1000px;
+  flex-shrink: 0;
+  background: white;
+  margin: 0 auto;
+`;
+
+const Font1 = styled.div`
+  color: black;
+  margin-top: 42px;
+  margin-left: 20px;
+  margin-bottom: 16px;
+  font-family: Roboto;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px; /* 80% */
+  letter-spacing: 0.5px;
+  text-decoration-line: underline;
+`;
+
+const Font2 = styled.div`
+  color: black;
+  font-family: Roboto;
+  margin-left: 20px;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 39px; /* 260% */
+  letter-spacing: 0.5px;
+`;
+
+const Margin1 = styled.div`
+  margin-left : 83px;
+`
+
+const Margin2 = styled.div`
+  margin-top : 10px;
+`
 
 const AdminRoom = () => {
   const [user, setUser] = useState("");
@@ -487,31 +544,37 @@ const AdminRoom = () => {
   };
 
   return (
-    <Div>
-      <SelectContainer>
-        <Select
-          onChange={changeTeam}
-          type="text"
-          name="team"
-          value={selectedTeam}
-          options={optionsTeam}
-          isSearchable
-          placeholder="팀 선택"
-          styles={SearchAndDropdown}
-        />
-        <Select
-          onChange={changeStandard}
-          type="text"
-          name="standard"
-          value={selectedStandard}
-          options={optionsStandard}
-          isSearchable
-          placeholder="기준 선택"
-          styles={SearchAndDropdown}
-        />
-        <AsignRoomButton onClick={assignRoom}>배정하기</AsignRoomButton>
-      </SelectContainer>
-    </Div>
+    <Main>
+      <Div>
+        <Rect1>
+          <Font1>기숙사 방배정</Font1>
+          <Font2>기숙사 방배정 결과를 조회합니다.</Font2>
+          <SelectContainer>
+            <Select
+              onChange={changeTeam}
+              type="text"
+              name="team"
+              value={selectedTeam}
+              options={optionsTeam}
+              isSearchable
+              placeholder="팀 선택"
+              styles={SearchAndDropdown}
+            /><Margin1></Margin1>
+            <Select
+              onChange={changeStandard}
+              type="text"
+              name="standard"
+              value={selectedStandard}
+              options={optionsStandard}
+              isSearchable
+              placeholder="기준 선택"
+              styles={SearchAndDropdown}
+            /> <Margin1></Margin1>
+           <Margin2> <AsignRoomButton onClick={assignRoom}>배정하기</AsignRoomButton></Margin2>
+          </SelectContainer>
+        </Rect1>
+      </Div>
+    </Main>
   );
 };
 
