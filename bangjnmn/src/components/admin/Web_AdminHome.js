@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkStatus } from "../../utils/CheckStatus";
 import styled from "styled-components";
-import main from "../../assets/img/main.png";
+import main from "../../assets/img/mainImg.webp";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   body {
-    margin : 0;
+    margin: 0;
     padding: 0;
   }
-  `;
+`;
 
 const Div = styled.div`
   display: flex;
@@ -19,10 +19,13 @@ const Div = styled.div`
   justify-content: center;
   margin: 0 auto;
   overflow: hidden;
+  height: calc(100vh - 72px); /* 화면 높이 - 네비게이션 바 높이 */
 `;
+
 const MainImg = styled.img`
-  width: 1500px;
-  height: 900px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 `;
 
 const AdminHome = () => {
@@ -42,23 +45,3 @@ const AdminHome = () => {
 };
 
 export default AdminHome;
-
-// import React, { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { checkStatus } from "../../utils/CheckStatus";
-
-// const AdminHome = () => {
-//   const [user, setUser] = useState("");
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     checkStatus(setUser);
-//   }, []);
-//   return (
-//     <div>
-//       <h1>AdminHome</h1>
-//     </div>
-//   );
-// };
-
-// export default AdminHome;

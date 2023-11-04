@@ -1,4 +1,11 @@
-import { collection, doc, getDoc, setDoc, updateDoc, deleteField} from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  deleteField,
+} from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -45,10 +52,7 @@ const Title = styled.div`
   margin-top: 42px;
   margin-bottom: 16px;
 `;
-const Check = styled.div`
-  display: flex;
-  /* justify-content: space-between; */
-`;
+
 const Info = styled.div`
   color: #000;
   font-family: Roboto;
@@ -58,15 +62,8 @@ const Info = styled.div`
   line-height: 39px; /* 260% */
   letter-spacing: 0.5px;
 `;
-const Cancel = styled.button`
-  height: 38px;
-  margin-left: 20px;
-  border-radius: 100px;
-  border: 1px solid #000;
-  background: #cecccc;
-`;
 const Table = styled.table`
-  margin-top:16px;
+  margin-top: 16px;
   border-collapse: collapse;
   border: 1px solid black;
   width: 482px;
@@ -390,10 +387,9 @@ const AdminMeet = () => {
       <GlobalStyle />
       <Universe>
         <Title>면담 예약</Title>
-        <Check>
+
         <Info>현재 페이지에서는 면담 예약 수정이 가능합니다.</Info>
-        <Cancel onClick={deleteMeet}>예약 취소하기</Cancel>
-        </Check>
+
         <Table>
           <tbody>
             {times.map((item, index) => (
@@ -401,15 +397,15 @@ const AdminMeet = () => {
                 <TableCell
                   style={{
                     backgroundColor: reserveTF[index]
-                          ? "#62606A"
-                          : selectedTimes === index
-                          ? "#F4F4F4"
-                          : "",
-                        cursor: reserveTF[index] ? "not-allowed" : "pointer",
-                      }}
-                      onClick={() => {
-                        handleSelectTime(index);
-                      }}
+                      ? "#62606A"
+                      : selectedTimes === index
+                      ? "#F4F4F4"
+                      : "",
+                    cursor: reserveTF[index] ? "not-allowed" : "pointer",
+                  }}
+                  onClick={() => {
+                    handleSelectTime(index);
+                  }}
                 >
                   {reservationList[index] &&
                   reservationList[index].access === "client"
@@ -436,7 +432,7 @@ const AdminMeet = () => {
           </ConfirmWrapper>
         </Box>
 
-        <Reserve onClick={reserveMeet}>예약 확인</Reserve>
+        <Reserve onClick={reserveMeet}>예약하기</Reserve>
       </Universe>
     </Div>
   );

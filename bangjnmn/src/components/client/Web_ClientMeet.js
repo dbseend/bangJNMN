@@ -66,7 +66,7 @@ const Cancel = styled.button`
   border-radius: 100px;
   border: 1px solid #000;
   background: #cecccc;
-  cursor:pointer;
+  cursor: pointer;
 `;
 
 const Row = styled.div`
@@ -411,9 +411,9 @@ const ClientMeet = () => {
                       }}
                     >
                       {reservationList[index] &&
-                  reservationList[index].access === "client"
-                    ? item + " " + reservationList[index].name
-                    : item}
+                      reservationList[index].access === "client"
+                        ? item + " " + reservationList[index].name
+                        : item}
                     </TableCell>
                   </tr>
                 ))}
@@ -435,11 +435,8 @@ const ClientMeet = () => {
             </ConfirmWrapper>
           </Box>
         </Row>
-        <Reserve onClick={reserveMeet}>확인</Reserve>
+        <Reserve onClick={reserveMeet}>예약하기</Reserve>
       </Universe>
-
-      {/* <button onClick={checkTime}>조회</button>
-       */}
     </Div>
   );
 };
