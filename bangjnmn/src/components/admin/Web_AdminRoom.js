@@ -20,7 +20,7 @@ const Div = styled.div`
   justify-content: center;
   margin: 0 auto;
   width: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
 
 const SelectContainer = styled.div`
