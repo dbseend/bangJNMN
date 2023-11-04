@@ -727,6 +727,10 @@ const AdminRoom = () => {
     }
   }
 
+  function updateStatus() {
+    console.log("하이");
+  }
+
   return (
     <Main>
       <Div>
@@ -851,7 +855,7 @@ const AdminRoom = () => {
               </Table>
             </>
           ) : (
-            <div>팀과 기준을 선택해주세요</div>
+            <></>
           )}
         </Rect1>
       </Div>
