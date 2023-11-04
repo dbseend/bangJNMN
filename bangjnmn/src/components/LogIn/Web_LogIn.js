@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 import logo from "../../assets/img/realLogo.png";
 
 const GlobalStyle = createGlobalStyle`
@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     margin : 0;
     padding: 0;
   }
-`;
+`
 
 const Div = styled.div`
   display: flex;
@@ -22,14 +22,14 @@ const Div = styled.div`
   margin: 0 auto;
   height: 100vh;
   overflow: hidden;
-  background: #f4f4f4;
+  background: #F4F4F4;
 `;
 
 const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: -40px;
-`;
+`
 const LogoImg = styled.img`
   width: 84px;
   height: 88px;
@@ -44,7 +44,7 @@ const Logo = styled.h1`
   flex-direction: column;
   justify-content: center;
   flex-shrink: 0;
-  color: #38373c;
+  color: #38373C;
   text-align: center;
   font-family: Roboto;
   font-size: 40px;
@@ -52,9 +52,10 @@ const Logo = styled.h1`
   font-weight: 700;
   line-height: 20px; /* 50% */
   letter-spacing: 0.1px;
-  margin-top: 45px;
+  margin-top:45px;
 `;
 const LoginButton = styled.button`
+  
   width: 315px;
   height: 65px;
   top: 469px;
@@ -63,15 +64,16 @@ const LoginButton = styled.button`
   border: 1px;
   gap: 8px;
   border: 1px solid #000000;
-  background: #ffffff;
+  background:#FFFFFF;
   font-family: Roboto;
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.10000000149011612px;
   text-align: center;
-  margin-top: 39px;
+  margin-top:39px;
 `;
+
 
 const SignupButton = styled.button`
   width: 315px;
@@ -82,15 +84,15 @@ const SignupButton = styled.button`
   border: 1px;
   gap: 8px;
   border: 1px solid #000000;
-  background: #ffffff;
+  background:#FFFFFF;
   font-family: Roboto;
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.10000000149011612px;
   text-align: center;
-  margin-top: 22px;
-`;
+  margin-top:22px;
+  `
 
 const LogIn = () => {
   const [init, setInit] = useState(false);
@@ -99,7 +101,7 @@ const LogIn = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-
+  
   const goToSignUp = async () => {
     navigate("/signUp");
   };
@@ -215,15 +217,13 @@ const LogIn = () => {
 
   return (
     <Div>
-      <GlobalStyle />
+      <GlobalStyle/>
       <LogoContainer>
-        <LogoImg src={logo} />
+        <LogoImg src = {logo}/>
         <Logo>방주니마니</Logo>
       </LogoContainer>
-
-      <LoginButton onClick={handleGoogleLogin}>
-        한동대 이메일로 로그인하기
-      </LoginButton>
+      
+      <LoginButton onClick={handleGoogleLogin}>한동대 이메일로 로그인하기</LoginButton>
       <SignupButton onClick={goToSignUp}> 회원가입하기</SignupButton>
     </Div>
   );
