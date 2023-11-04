@@ -13,6 +13,7 @@ import Select from "react-select";
 import styled from "styled-components";
 import { dbService } from "../../api/fbase";
 import { checkStatus } from "../../utils/CheckStatus";
+import { get } from "react-hook-form";
 
 const Div = styled.div`
   display: flex;
@@ -86,6 +87,8 @@ const Rect1 = styled.div`
   flex-shrink: 0;
   background: white;
   margin: 0 auto;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Font1 = styled.div`
@@ -121,16 +124,6 @@ const Margin2 = styled.div`
   margin-top: 10px;
 `;
 
-const Table = styled.div`
-  margin-left: 166px;
-  width: 480px;
-  height: 37px;
-  flex-shrink: 0;
-  border: 1px solid #000;
-  background: #fff;
-  display: flex;
-`;
-
 const Title = styled.div`
   color: black;
   font-family: Roboto;
@@ -151,6 +144,20 @@ const Info = styled.div`
   letter-spacing: 0.5px;
 `;
 
+const Table = styled.table`
+  margin-left: 20px;
+  margin-top: 20px;
+  background-color: gray;
+  border: 1px solid black;
+`;
+
+const TableCell = styled.td`
+  width: 210px;
+  padding: 8px;
+  border: 1px solid black; // 각 셀을 구분선으로 둘러싸기
+  text-align: center;
+`;
+
 const AdminRoom = () => {
   const [user, setUser] = useState("");
   const [rc, setRc] = useState("");
@@ -163,6 +170,10 @@ const AdminRoom = () => {
   const [male2, setMale2] = useState([]);
   const [female4, setFemale4] = useState([]);
   const [female2, setFemale2] = useState([]);
+  const [resMale4, setResMale4] = useState([]);
+  const [resMale2, setResMale2] = useState([]);
+  const [resFemale4, setResFemale4] = useState([]);
+  const [resFemale2, setResFemale2] = useState([]);
   const [restMale4, setRestMale4] = useState([]);
   const [restMale2, setRestMale2] = useState([]);
   const [restFemale4, setRestFemale4] = useState([]);
@@ -171,6 +182,7 @@ const AdminRoom = () => {
   const male2Ref = useRef([]);
   const female4Ref = useRef([]);
   const female2Ref = useRef([]);
+  const [isExceuted, setIsExceuted] = useState(false);
 
   const optionsTeam = [
     { value: "김군오", label: "김군오 교수님 팀" },
@@ -205,7 +217,9 @@ const AdminRoom = () => {
   async function assignRoom() {
     await setUsersInfo(); // setUsersInfo가 완료될 때까지 기다립니다.
     makeTeamRoom(); // setUsersInfo가 완료된 후에 실행됩니다.
-    makeRestRoom(); // setUsersInfo가 완료된 후에 실행됩니다.
+    await makeRestRoom(); // setUsersInfo가 완료된 후에 실행됩니다.
+    getResult();
+    setIsExceuted(true);
   }
 
   async function setUsersInfo() {
@@ -219,11 +233,12 @@ const AdminRoom = () => {
     const restF2 = []; // 여자 남은 2인실
 
     const userCollection = collection(dbService, "user");
+    const team = selectedTeam.label;
     const q = query(
       userCollection,
       where("access", "==", "client"), // client 정보만 불러오도록
       where("rc", "==", "카이퍼"), // rc 필터
-      where("team", "==", selectedTeam.label), // 팀 필터
+      where("team", "==", team), // 팀 필터
       where("dorm", "==", "하용조관") // 생활관 필터
     );
     const clientInfo = await getDocs(q); // 필터(client, rc, 팀, 생활관)를 통해 나온 유저 정보
@@ -246,7 +261,6 @@ const AdminRoom = () => {
         const surveyData = surveySnap.data();
         const userAndSurveyData = {
           name: userData.name,
-          stuNum: userData.stuNum,
           q1: surveyData.Q1,
           q2: surveyData.Q2,
           q3: surveyData.Q3,
@@ -409,7 +423,6 @@ const AdminRoom = () => {
             roommateKey = `m${i + 1}`;
             memData = {
               name: freshAndHelper[fhCnt].name,
-              stsuNum: freshAndHelper[fhCnt].stuNum,
             };
             fhCnt++;
             roomMates.push(memData);
@@ -425,13 +438,11 @@ const AdminRoom = () => {
             if (i < freshAndHelper.length) {
               memData = {
                 name: freshAndHelper[fhCnt].name,
-                stuNum: freshAndHelper[fhCnt].stuNum,
               };
               fhCnt++;
             } else {
               memData = {
                 name: teamMate[m4TCnt].name,
-                stuNum: teamMate[m4TCnt].stuNum,
               };
               m4TCnt++;
             }
@@ -449,13 +460,11 @@ const AdminRoom = () => {
             if (i < 3) {
               memData = {
                 name: freshAndHelper[fhCnt].name,
-                stuNum: freshAndHelper[fhCnt].stuNum,
               };
               fhCnt++;
             } else {
               memData = {
                 name: teamMate[m4TCnt].name,
-                stuNum: teamMate[m4TCnt].stuNum,
               };
               m4TCnt++;
             }
@@ -505,13 +514,11 @@ const AdminRoom = () => {
         if (fhCnt < freshAndHelper.length) {
           memData = {
             name: freshAndHelper[fhCnt].name,
-            stsuNum: freshAndHelper[fhCnt].stuNum,
           };
           fhCnt++;
         } else {
           memData = {
             name: teamMate[m4TCnt].name,
-            stsuNum: teamMate[m4TCnt].stuNum,
           };
           m4TCnt++;
         }
@@ -545,13 +552,13 @@ const AdminRoom = () => {
               const existingData = docSnapshot.data();
 
               // 동적으로 필드 이름 생성
-              const dynamicFieldName = `mate${roomCnt}`;
+              const dynamicFieldName = `mate${roomCnt + 1}`;
 
               // 기존 데이터에서 dynamicFieldName 필드 가져오기
               const existingFieldData = existingData[dynamicFieldName] || [];
 
               // 새로운 mate 필드 항목 추가
-              const newRoomMatesItem = { name: "윤성현" }; // 원하는 데이터로 대체
+              const newRoomMatesItem = { roomMates: roomMates }; // 원하는 데이터로 대체
               existingFieldData.push(newRoomMatesItem);
 
               // 업데이트할 데이터 생성
@@ -567,7 +574,7 @@ const AdminRoom = () => {
               memData = {};
             } else {
               // 문서가 존재하지 않는 경우 새로운 데이터 생성
-              const data = { mate1: [{ name: "윤성현" }] }; // 원하는 데이터로 대체
+              const data = { mate1: [{ roomMates: roomMates }] }; // 원하는 데이터로 대체
               await setDoc(roomRef, data);
 
               console.log("mate1을 초기화하였습니다.");
@@ -616,25 +623,108 @@ const AdminRoom = () => {
     console.log(selectedStandard);
   };
 
-  async function test() {
-    console.log(selectedTeam.label);
-    console.log(selectedStandard.label);
-    // console.log(gender);
-    // console.log(memNums);
+  async function getResult() {
     const team = selectedTeam.label;
     const standard = selectedStandard.label;
-    const roomRef = doc(
-      dbService,
-      "room",
-      "카이퍼",
-      team,
-      standard,
-      "남자",
-      "4인실"
-    );
+    let gender = "";
+    let memNums = "";
+    let num = 0;
+    for (let k = 0; k < 4; k++) {
+      switch (k) {
+        case 0:
+          gender = "남자";
+          memNums = "4인실";
+          num = 4;
+          break;
+        case 1:
+          gender = "남자";
+          memNums = "2인실";
+          num = 2;
+          break;
+        case 2:
+          gender = "여자";
+          memNums = "4인실";
+          num = 4;
+          break;
+        case 3:
+          gender = "여자";
+          memNums = "2인실";
+          num = 2;
+          break;
+      }
 
-    const data = { roomMates: [{ name: "윤성현" }, { name: "전혜원" }] };
-    await setDoc(roomRef, data);
+      try {
+        const roomRef = doc(
+          dbService,
+          "room",
+          "카이퍼",
+          team,
+          standard,
+          gender,
+          memNums
+        );
+
+        const docSnap = await getDoc(roomRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const dataLength = Object.keys(data).length;
+
+          let resInfo = [];
+          if (num === 4) {
+            for (let i = 0; i < dataLength; i++) {
+              for (let j = 0; j < 4; j++) {
+                const mateKey = `mate${i + 1}`; // 예: mate1, mate2, ...
+                const roomMatesKey = j.toString(); // 예: "0", "1", "2", "3"
+                if (
+                  data[mateKey] &&
+                  data[mateKey][roomMatesKey] &&
+                  data[mateKey][roomMatesKey].roomMates
+                ) {
+                  const name = data[mateKey][roomMatesKey].roomMates[j].name;
+                  resInfo.push(name);
+                  console.log(name);
+                }
+              }
+            }
+          } else if (num === 2) {
+            for (let i = 0; i < dataLength; i++) {
+              for (let j = 0; j < 2; j++) {
+                const mateKey = `mate${i + 1}`; // 예: mate1, mate2, ...
+                const roomMatesKey = j.toString(); // 예: "0", "1", "2", "3";
+                if (
+                  data[mateKey] &&
+                  data[mateKey][roomMatesKey] &&
+                  data[mateKey][roomMatesKey].roomMates
+                ) {
+                  const name = data[mateKey][roomMatesKey].roomMates[j].name;
+                  resInfo.push(name);
+                  console.log(mateKey, roomMatesKey, name);
+                }
+              }
+            }
+          }
+          console.log(resInfo);
+          switch (k) {
+            case 0:
+              setResMale4(resInfo);
+              break;
+            case 1:
+              setResMale2(resInfo);
+              break;
+            case 2:
+              setResFemale4(resInfo);
+              break;
+            case 3:
+              setResFemale2(resInfo);
+              num = 2;
+              break;
+          }
+          resInfo = [];
+        }
+      } catch (error) {
+        console.error("데이터를 업데이트하지 못 했습니다.", error);
+      }
+    }
   }
 
   return (
@@ -669,9 +759,100 @@ const AdminRoom = () => {
             <Margin2>
               {" "}
               <AsignRoomButton onClick={assignRoom}>배정하기</AsignRoomButton>
-              <button onClick={test}>테스트 데이터</button>
             </Margin2>
           </SelectContainer>
+          {isExceuted ? (
+            <>
+              <Table>
+                <tbody>
+                  <tr>
+                    <TableCell>여자 4인실</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                  </tr>
+                  {resFemale4.map((name, index) => (
+                    <React.Fragment key={index}>
+                      {(index + 1) % 4 === 1 ? (
+                        <TableCell>{index / 4 + 1}</TableCell>
+                      ) : null}
+                      {(index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? (
+                        <TableCell>{name}</TableCell>
+                      ) : null}
+                      {(index + 1) % 4 === 3 || (index + 1) % 4 === 0 ? (
+                        <TableCell>{name}</TableCell>
+                      ) : null}
+                      {(index + 1) % 4 === 0 ? <tr></tr> : null}
+                    </React.Fragment>
+                  ))}
+                  <tr>
+                    <TableCell>여자 2인실</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                  </tr>
+                  {resFemale2.map((name, index) => (
+                    <React.Fragment key={index}>
+                      {(index + 1) % 3 === 1 ? (
+                        <TableCell>{index / 3 + 1}</TableCell>
+                      ) : null}
+                      {(index + 1) % 3 === 2 || (index + 1) % 3 === 0 ? (
+                        <TableCell>{name}</TableCell>
+                      ) : null}
+                      {(index + 1) % 3 === 0 ? <tr></tr> : null}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </Table>
+              <Table>
+                <tbody>
+                  <tr>
+                    <TableCell>남자 4인실</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                  </tr>
+                  {resMale4.map((name, index) => (
+                    <React.Fragment key={index}>
+                      {(index + 1) % 4 === 1 ? (
+                        <TableCell>{index / 4 + 1}</TableCell>
+                      ) : null}
+                      {(index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? (
+                        <TableCell>{name}</TableCell>
+                      ) : null}
+                      {(index + 1) % 4 === 3 || (index + 1) % 4 === 0 ? (
+                        <TableCell>{name}</TableCell>
+                      ) : null}
+                      {(index + 1) % 4 === 0 ? <tr></tr> : null}
+                    </React.Fragment>
+                  ))}
+                  <tr>
+                    <TableCell>남자 2인실</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>이름</TableCell>
+                  </tr>
+                  {resMale2.map((name, index) => (
+                    <React.Fragment key={index}>
+                      {(index + 1) % 3 === 1 ? (
+                        <TableCell>{index / 3 + 1}</TableCell>
+                      ) : null}
+                      {(index + 1) % 3 === 2 || (index + 1) % 3 === 0 ? (
+                        <TableCell>{name}</TableCell>
+                      ) : null}
+                      {(index + 1) % 3 === 0 ? <tr></tr> : null}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </Table>
+            </>
+          ) : (
+            <div>팀과 기준을 선택해주세요</div>
+          )}
         </Rect1>
       </Div>
     </Main>
