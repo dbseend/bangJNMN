@@ -20,7 +20,7 @@ const Div = styled.div`
   justify-content: center;
   margin: 0 auto;
   width: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
 
 const SelectContainer = styled.div`
@@ -69,8 +69,8 @@ const AdminRoom = () => {
   const [team, setTeam] = useState("");
   const [dorm, setDorm] = useState("");
   const [selectedRc, setSelectedRc] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState("");
-  const [selectedStandard, setSelectedStandard] = useState("");
+  const [selectedTeam, setSeletedTeam] = useState("");
+  const [selectedStandard, setSeletedStandard] = useState("");
   const [male4, setMale4] = useState([]);
   const [male2, setMale2] = useState([]);
   const [female4, setFemale4] = useState([]);
@@ -477,12 +477,12 @@ const AdminRoom = () => {
   };
 
   const changeTeam = (selectedTeam) => {
-    setSelectedTeam(selectedTeam);
+    setSeletedTeam(selectedTeam);
     console.log(selectedTeam);
   };
 
   const changeStandard = (selectedStandard) => {
-    setSelectedStandard(selectedStandard);
+    setSeletedStandard(selectedStandard);
     console.log(selectedStandard);
   };
 
