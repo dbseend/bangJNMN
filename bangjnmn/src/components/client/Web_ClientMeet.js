@@ -389,7 +389,7 @@ const ClientMeet = () => {
               )}
               <Cancel onClick={deleteMeet}>예약 취소하기</Cancel>
             </Check>
-            
+
             <Top> 가능한 시간을 선택하세요. </Top>
             <Table>
               <tbody>
@@ -407,7 +407,12 @@ const ClientMeet = () => {
                       onClick={() => {
                         handleSelectTime(index);
                       }}
-                    ></TableCell>
+                    >
+                      {reservationList[index] &&
+                      reservationList[index].access === "client"
+                        ? item + " " + reservationList[index].name
+                        : item}
+                    </TableCell>
                   </tr>
                 ))}
               </tbody>
