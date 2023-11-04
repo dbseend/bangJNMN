@@ -163,9 +163,9 @@ const DateSelect = styled.input`
   margin-bottom: 24px;
 
   /* Hide the calendar icon in webkit-based browsers (Chrome, Safari) */
-  &::-webkit-calendar-picker-indicator {
+  /* &::-webkit-calendar-picker-indicator {
     //display: none;
-  }
+  } */
 `;
 
 const IconImg = styled.img`
@@ -297,15 +297,15 @@ const ClientMeet = () => {
           time: selectedTime,
           name: user.name,
           access: "client",
-          meetCreated: serverTimestamp(),
         },
       };
-
+      
       await setDoc(dayRef, { ...dayUpdateData }, { merge: true });
-
+      
       await updateDoc(userRef, {
         meetTF: true,
         meetTime: meetTime,
+        meetCreated: serverTimestamp(),
       });
 
       console.log("day 문서 업데이트 성공!");
@@ -317,40 +317,47 @@ const ClientMeet = () => {
   };
 
   const deleteMeet = async () => {
-    try {
-      const [year, month, day, time] = user.meetTime.split(" ")[0].split("-");
-      const formattedMonth = parseInt(month, 10).toString();
-      const formattedDay = parseInt(day, 10).toString();
+    console.log("싫어");
+    console.log(user.meetTime)
+    if (user.meetTime) {
+      try {
+        // 공백(" ")을 기준으로 문자열을 분리하여 날짜와 시간을 얻습니다.
+        const [year, month, day, time] = user.meetTime.split(" ")[0].split("-");
+        const formattedMonth = parseInt(month, 10).toString();
+        const formattedDay = parseInt(day, 10).toString();
 
-      const meetReservationRef = collection(dbService, "meetReservation");
-      const dayRef = doc(
-        collection(meetReservationRef, formattedMonth, "day"),
-        formattedDay
-      );
-      const userRef = doc(collection(dbService, "user"), user.name);
-      const meetIdx = user.meetIdx;
+        const meetReservationRef = collection(dbService, "meet");
+        const dayRef = doc(
+          collection(meetReservationRef, formattedMonth, "day"),
+          formattedDay
+        );
+        const userRef = doc(collection(dbService, "user"), user.name);
+        const meetIdx = user.meetIdx;
 
-      const currentTime = Math.floor(Date.now() / 1000); // 현재 시간을 초로 변환
-      const reserveTime = user.meetCreated.seconds; // 예약 시간을 초로 가정합니다.
-      const timeDiff = currentTime - reserveTime; // 시간 차이 계산
-      const timeDiffHours = timeDiff / 3600;
+        const currentTime = Math.floor(Date.now() / 1000); // 현재 시간을 초로 변환
+        const reserveTime = user.meetCreated.seconds; // 예약 시간을 초로 가정합니다.
+        const timeDiff = currentTime - reserveTime; // 시간 차이 계산
+        const timeDiffHours = timeDiff / 3600;
 
-      if (timeDiffHours < 24) {
-        await updateDoc(dayRef, {
-          [meetIdx]: deleteField(),
-        });
+        if (timeDiffHours < 24) {
+          await updateDoc(dayRef, {
+            [meetIdx]: deleteField(),
+          });
 
-        await updateDoc(userRef, {
-          meetTF: false,
-          meetTime: "",
-        });
+          await updateDoc(userRef, {
+            meetTF: false,
+            meetTime: "",
+          });
 
-        alert("면담 예약이 취소 되었습니다.");
-      } else {
-        alert("취소 할 수 없습니다(24시간 이내 가능)");
+          alert("면담 예약이 취소 되었습니다.");
+        } else {
+          alert("취소 할 수 없습니다(24시간 이내 가능)");
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
+    } else {
+      alert("예약 정보가 없습니다!");
     }
   };
 

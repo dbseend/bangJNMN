@@ -5,6 +5,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
@@ -537,18 +538,42 @@ const AdminRoom = () => {
               memNums
             );
 
-            const data = { roomMates: roomMates };
+            // 기존 데이터 가져오기
+            const docSnapshot = await getDoc(roomRef);
 
-            // 기존 데이터를 병합하면서 업데이트
-            await setDoc(roomRef, data, { merge: true });
+            if (docSnapshot.exists()) {
+              const existingData = docSnapshot.data();
 
-            console.log("데이터를 저장하였습니다.");
-            roomCnt++;
-            roomMates = [];
-            roommateKey = 0;
-            memData = {};
+              // 동적으로 필드 이름 생성
+              const dynamicFieldName = `mate${roomCnt}`;
+
+              // 기존 데이터에서 dynamicFieldName 필드 가져오기
+              const existingFieldData = existingData[dynamicFieldName] || [];
+
+              // 새로운 mate 필드 항목 추가
+              const newRoomMatesItem = { name: "윤성현" }; // 원하는 데이터로 대체
+              existingFieldData.push(newRoomMatesItem);
+
+              // 업데이트할 데이터 생성
+              const data = { [dynamicFieldName]: existingFieldData };
+
+              // 데이터 업데이트
+              await updateDoc(roomRef, data);
+
+              console.log(`${dynamicFieldName}을 업데이트하였습니다.`);
+              roomCnt++;
+              roomMates = [];
+              roommateKey = 0;
+              memData = {};
+            } else {
+              // 문서가 존재하지 않는 경우 새로운 데이터 생성
+              const data = { mate1: [{ name: "윤성현" }] }; // 원하는 데이터로 대체
+              await setDoc(roomRef, data);
+
+              console.log("mate1을 초기화하였습니다.");
+            }
           } catch (error) {
-            console.error("데이터를 저장하지 못 했습니다.", error);
+            console.error("데이터를 업데이트하지 못 했습니다.", error);
           }
 
           j = 0;
