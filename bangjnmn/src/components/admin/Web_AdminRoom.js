@@ -113,12 +113,42 @@ const Font2 = styled.div`
 `;
 
 const Margin1 = styled.div`
-  margin-left : 83px;
-`
+  margin-left: 83px;
+`;
 
 const Margin2 = styled.div`
-  margin-top : 10px;
-`
+  margin-top: 10px;
+`;
+
+const Table = styled.div`
+  margin-left: 166px;
+  width: 480px;
+  height: 37px;
+  flex-shrink: 0;
+  border: 1px solid #000;
+  background: #fff;
+  display: flex;
+`;
+
+const Title = styled.div`
+  color: black;
+  font-family: Roboto;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 450;
+  line-height: 16px; /* 123.077% */
+  letter-spacing: 0.5px;
+`;
+
+const Info = styled.div`
+  color: black;
+  font-family: Roboto;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 123.077% */
+  letter-spacing: 0.5px;
+`;
 
 const AdminRoom = () => {
   const [user, setUser] = useState("");
@@ -559,7 +589,8 @@ const AdminRoom = () => {
               isSearchable
               placeholder="팀 선택"
               styles={SearchAndDropdown}
-            /><Margin1></Margin1>
+            />
+            <Margin1></Margin1>
             <Select
               onChange={changeStandard}
               type="text"
@@ -569,8 +600,12 @@ const AdminRoom = () => {
               isSearchable
               placeholder="기준 선택"
               styles={SearchAndDropdown}
-            /> <Margin1></Margin1>
-           <Margin2> <AsignRoomButton onClick={assignRoom}>배정하기</AsignRoomButton></Margin2>
+            />{" "}
+            <Margin1></Margin1>
+            <Margin2>
+              {" "}
+              <AsignRoomButton onClick={assignRoom}>배정하기</AsignRoomButton>
+            </Margin2>
           </SelectContainer>
         </Rect1>
       </Div>
