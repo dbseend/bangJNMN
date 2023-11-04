@@ -33,15 +33,15 @@ const Div = styled.div`
   background: #f4f4f4;
 `;
 const Pont = styled.p`
-color: #000;
-font-family: Roboto;
-font-size: 20px;
-font-style: normal;
-font-weight: 400;
-line-height: 20px; /* 125% */
-letter-spacing: 0.1px;
-margin-right:20px;
-`
+  color: #000;
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 125% */
+  letter-spacing: 0.1px;
+  margin-right: 20px;
+`;
 const Universe = styled.div`
   width: 1026px;
   /* height: 957px; */
@@ -60,14 +60,15 @@ const Check = styled.div`
   /* justify-content: space-between; */
 `;
 const Cancel = styled.button`
-margin-top:10px;
-width: 88px;
-height: 38px;
+  margin-top: 10px;
+  width: 88px;
+  height: 38px;
 
-border-radius: 100px;
-border: 1px solid #000;
-background: #CECCCC;
-`
+  border-radius: 100px;
+  border: 1px solid #000;
+  background: #cecccc;
+`;
+
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
@@ -126,9 +127,9 @@ const Box = styled.div`
   padding-left: 24px;
 `;
 const TextNIcon = styled.div`
-display: flex;
-margin-bottom: 36px;
-`
+  display: flex;
+  margin-bottom: 36px;
+`;
 const Text = styled.div`
   font-family: Roboto;
   font-size: 14px;
@@ -167,20 +168,20 @@ const DateSelect = styled.input`
   }
 `;
 
-const IconImg =styled.img`
-margin-left:173px;
-/* display: flex; */
-/* padding: 16px 12px 8px 24px; */
-/* flex-direction: column;
+const IconImg = styled.img`
+  margin-left: 173px;
+  /* display: flex; */
+  /* padding: 16px 12px 8px 24px; */
+  /* flex-direction: column;
 align-items: flex-start;
 gap: 36px;
 align-self: stretch; */
-`
+`;
 const ConfirmWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-right:24px;
-  margin-top:50px;
+  margin-right: 24px;
+  margin-top: 50px;
 `;
 
 const Confirm = styled.div`
@@ -196,21 +197,21 @@ const Confirm = styled.div`
   letter-spacing: 0.1px;
 `;
 const Reserve = styled.button`
-display: flex;
-width: 88px;
-height: 38px;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-gap: 8px;
-flex-shrink: 0;
-border-radius: 100px;
-border: 1px solid #000;
-background: #CECCCC;
-margin-top: 28px;
-margin-left:395px;
-margin-bottom: 25px;
-`
+  display: flex;
+  width: 88px;
+  height: 38px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 100px;
+  border: 1px solid #000;
+  background: #cecccc;
+  margin-top: 28px;
+  margin-left: 395px;
+  margin-bottom: 25px;
+`;
 const ClientMeet = () => {
   const [user, setUser] = useState("");
   const [selectedTime, setSelectedTime] = useState(-1);
@@ -413,21 +414,23 @@ const ClientMeet = () => {
             </Table>
           </Up>
           <Box>
-  <Text>상담 예약 날짜</Text>
-  <TextNIcon> <Text2>날짜 선택 </Text2>
-  <IconImg src = {icon}/> </TextNIcon>
-  
-  <DateSelect type="date" onChange={handleSelectDate} />
-  
-  <ConfirmWrapper>
-    <Confirm onClick={checkTime}>확인</Confirm>
-  </ConfirmWrapper>
-</Box>
+            <Text>상담 예약 날짜</Text>
+            <TextNIcon>
+              {" "}
+              <Text2>날짜 선택 </Text2>
+              <IconImg src={icon} />{" "}
+            </TextNIcon>
 
+            <DateSelect type="date" onChange={handleSelectDate} />
+
+            <ConfirmWrapper>
+              <Confirm onClick={checkTime}>확인</Confirm>
+            </ConfirmWrapper>
+          </Box>
         </Row>
         <Reserve onClick={reserveMeet}>확인</Reserve>
       </Universe>
-      
+
       {/* <button onClick={checkTime}>조회</button>
        */}
     </Div>

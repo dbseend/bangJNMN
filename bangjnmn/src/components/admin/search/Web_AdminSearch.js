@@ -12,17 +12,17 @@ const Back = styled.div`
   height: 100vh;
 `;
 const Div = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    height: 100vh;
-    max-width: 1000px; // 중앙 박스의 최대 너비 설정
-    margin: 0 auto; // 중앙 정렬
-    overflow: hidden;
-    background-color: white;
-  `;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100vh;
+  max-width: 1000px; // 중앙 박스의 최대 너비 설정
+  margin: 0 auto; // 중앙 정렬
+  overflow: hidden;
+  background-color: white;
+`;
 
 const Search = styled.form`
   display: flex;
@@ -81,55 +81,51 @@ const Web_AdminSearch = () => {
 
   return (
     <Back>
-    <Div>
-      <h1>학생 정보 조회</h1>
-      <Search onSubmit={handleSearchSubmit}>
-        <Select
-          options={options}
-          onChange={(option) => setSelectedOption(option.value)}
-          placeholder="Select a search type"
-        />
+      <Div>
+        <h1>학생 정보 조회</h1>
+        <Search onSubmit={handleSearchSubmit}>
+          <Select
+            options={options}
+            onChange={(option) => setSelectedOption(option.value)}
+            placeholder="Select a search type"
+          />
 
-        <input
-          style={{ marginLeft: "8px" }}
-          type="text"
-          value={searchTerm}
-          onChange={handleInputChange}
-          placeholder="검색어 입력"
-        />
-        <button
-          type="submit"
-          style={{ marginLeft: "8px" }}
-        >
-          🔍
-        </button>
-      </Search>
+          <input
+            style={{ marginLeft: "8px" }}
+            type="text"
+            value={searchTerm}
+            onChange={handleInputChange}
+            placeholder="검색어 입력"
+          />
+          <button type="submit" style={{ marginLeft: "8px" }}>
+            🔍
+          </button>
+        </Search>
 
-      <div>
-      {filteredData.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>이름</th>
-              <th>학번</th>
-              <th>팀</th>
-              <th>학부</th>
-              <th>생년월일</th>
-              <th>호실</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((user, idx) => {
-              // change 'data' to 'filteredData'
-              return <Item key={idx} data={user} />;
-            })}
-          </tbody>
-        </table>
-      )}
-      </div>
-    </Div>
+        <div>
+          {filteredData.length > 0 && (
+            <table>
+              <thead>
+                <tr>
+                  <th>이름</th>
+                  <th>학번</th>
+                  <th>팀</th>
+                  <th>학부</th>
+                  <th>생년월일</th>
+                  <th>호실</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.map((user, idx) => {
+                  // change 'data' to 'filteredData'
+                  return <Item key={idx} data={user} />;
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </Div>
     </Back>
-    
   );
 };
 

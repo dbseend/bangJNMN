@@ -31,7 +31,7 @@ const ClientMyPage = () => {
   const handleFieldChange = (e) => {
     const newPhoneNumber = e.target.value;
     const phoneNumberPattern = /^010\d{4}\d{4}$/;
-  
+
     setPhoneNumber((prevPhoneNumber) => {
       // Use the previous state to update the new state
       if (newPhoneNumber === "" || phoneNumberPattern.test(newPhoneNumber)) {
@@ -39,10 +39,10 @@ const ClientMyPage = () => {
       } else {
         setErrorMessage("   올바른 형식이 아닙니다.");
       }
-  
+
       return newPhoneNumber; // Update the state with the new value
     });
-  };  
+  };
 
   const handleSave = async () => {
     if (errorMessage) {
@@ -68,7 +68,7 @@ const ClientMyPage = () => {
     justify-content: center;
     width: 100%;
     overflow: hidden;
-    background: #F4F4F4;
+    background: #f4f4f4;
     position: relative;
     z-index: 1;
   `;
@@ -201,7 +201,9 @@ const ClientMyPage = () => {
                   autoFocus
                 />
                 <Button onClick={handleSave}>저장</Button>
-                <span style={{ color: "red", fontSize: "12px" }}>{errorMessage}</span>
+                <span style={{ color: "red", fontSize: "12px" }}>
+                  {errorMessage}
+                </span>
               </div>
             ) : userData ? (
               userData.phoneNumber ? (
