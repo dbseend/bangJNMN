@@ -61,12 +61,12 @@ const Check = styled.div`
 `;
 const Cancel = styled.button`
   margin-top: 10px;
-  width: 88px;
   height: 38px;
 
   border-radius: 100px;
   border: 1px solid #000;
   background: #cecccc;
+  cursor:pointer;
 `;
 
 const Row = styled.div`
@@ -220,7 +220,7 @@ const ClientMeet = () => {
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  const times = Array.from({ length: 40 }, (_, index) => formatTime(index));
+  const times = Array.from({ length: 18 }, (_, index) => formatTime(index));
 
   useEffect(() => {
     checkStatus(setUser);
@@ -344,6 +344,8 @@ const ClientMeet = () => {
           meetTF: false,
           meetTime: "",
         });
+
+        alert("면담 예약이 취소 되었습니다.");
       } else {
         alert("취소 할 수 없습니다(24시간 이내 가능)");
       }
@@ -398,9 +400,9 @@ const ClientMeet = () => {
                     <TableCell
                       style={{
                         backgroundColor: reserveTF[index]
-                          ? "red"
+                          ? "#48474E"
                           : selectedTime === index
-                          ? "lightblue"
+                          ? "#F4F4F4"
                           : "",
                         cursor: reserveTF[index] ? "not-allowed" : "pointer",
                       }}
@@ -409,9 +411,15 @@ const ClientMeet = () => {
                       }}
                     >
                       {reservationList[index] &&
+<<<<<<< HEAD
+                  reservationList[index].access === "client"
+                    ? item + " " + reservationList[index].name
+                    : item}
+=======
                       reservationList[index].access === "client"
                         ? item + " " + reservationList[index].name
                         : item}
+>>>>>>> main
                     </TableCell>
                   </tr>
                 ))}
