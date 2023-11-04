@@ -25,20 +25,43 @@ const Div = styled.div`
 const UserData = styled.div`
   padding-left: 167px;
   padding-right: 168px;
+  margin-bottom: 83px;
 `
 const Survey = styled.div`
   padding-left: 167px;
+  margin-bottom: 50px;
 `
 
 const InfoBox = styled.div`
   border: 1px solid #000; // 테두리 설정
   display: flex; // 추가된 부분
-  padding: 14px;
+  //padding: 14px;
 `;
+
+const Box = styled.div`
+  font-weight: bold;
+  margin-left:14px;
+  width: 70px;
+`
+
+const Box1 = styled.div`
+  //border: 1px solid #000;
+  font-weight: bold;
+  width: 250px;
+`
+
+const Row = styled.p`
+  display: flex;
+  flex-direction: row;
+`
 
 const Info = styled.label`
   padding-left: 113px;
   margin-left: auto;
+`;
+
+const Info1 = styled.label`
+  margin-left: 70px;
 `;
 
 
@@ -52,7 +75,20 @@ const Head = styled.h3`
   line-height: 16px; /* 80% */
   letter-spacing: 0.5px;
   text-decoration-line: underline;
+  margin-bottom: 25px;
 `
+
+const Head1 = styled.label`
+  color: #000;
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 39px; /* 216.667% */
+  letter-spacing: 0.5px;
+  text-decoration-line: underline;
+`
+
 const SH = styled.p`
   color: #000;
   font-family: Roboto;
@@ -61,6 +97,35 @@ const SH = styled.p`
   font-weight: 400;
   //line-height: 39px; /* 260% */
   letter-spacing: 0.5px;
+  margin-bottom: 48px;
+`
+
+const Button = styled.button`
+  margin-left: auto;
+  margin-right: auto;
+  width: 90px;
+  margin-bottom: 50px;
+  //all: unset;
+  align-items: center;
+  border-radius: 100px;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 40px;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid;
+  background-color: var(--m-3syslightprimary);
+  box-shadow: var(--m3-elevation-light-1);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background: #CECCCC;
+
+  &:hover {
+    background: #A3A3A3; // 마우스를 올렸을 때의 배경색을 설정
+  }
 `
 
 const User = () => {
@@ -126,10 +191,10 @@ const User = () => {
     else return "흡연 함"
   }
 
-  function Room(num){
-    if({num} == "room4") return "4인실"
-    if({num} == "room2") return "2인실"
-    if({num} == "room1") return "1인실"
+  function Room(roommateNum){
+    if(roommateNum == "room4") return "4인실"
+    if(roommateNum == "room2") return "2인실"
+    if(roommateNum == "room1") return "1인실"
   }
 
 
@@ -173,97 +238,55 @@ const User = () => {
           <SH>학생의 상세 정보를 조회할 수 있습니다.</SH>
           <div>
             <InfoBox>
-            <p><b>이름</b> <Info>{user.name}</Info></p>
+            <Row><Box>이름</Box> <Info>{user.name}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>학번</b> <Info>{user.stuNum}</Info></p>
+            <Row><Box>학번</Box> <Info>{user.stuNum}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>팀</b> <Info>{user.team}</Info></p>
+            <Row><Box>팀</Box> <Info>{user.team}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>전공</b> <Info>{user.major}</Info></p>
+            <Row><Box>전공</Box> <Info>{user.major}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>생년월일</b> <Info>{user.birth}</Info></p>
+            <Row><Box>생년월일</Box> <Info>{user.birth}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>인실</b> <Info>{Room(user.roommateNum)}</Info></p>
+            <Row><Box>인실</Box> <Info>{Room(user.roommateNum)}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>이메일</b> <Info>{user.email}</Info></p>
+            <Row><Box>이메일</Box> <Info>{user.email}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>성별</b> <Info>{user.gender}</Info></p>
+            <Row><Box>성별</Box> <Info>{user.gender}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>전화번호</b> <Info>{user.phoneNumber}</Info></p>
+            <Row><Box>전화번호</Box> <Info>{user.phoneNumber}</Info></Row>
             </InfoBox>
             <InfoBox>
-            <p><b>기숙사</b> <Info>{user.dorm}</Info></p>
+            <Row><Box>기숙사</Box> <Info>{user.dorm}</Info></Row>
             </InfoBox>
-
-          {/* <div>
-            <label>이름</label>
-            <input value={user.name} name="name"/>
-          </div>
-          <div>
-            <label>학번</label>
-            <input value={user.stuNum} name="stuNum"/>
-          </div>
-          <div>
-            <label>팀</label>
-            <input value={user.team} name="team"/>
-          </div>
-          <div>
-            <label>전공</label>
-            <input value={user.major} name="major"/>
-          </div>
-          <div>
-            <label>생년월일</label>
-            <input value={user.birth} name="birth"/>
-          </div>
-          <div>
-            <label>호실</label>
-            <input value={user.roommateNum} name="roommateNum"/>
-          </div>
-          <div>
-            <label>이메일</label>
-            <input value={user.email} name="email"/>
-          </div>
-          <div>
-            <label>성별</label>
-            <input value={user.gender} name="gender"/>
-          </div>
-          <div>
-            <label>전화번호</label>
-            <input value={user.phoneNumber} name="phoneNumber"/>
-          </div>
-          <div>
-            <label>기숙사</label>
-            <input value={user.dorm} name="dorm"/>
-          </div> */}
-          
         </div>
       </UserData>
       <Survey>
-        <h2>설문조사 결과</h2>
+        <Head1>학생 설문조사 결과</Head1>
         {surveyData.map((data, index) => (
           <p key={index}>
-            Q1. 당신은 누구입니까? {data.Q1} <br/>
-            Q2. 당신의 기상시간은 언제입니까?: {Answer2(data.Q2)} <br/>
-            Q3. 당신의 취침시간은 언제입니까?: {Answer3(data.Q3)} <br/>
-            Q4. 당신은 소리에 예민합니까?: {Answer4(data.Q4)} <br/>
-            Q5. 당신은 빛에 예민합니까?: {Answer5(data.Q5)} <br/>
-            Q6. 당신은 더위에 예민합니까?: {Answer6(data.Q6)} <br/>
-            Q7. 당신은 추위에 예민합니까?: {Answer7(data.Q7)} <br/>
-            Q8. 당신의 청소 주기는 무엇입니까?: {Answer8(data.Q8)} <br/>
-            Q9. 당신은 흡연을 하십니까?: {Answer9(data.Q9)} <br/>
-            마지막 한마디(자유롭게) : {data.Sub} <br/>
+            <Row><Box1>1. 당신은 누구입니까?</Box1> <Info1>{data.Q1}</Info1></Row>
+            <Row><Box1>2. 당신의 기상시간은 언제입니까?</Box1> <Info1>{Answer2(data.Q2)}</Info1></Row>
+            <Row><Box1>3. 당신의 취침시간은 언제입니까?</Box1> <Info1>{Answer3(data.Q3)}</Info1></Row>
+            <Row><Box1>4. 당신은 소리에 예민합니까?</Box1> <Info1>{Answer4(data.Q4)}</Info1></Row>
+            <Row><Box1>5. 당신은 빛에 예민합니까?</Box1> <Info1>{Answer5(data.Q5)}</Info1></Row>
+            <Row><Box1>6. 당신은 더위에 예민합니까?</Box1> <Info1>{Answer6(data.Q6)}</Info1></Row>
+            <Row><Box1>7. 당신은 추위에 예민합니까?</Box1> <Info1>{Answer7(data.Q7)}</Info1></Row>
+            <Row><Box1>8. 당신의 청소 주기는 무엇입니까?</Box1> <Info1>{Answer8(data.Q8)}</Info1></Row>
+            <Row><Box1>8. 당신의 청소 주기는 무엇입니까?</Box1> <Info1>{Answer9(data.Q9)}</Info1></Row>
+            <Row><Box1>마지막 한마디(자유롭게)</Box1> <Info1>{data.Sub}</Info1></Row>
           </p>
         ))}
       </Survey>
-      <button onClick={handleGoBack}>돌아가기</button>
+      <Button onClick={handleGoBack}>돌아가기</Button>
     </Div>
     </Back>
     
