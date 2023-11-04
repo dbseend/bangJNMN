@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, updateDoc, deleteField} from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -20,13 +20,12 @@ const Div = styled.div`
   justify-content: center;
   margin: 0 auto;
   width: 100%;
-  height: 100vh;
   overflow: hidden;
   background: #f4f4f4;
 `;
 const Universe = styled.div`
   width: 1026px;
-  height: 100vh;
+  /* height: 100vh; */
   flex-shrink: 0;
   background: #ffffff;
   /* display: flex; */
@@ -46,6 +45,10 @@ const Title = styled.div`
   margin-top: 42px;
   margin-bottom: 16px;
 `;
+const Check = styled.div`
+  display: flex;
+  /* justify-content: space-between; */
+`;
 const Info = styled.div`
   color: #000;
   font-family: Roboto;
@@ -55,7 +58,15 @@ const Info = styled.div`
   line-height: 39px; /* 260% */
   letter-spacing: 0.5px;
 `;
+const Cancel = styled.button`
+  height: 38px;
+  margin-left: 20px;
+  border-radius: 100px;
+  border: 1px solid #000;
+  background: #cecccc;
+`;
 const Table = styled.table`
+  margin-top:16px;
   border-collapse: collapse;
   border: 1px solid black;
   width: 482px;
@@ -180,7 +191,7 @@ const AdminMeet = () => {
   const [meetDate, setMeetDate] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  const times = Array.from({ length: 5 }, (_, index) => formatTime(index));
+  const times = Array.from({ length: 18 }, (_, index) => formatTime(index));
 
   useEffect(() => {
     checkStatus(setUser);
@@ -283,7 +294,41 @@ const AdminMeet = () => {
     }
   }; 
   */
+  const deleteMeet = async () => {
+    try {
+      const [year, month, day, time] = user.meetTime.split(" ")[0].split("-");
+      const formattedMonth = parseInt(month, 10).toString();
+      const formattedDay = parseInt(day, 10).toString();
 
+      const meetReservationRef = collection(dbService, "meetReservation");
+      const dayRef = doc(
+        collection(meetReservationRef, formattedMonth, "day"),
+        formattedDay
+      );
+      const userRef = doc(collection(dbService, "user"), user.name);
+      const meetIdx = user.meetIdx;
+
+      const currentTime = Math.floor(Date.now() / 1000); // 현재 시간을 초로 변환
+      const reserveTime = user.meetCreated.seconds; // 예약 시간을 초로 가정합니다.
+      const timeDiff = currentTime - reserveTime; // 시간 차이 계산
+      const timeDiffHours = timeDiff / 3600;
+
+      if (timeDiffHours < 24) {
+        await updateDoc(dayRef, {
+          [meetIdx]: deleteField(),
+        });
+
+        await updateDoc(userRef, {
+          meetTF: false,
+          meetTime: "",
+        });
+      } else {
+        alert("취소 할 수 없습니다(24시간 이내 가능)");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
   const reserveMeet = () => {
     const meetReservationRef = collection(dbService, "meetReservation");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
@@ -345,19 +390,26 @@ const AdminMeet = () => {
       <GlobalStyle />
       <Universe>
         <Title>면담 예약</Title>
+        <Check>
         <Info>현재 페이지에서는 면담 예약 수정이 가능합니다.</Info>
+        <Cancel onClick={deleteMeet}>예약 취소하기</Cancel>
+        </Check>
         <Table>
           <tbody>
             {times.map((item, index) => (
               <tr key={index}>
                 <TableCell
                   style={{
-                    backgroundColor: reserveTF[index] ? "#FA9989" : "",
-                    cursor: reserveTF[index] ? "not-allowed" : "pointer",
-                  }}
-                  onClick={() => {
-                    handleSelectTime(index);
-                  }}
+                    backgroundColor: reserveTF[index]
+                          ? "#62606A"
+                          : selectedTimes === index
+                          ? "#F4F4F4"
+                          : "",
+                        cursor: reserveTF[index] ? "not-allowed" : "pointer",
+                      }}
+                      onClick={() => {
+                        handleSelectTime(index);
+                      }}
                 >
                   {reservationList[index] &&
                   reservationList[index].access === "client"
@@ -384,7 +436,7 @@ const AdminMeet = () => {
           </ConfirmWrapper>
         </Box>
 
-        <Reserve onClick={reserveMeet}>예약 취소</Reserve>
+        <Reserve onClick={reserveMeet}>예약 확인</Reserve>
       </Universe>
     </Div>
   );
