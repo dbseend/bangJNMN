@@ -241,7 +241,7 @@ const ClientMeet = () => {
   const checkTime = async () => {
     setReserveTF(Array(40).fill(false));
 
-    const meetReservationRef = collection(dbService, "meetReservation");
+    const meetReservationRef = collection(dbService, "meet");
     const dayRef = doc(collection(meetReservationRef, month, "day"), day);
 
     try {

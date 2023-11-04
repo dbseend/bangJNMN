@@ -192,7 +192,7 @@ const AdminRoom = () => {
   ];
 
   const optionsStandard = [
-    { value: "수면패턴", label: "수면패턴" },
+    { value: "생활패턴", label: "생활패턴" },
     { value: "예민도", label: "예민도" },
     { value: "삶의질", label: "삶의질" },
   ];
@@ -222,7 +222,7 @@ const AdminRoom = () => {
       userCollection,
       where("access", "==", "client"), // client 정보만 불러오도록
       where("rc", "==", "카이퍼"), // rc 필터
-      where("team", "==", selectedTeam), // 팀 필터
+      where("team", "==", selectedTeam.label), // 팀 필터
       where("dorm", "==", "하용조관") // 생활관 필터
     );
     const clientInfo = await getDocs(q); // 필터(client, rc, 팀, 생활관)를 통해 나온 유저 정보
@@ -325,6 +325,10 @@ const AdminRoom = () => {
     female4Ref.current = f4;
     female2Ref.current = f2;
 
+    console.log(m4);
+    console.log(m2);
+    console.log(f4);
+    console.log(f2);
     console.log("다 끝남 유저인포!");
   }
 
@@ -332,13 +336,15 @@ const AdminRoom = () => {
     console.log("방 배정 해볼까?");
     //남자, 여자 => 4인실, 2인실
     sortByRole(); //새섬,새내기,팀원을 기준 오름차순으로 정렬
+    const team = selectedTeam.label;
+    const standard = selectedStandard.label;
 
     //4번 반복 -> 남자 4인실, 남자 2인실, 여자 4인실, 여자 2인실
     for (let k = 0; k < 4; k++) {
       let roomCnt = 0; // 현재까지 만들어진 방 개수
       let fhCnt = 0; //새섬, 새내기 방에 들어간 인원
       let m4TCnt = 0; //4인실 팀원 방에 들어간 인원
-      let roomMates = {}; // 방 룸메 정보(최대 4명)
+      let roomMates = []; // 방 룸메 정보(최대 4명)
       let roommateKey; // 방 룸메 번호(1~4)
       let memData = {}; // 방 룸메 한명당 정보
       let currenRoom = []; // 현재 사용하고 있는 배열
@@ -378,26 +384,19 @@ const AdminRoom = () => {
         //새섬, 새내기 정보
         (user) => user.q1 === "새내기" || user.q1 === "새섬"
       );
-      // console.log("4인실: 새섬, 새내기", freshAndHelper);
       const teamMate = currenRoom.filter((user) => user.q1 === "팀원"); //팀원 정보
-      // console.log("4인실: 팀원", teamMate);
 
-      //1. 수면 패턴: 기상시간 + 취침시간
-      //2. 예민도: 합
-      //3. 삶의 질: 합
-      //청소주기는 기간이 짧으면 점수 작게 부여, 기간이 길면 점수를 크게 부여함.
-      //담배는 안피면 점수 낮게, 피면 점수 높게 부여함.
-      if (selectedStandard === "수면패턴") {
+      if (selectedStandard.label === "수면패턴") {
         freshAndHelper.sort((a, b) => a.q2 + a.q3 - (b.q2 + b.q3));
         teamMate.sort((a, b) => a.q2 + a.q3 - (b.q2 + b.q3));
-      } else if (selectedStandard === "예민도") {
+      } else if (selectedStandard.label === "예민도") {
         freshAndHelper.sort(
           (a, b) => a.q4 + a.q5 + a.q6 + a.q7 - (b.q4 + b.q5 + b.q7 + b.q8)
         );
         teamMate.sort(
           (a, b) => a.q4 + a.q5 + a.q6 + a.q7 - (b.q4 + b.q5 + b.q7 + b.q8)
         );
-      } else if (selectedStandard === "삶의질") {
+      } else if (selectedStandard.label === "삶의질") {
         freshAndHelper.sort((a, b) => a.q8 + a.q9 - (b.q8 + b.q9));
         teamMate.sort((a, b) => a.q8 + a.q9 - (b.q8 + b.q9));
       }
@@ -412,13 +411,12 @@ const AdminRoom = () => {
               stsuNum: freshAndHelper[fhCnt].stuNum,
             };
             fhCnt++;
-            roomMates[roommateKey] = memData;
+            roomMates.push(memData);
+            // roomMates[roommateKey] = memData;
           }
         }
         //새섬, 새내기가 4명보다 작을 때
         else if (freshAndHelper.length < 4) {
-          console.log("4명보다 작음 !");
-
           for (let i = 0; i < memNum; i++) {
             roommateKey = `m${i + 1}`;
             memData = {};
@@ -436,15 +434,13 @@ const AdminRoom = () => {
               };
               m4TCnt++;
             }
-
-            roomMates[roommateKey] = memData;
+            roomMates.push(memData);
+            // roomMates[roommateKey] = memData;
           }
         }
 
         //새섬, 새내기가 4명보다 많을 때 - 5,6 => 2/3, 3/3 으로 나누기
         else if (freshAndHelper.length > memNum) {
-          console.log("4명보다 많음 !");
-
           for (let i = 0; i < memNum; i++) {
             roommateKey = `m${i + 1}`;
             memData = {};
@@ -462,26 +458,37 @@ const AdminRoom = () => {
               };
               m4TCnt++;
             }
-
-            roomMates[roommateKey] = memData;
+            roomMates.push(memData);
+            // roomMates[roommateKey] = memData;
           }
         }
 
+        console.log(
+          selectedTeam.label,
+          selectedStandard.label,
+          gender,
+          memNums
+        );
+        console.log(roomMates);
         try {
           const roomRef = doc(
             dbService,
             "room",
             "카이퍼",
-            selectedTeam,
+            team,
+            standard,
             gender,
-            memNums,
-            `${roomCnt + 1}번방` // 문자열에 변수 값 넣으려면 백틱(`) 사용
+            memNums
           );
-          await setDoc(roomRef, roomMates);
+
+          const data = { roomMates: roomMates };
+
+          // 기존 데이터를 병합하면서 업데이트
+          await setDoc(roomRef, data, { merge: true });
+
           console.log("데이터를 저장하였습니다.");
           roomCnt++;
-          console.log(roomCnt, " 번 방입니다");
-          roomMates = {};
+          roomMates = [];
           roommateKey = 0;
           memData = {};
         } catch (error) {
@@ -507,32 +514,43 @@ const AdminRoom = () => {
           };
           m4TCnt++;
         }
-        roomMates[roommateKey] = memData;
+        roomMates.push(memData);
+        // roomMates[roommateKey] = memData;
         j++;
 
+        console.log(
+          selectedTeam.label,
+          selectedStandard.label,
+          gender,
+          memNums
+        );
         if (j % memNum === 0) {
-          //방 인원수 채웠을 때
-          console.log("4명 채웠습니당");
+          console.log(roomMates);
           try {
             const roomRef = doc(
               dbService,
               "room",
               "카이퍼",
-              selectedTeam,
+              team,
+              standard,
               gender,
-              memNums,
-              `${roomCnt + 1}번방` // 문자열에 변수 값 넣으려면 백틱(`) 사용
+              memNums
             );
-            await setDoc(roomRef, roomMates);
+
+            const data = { roomMates: roomMates };
+
+            // 기존 데이터를 병합하면서 업데이트
+            await setDoc(roomRef, data, { merge: true });
+
             console.log("데이터를 저장하였습니다.");
             roomCnt++;
-            console.log(roomCnt, " 번 방입니다");
-            roomMates = {};
+            roomMates = [];
             roommateKey = 0;
             memData = {};
           } catch (error) {
             console.error("데이터를 저장하지 못 했습니다.", error);
           }
+
           j = 0;
         }
       }
@@ -573,6 +591,27 @@ const AdminRoom = () => {
     console.log(selectedStandard);
   };
 
+  async function test() {
+    console.log(selectedTeam.label);
+    console.log(selectedStandard.label);
+    // console.log(gender);
+    // console.log(memNums);
+    const team = selectedTeam.label;
+    const standard = selectedStandard.label;
+    const roomRef = doc(
+      dbService,
+      "room",
+      "카이퍼",
+      team,
+      standard,
+      "남자",
+      "4인실"
+    );
+
+    const data = { roomMates: [{ name: "윤성현" }, { name: "전혜원" }] };
+    await setDoc(roomRef, data);
+  }
+
   return (
     <Main>
       <Div>
@@ -605,6 +644,7 @@ const AdminRoom = () => {
             <Margin2>
               {" "}
               <AsignRoomButton onClick={assignRoom}>배정하기</AsignRoomButton>
+              <button onClick={test}>테스트 데이터</button>
             </Margin2>
           </SelectContainer>
         </Rect1>
