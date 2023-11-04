@@ -411,15 +411,9 @@ const ClientMeet = () => {
                       }}
                     >
                       {reservationList[index] &&
-<<<<<<< HEAD
                   reservationList[index].access === "client"
                     ? item + " " + reservationList[index].name
                     : item}
-=======
-                      reservationList[index].access === "client"
-                        ? item + " " + reservationList[index].name
-                        : item}
->>>>>>> main
                     </TableCell>
                   </tr>
                 ))}
